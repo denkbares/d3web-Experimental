@@ -5,33 +5,31 @@
 	<parent>
 		<artifactId>KnowWE-Plugins-Experimental</artifactId>
 		<groupId>de.uniwue.d3web</groupId>
-		<version>0-SNAPSHOT</version>
+		<version>1.0-SNAPSHOT</version>
 	</parent>
 
-	<name>KnowWE-Plugin-IncrementalCompiler</name>
 	<artifactId>KnowWE-Plugin-IncrementalCompiler</artifactId>
-	<version>0-SNAPSHOT</version>
 
 	<dependencies>
 		<dependency>
 			<groupId>de.uniwue.d3web</groupId>
 			<artifactId>KnowWE-core</artifactId>
-			<version>0-SNAPSHOT</version>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>de.uniwue.d3web</groupId>
 			<artifactId>KnowWE-Plugin-Core</artifactId>
-			<version>0-SNAPSHOT</version>
+			<version>${project.version}</version>
 		</dependency>
 	 	<dependency>
 	 		<groupId>de.uniwue.d3web</groupId>
 	 		<artifactId>d3web-Plugin-TestingFramework</artifactId>
-	 		<version>0-SNAPSHOT</version>
+	 		<version>${project.version}</version>
 	 	</dependency>
 	 	<dependency>
 	 		<groupId>de.uniwue.d3web</groupId>
 	 		<artifactId>KnowWE-KDOMParseUtils</artifactId>
-	 		<version>0-SNAPSHOT</version>
+	 		<version>${project.version}</version>
 	 	</dependency>
 	</dependencies>
 </project>

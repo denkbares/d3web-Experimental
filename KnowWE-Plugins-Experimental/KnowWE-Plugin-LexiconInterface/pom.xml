@@ -6,19 +6,17 @@
 	<parent>
 		<artifactId>KnowWE-Plugins-Experimental</artifactId>
 		<groupId>de.uniwue.d3web</groupId>
-		<version>0-SNAPSHOT</version>
+		<version>1.0-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>KnowWE-Plugin-LexiconInterface</artifactId>
-	<version>0-SNAPSHOT</version>
-	<name>KnowWE-Plugin-LexiconInterface</name>
 	<description>Lexicon Interface for accessing lexica like WordNet and OpenThesaurus</description>
 
 	<dependencies>
 		<dependency>
 			<groupId>de.uniwue.d3web</groupId>
 			<artifactId>KnowWE-core</artifactId>
-			<version>0-SNAPSHOT</version>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>net.sf.extjwnl</groupId>

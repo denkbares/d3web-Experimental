@@ -6,23 +6,22 @@
 	<parent>
 		<groupId>de.uniwue.d3web</groupId>
 		<artifactId>KnowWE-Plugins-Experimental</artifactId>
-		<version>0-SNAPSHOT</version>
+		<version>1.0-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>d3web-Plugin-Tests-ThrillSeeker</artifactId>
-	<name>d3web-Plugin-Tests-ThrillSeeker</name>
 	<description>Project for d3web tests that are not quite ready for the core.</description>
 
 	<dependencies>
 		<dependency>
 			<groupId>de.uniwue.d3web</groupId>
 			<artifactId>d3web-Plugin-Tests</artifactId>
-			<version>0-SNAPSHOT</version>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>de.uniwue.d3web</groupId>
 			<artifactId>d3web-Plugin-TestingFramework</artifactId>
-			<version>0-SNAPSHOT</version>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>

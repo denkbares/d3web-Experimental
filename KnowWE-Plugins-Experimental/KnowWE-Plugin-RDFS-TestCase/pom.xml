@@ -5,13 +5,11 @@
 	<parent>
 		<artifactId>KnowWE-Plugins-Experimental</artifactId>
 		<groupId>de.uniwue.d3web</groupId>
-		<version>0-SNAPSHOT</version>
+		<version>1.0-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>KnowWE-Plugin-RDFS-TestCase</artifactId>
-	<name>KnowWE-Plugin-RDFS-TestCase</name>
 	<description>Plugin providing functionality for RDFS test cases</description>
-	<version>0-SNAPSHOT</version>
 
 	<build>
 		<plugins>

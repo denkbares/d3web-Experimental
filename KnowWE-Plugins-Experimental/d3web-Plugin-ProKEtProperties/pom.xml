@@ -5,19 +5,17 @@
 	<parent>
 		<artifactId>KnowWE-Plugins-Experimental</artifactId>
 		<groupId>de.uniwue.d3web</groupId>
-		<version>0-SNAPSHOT</version>
+		<version>1.0-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>d3web-Plugin-ProKEtProperties</artifactId>
-	<version>0-SNAPSHOT</version>
-	<name>d3web-Plugin-ProKEtProperties</name>
 	<description>Project to allow ProKEt specific properties for d3web objects.</description>
 
 	<dependencies>
 		<dependency>
 			<groupId>de.uniwue.d3web</groupId>
 			<artifactId>d3web-Kernel</artifactId>
-			<version>0-SNAPSHOT</version>
+			<version>${project.version}</version>
 		</dependency>
 	</dependencies>
 </project>
