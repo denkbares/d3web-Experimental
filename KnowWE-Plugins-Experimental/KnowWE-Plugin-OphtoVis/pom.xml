@@ -3,40 +3,40 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<artifactId>Research</artifactId>
+		<artifactId>KnowWE-Plugins-Experimental</artifactId>
 		<groupId>de.uniwue.d3web</groupId>
-		<version>0.2-SNAPSHOT</version>
+		<version>0-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>KnowWE-Plugin-OphtoVis</artifactId>
 	<name>KnowWE-Plugin-OphtoVis</name>
-	<version>0.2-SNAPSHOT</version>
+	<version>0-SNAPSHOT</version>
 
 	<dependencies>
 		<dependency>
 			<groupId>de.uniwue.d3web</groupId>
 			<artifactId>KnowWE-core</artifactId>
-			<version>0.2-SNAPSHOT</version>
+			<version>0-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>de.uniwue.d3web</groupId>
 			<artifactId>KnowWE-Plugin-ExtensionPoints</artifactId>
-			<version>0.2-SNAPSHOT</version>
+			<version>0-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>de.uniwue.d3web</groupId>
 			<artifactId>KnowWE-Plugin-Rdf2GoSemanticCore</artifactId>
-			<version>0.2-SNAPSHOT</version>
+			<version>0-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>de.uniwue.d3web</groupId>
 			<artifactId>KnowWE-Plugin-IncrementalCompiler</artifactId>
-			<version>0.2-SNAPSHOT</version>
+			<version>0-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>de.uniwue.d3web</groupId>
 			<artifactId>KnowWE-Plugin-RDFS-Basic</artifactId>
-			<version>0.2-SNAPSHOT</version>
+			<version>0-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
 </project>

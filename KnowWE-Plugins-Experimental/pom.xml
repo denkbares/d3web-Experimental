@@ -4,10 +4,9 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>de.uniwue.d3web</groupId>
-	<artifactId>Research</artifactId>
+	<artifactId>KnowWE-Plugins-Experimental</artifactId>
 	<packaging>pom</packaging>
-	<name>Research</name>
-	<version>0.2-SNAPSHOT</version>
+	<version>0-SNAPSHOT</version>
 	<url>https://www.d3web.de/</url>
 
 	<issueManagement>

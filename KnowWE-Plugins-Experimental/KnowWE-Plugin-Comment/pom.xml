@@ -3,15 +3,14 @@
 	<modelVersion>4.0.0</modelVersion>
 	
 	<parent>
-		<artifactId>Research</artifactId>
+		<artifactId>KnowWE-Plugins-Experimental</artifactId>
 		<groupId>de.uniwue.d3web</groupId>
-		<version>0.2-SNAPSHOT</version>
+		<version>0-SNAPSHOT</version>
 	</parent>
 	
 	<artifactId>KnowWE-Plugin-Comment</artifactId>
 	<name>KnowWE-Plugin-Comment</name>
-	<version>0.2-SNAPSHOT</version>
-	
+
 	<build>
 		<plugins>
 			<plugin>

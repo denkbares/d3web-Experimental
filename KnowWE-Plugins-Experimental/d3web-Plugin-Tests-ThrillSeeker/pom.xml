@@ -5,8 +5,8 @@
 
 	<parent>
 		<groupId>de.uniwue.d3web</groupId>
-		<artifactId>Research</artifactId>
-		<version>0.2-SNAPSHOT</version>
+		<artifactId>KnowWE-Plugins-Experimental</artifactId>
+		<version>0-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>d3web-Plugin-Tests-ThrillSeeker</artifactId>
@@ -17,12 +17,12 @@
 		<dependency>
 			<groupId>de.uniwue.d3web</groupId>
 			<artifactId>d3web-Plugin-Tests</artifactId>
-			<version>0.2-SNAPSHOT</version>
+			<version>0-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>de.uniwue.d3web</groupId>
 			<artifactId>d3web-Plugin-TestingFramework</artifactId>
-			<version>0.2-SNAPSHOT</version>
+			<version>0-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
