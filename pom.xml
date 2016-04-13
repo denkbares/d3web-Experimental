@@ -9,8 +9,8 @@
 	<description>Open source parent for experimental and research modules</description>
 
 	<modules>
-		<module>KnowWE-Plugins-Experimental</module>
 		<module>d3web-Plugins-Experimental</module>
+		<module>KnowWE-Plugins-Experimental</module>
 	</modules>
 
 

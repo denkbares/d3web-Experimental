@@ -14,10 +14,8 @@
 
 	<modules>
 		<module>KnowWE-Plugin-Comment</module>
-		<module>d3web-Plugin-Persistence-ImageQuestion</module>
 		<module>KnowWE-Plugin-Defi</module>
 		<module>KnowWE-Plugin-Renaming</module>
-		<module>d3web-Plugin-ProKEtProperties</module>
 		<module>KnowWE-Plugin-DiaFlux-Refactoring</module>
 		<module>KnowWE-Plugin-IncrementalCompiler</module>
 		<module>KnowWE-Plugin-IncrementalCompilerTest</module>
@@ -42,7 +40,6 @@
 		<module>KnowWE-Plugin-Flash</module>
 		<module>KnowWE-Plugin-SparqlToExcel</module>
 		<module>KnowWE-Plugin-Revisions</module>
-		<module>d3web-Plugin-Tests-ThrillSeeker</module>
 		<module>KnowWE-Plugin-DiaFlux-Review</module>
 		<module>KnowWE-Plugin-TypeVis</module>
 		<module>KnowWE-Plugin-KnowledgeSummary</module>
