@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <!DOCTYPE plugin PUBLIC "-//JPF//Java Plug-in Manifest 1.0" "http://jpf.sourceforge.net/plugin_1_0.dtd">
-<plugin id="KnowWE-Plugin-RDFS-WikiObjectModel" version="0.0.1">
+<plugin id="KnowWE-Plugin-RDFS-WikiObjectModel" version="1.0">
 	<requires>
 		<import plugin-id="KnowWEExtensionPoints" />
 		<import plugin-id="KnowWE-Plugin-Rdf2GoSemanticCore" />
@@ -42,7 +42,7 @@
 		<parameter id="class" value="de.knowwe.rdfs.wikiObjectModel.types.CompiledWikiSection" />
 		<parameter id="name" value="SectionType" />
 		<parameter id="description" value="Represents a SectionType in KDOM" />
-		<parameter id="version" value="0.2" />
+		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="1" />
 		<parameter id="scope" value="root" />
 	</extension>
@@ -52,7 +52,7 @@
 		<parameter id="class" value="de.knowwe.rdfs.wikiObjectModel.types.SectionHeaderObjectDefinition" />
 		<parameter id="name" value="SectionHeaderObjectDefinition" />
 		<parameter id="description" value="Defines a section header as RDFS-object" />
-		<parameter id="version" value="0.2" />
+		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="1" />
 		<parameter id="scope" value="SectionHeaderType" />
 	</extension>
@@ -62,7 +62,7 @@
 		<parameter id="class" value="de.knowwe.rdfs.wikiObjectModel.types.LocalConceptReference" />
 		<parameter id="name" value="LocalConceptReference" />
 		<parameter id="description" value="this as reference to local section" />
-		<parameter id="version" value="0.2" />
+		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="1" />
 		<parameter id="scope" value="SimpleTurtleSubjectSection" />
 		<parameter id="scope" value="SimpleTurtleObjectSection" />
@@ -73,7 +73,7 @@
 		<parameter id="class" value="de.knowwe.rdfs.wikiObjectModel.types.CompiledImageTag" />
 		<parameter id="name" value="CompiledImageTag" />
 		<parameter id="description" value="Compiles the images in the wiki sources to rdf" />
-		<parameter id="version" value="0.2" />
+		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="1.0" />
 		<parameter id="scope" value="ImageType" />
 	</extension>

@@ -45,10 +45,6 @@
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-		</dependency>
-		<dependency>
 			<groupId>de.uniwue.d3web</groupId>
 			<artifactId>KnowWE-GlobalTestUtils</artifactId>
 			<version>${project.version}</version>

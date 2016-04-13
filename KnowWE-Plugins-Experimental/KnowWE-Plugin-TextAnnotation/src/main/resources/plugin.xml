@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <!DOCTYPE plugin PUBLIC "-//JPF//Java Plug-in Manifest 1.0" "http://jpf.sourceforge.net/plugin_1_0.dtd">
-<plugin id="KnowWE-Plugin-TextAnnotation" version="0.0.1">
+<plugin id="KnowWE-Plugin-TextAnnotation" version="1.0">
     
     <requires>
         <import plugin-id="KnowWEExtensionPoints" />
@@ -45,7 +45,7 @@
 		<parameter id="class" value="de.knowwe.annotation.type.header.AnnotatableHeaderType" />
 		<parameter id="name" value="AnnotatableHeaderType" />
 		<parameter id="description" value="Represents a HeaderType in KDOM" />
-		<parameter id="version" value="0.2" />
+		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="1.8" />
 		<parameter id="scope" value="root" />
 	</extension>
@@ -55,7 +55,7 @@
 		<parameter id="class" value="de.knowwe.annotation.type.header.AnnotatableHeaderType1" />
 		<parameter id="name" value="AnnotatableHeaderType1" />
 		<parameter id="description" value="Represents a HeaderType in KDOM" />
-		<parameter id="version" value="0.2" />
+		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="1.9" />
 		<parameter id="scope" value="root" />
 	</extension>
@@ -66,7 +66,7 @@
 		<parameter id="class" value="de.knowwe.annotation.type.header.AnnotatableHeaderType2" />
 		<parameter id="name" value="AnnotatableHeaderType2" />
 		<parameter id="description" value="Represents a HeaderType in KDOM" />
-		<parameter id="version" value="0.2" />
+		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="2.0" />
 		<parameter id="scope" value="root" />
 	</extension>
@@ -87,7 +87,7 @@
 		<parameter id="class" value="de.knowwe.annotation.type.list.ConceptList" />
 		<parameter id="name" value="ConceptList" />
 		<parameter id="description" value="Represents a ConceptList in KDOM" />
-		<parameter id="version" value="0.2" />
+		<parameter id="version" value="1.0" />
 		<parameter id="priority" value="2.0" />
 		<parameter id="scope" value="root" />
 	</extension>

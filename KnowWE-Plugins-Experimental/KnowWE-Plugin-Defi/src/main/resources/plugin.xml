@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <!DOCTYPE plugin PUBLIC "-//JPF//Java Plug-in Manifest 1.0" "http://jpf.sourceforge.net/plugin_1_0.dtd">
-<plugin id="KnowWE-Plugin-Defi" version="0.2">
+<plugin id="KnowWE-Plugin-Defi" version="1.0">
     
     <requires>
         <import plugin-id="KnowWEExtensionPoints" />

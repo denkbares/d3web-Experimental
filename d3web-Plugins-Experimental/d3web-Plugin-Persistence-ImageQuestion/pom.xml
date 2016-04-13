@@ -11,19 +11,6 @@
 
 	<artifactId>d3web-Plugin-Persistence-ImageQuestion</artifactId>
 
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-dependency-plugin</artifactId>
-			</plugin>
-			<plugin>
-				<groupId>de.uniwue.maven.plugins</groupId>
-				<artifactId>knowwe-versionator</artifactId>
-			</plugin>
-		</plugins>
-	</build>
-
 	<dependencies>
 		<dependency>
 			<groupId>de.uniwue.d3web</groupId>
@@ -46,10 +33,6 @@
 			<groupId>com.denkbares</groupId>
 			<artifactId>denkbares-Progress</artifactId>
 			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
 		</dependency>
 	</dependencies>
 </project>
