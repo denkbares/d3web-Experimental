@@ -10,6 +10,7 @@
 
 	<modules>
 		<module>KnowWE-Plugins-Experimental</module>
+		<module>d3web-Plugins-Experimental</module>
 	</modules>
 
 
