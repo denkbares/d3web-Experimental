@@ -13,7 +13,6 @@
 		<module>KnowWE-Plugins-Experimental</module>
 	</modules>
 
-
 	<url>https://www.d3web.de/</url>
 
 	<issueManagement>
@@ -223,5 +222,6 @@
 		<name>Universität Würzburg</name>
 		<url>http://uni-wuerzburg.de/</url>
 	</organization>
+
 
 </project>
