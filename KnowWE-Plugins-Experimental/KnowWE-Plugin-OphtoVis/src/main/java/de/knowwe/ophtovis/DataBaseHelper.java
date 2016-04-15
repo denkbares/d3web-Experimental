@@ -18,23 +18,22 @@
  */
  package de.knowwe.ophtovis;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+ import java.io.UnsupportedEncodingException;
+ import java.net.URLDecoder;
+ import java.util.ArrayList;
+ import java.util.Collection;
+ import java.util.List;
 
-import org.ontoware.rdf2go.model.QueryResultTable;
-import org.ontoware.rdf2go.model.QueryRow;
-import org.ontoware.rdf2go.model.node.Node;
+ import org.openrdf.model.Value;
+ import org.openrdf.query.BindingSet;
 
-import de.d3web.strings.Identifier;
-import de.knowwe.compile.IncrementalCompiler;
-import de.knowwe.core.kdom.objects.SimpleDefinition;
-import de.knowwe.core.kdom.parsing.Section;
-import de.knowwe.rdf2go.Rdf2GoCore;
-import de.knowwe.rdf2go.utils.Rdf2GoUtils;
-import de.knowwe.rdfs.util.RDFSUtil;
+ import de.d3web.strings.Identifier;
+ import de.knowwe.compile.IncrementalCompiler;
+ import de.knowwe.core.kdom.objects.SimpleDefinition;
+ import de.knowwe.core.kdom.parsing.Section;
+ import de.knowwe.rdf2go.Rdf2GoCore;
+ import de.knowwe.rdf2go.utils.Rdf2GoUtils;
+ import de.knowwe.rdfs.util.RDFSUtil;
 
 
  /**
@@ -47,7 +46,7 @@ import de.knowwe.rdfs.util.RDFSUtil;
 	public static List<String> getConnectedNodeNamesOfType(String startNode, String conType, boolean reverse)
 	{
 		List<String> connectedNodesList = new ArrayList<String>();
-		QueryResultTable table = null;
+		Rdf2GoCore.QueryResultTable table = null;
 
 		try {
 			startNode = URLDecoder.decode(startNode, "UTF-8");
@@ -68,8 +67,8 @@ import de.knowwe.rdfs.util.RDFSUtil;
 
 					"SELECT ?a WHERE { ?a  lns:" + conType + " " + startNode + "}");
 		}
-		for (QueryRow row : table) {
-			Node node = row.getValue("a");// .toString();// in der Hashmap das
+		for (BindingSet row : table.getBindingSets()) {
+			Value node = row.getValue("a");// .toString();// in der Hashmap das
 			String keyurl = Rdf2GoUtils.getLocalName(node); // Praedikat
 			try {
 				keyurl = URLDecoder.decode(keyurl, "UTF-8");

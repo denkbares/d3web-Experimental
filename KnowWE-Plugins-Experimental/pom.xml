@@ -21,15 +21,10 @@
 		<module>KnowWE-Plugin-IncrementalCompilerTest</module>
 		<module>KnowWE-Plugin-InlineIndication</module>
 		<module>KnowWE-Plugin-DiaFlux-Coverage</module>
-		<module>KnowWE-Plugin-RDFS-Basic</module>
-		<module>KnowWE-Plugin-RDFS-TurtleN3</module>
 		<module>KnowWE-Plugin-d3web-SimpleScoreTable</module>
-		<module>KnowWE-Plugin-RDFS-SubclassingTree</module>
 		<module>KnowWE-Plugin-DiaFlux-Anomalies</module>
-		<module>KnowWE-Plugin-RDFS-TestCase</module>
 		<module>KnowWE-Plugin-d3web-RuleDebugger</module>
 		<module>KnowWE-Plugin-d3web-Rdf2Go</module>
-		<module>KnowWE-Plugin-RDFS-WikiObjectModel</module>
 		<module>KnowWE-Plugin-LexiconInterface</module>
 		<module>KnowWE-Plugin-LoadKnowledgeBase</module>
 		<module>KnowWE-Plugin-WikiBaseline</module>
@@ -45,6 +40,11 @@
 		<module>KnowWE-Plugin-KnowledgeSummary</module>
 		<module>KnowWE-Plugin-SELESUP</module>
 		<module>KnowWE-Plugin-SparqlEndpoint</module>
+		<!--module>KnowWE-Plugin-RDFS-Basic</module-->
+		<!--module>KnowWE-Plugin-RDFS-TurtleN3</module-->
+		<!--module>KnowWE-Plugin-RDFS-WikiObjectModel</module-->
+		<!--module>KnowWE-Plugin-RDFS-SubclassingTree</module-->
+		<!--module>KnowWE-Plugin-RDFS-TestCase</module-->
 		<!--module>KnowWE-Plugin-TextAnnotation</module-->
 		<!--module>KnowWE-Plugin-WissKont</module-->
 		<!--module>KnowWE-Plugin-OphtoVisD3</module-->
