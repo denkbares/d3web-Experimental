@@ -29,7 +29,6 @@
 		<module>KnowWE-Plugin-LoadKnowledgeBase</module>
 		<module>KnowWE-Plugin-WikiBaseline</module>
 		<module>KnowWE-Plugin-d3web-Visualizations</module>
-		<module>KnowWE-Plugin-OphtoVis</module>
 		<module>KnowWE-Plugin-DataAnalysis</module>
 		<module>KnowWE-Plugin-ESAT</module>
 		<module>KnowWE-Plugin-Flash</module>
@@ -47,6 +46,7 @@
 		<!--module>KnowWE-Plugin-RDFS-TestCase</module-->
 		<!--module>KnowWE-Plugin-TextAnnotation</module-->
 		<!--module>KnowWE-Plugin-WissKont</module-->
+		<!--module>KnowWE-Plugin-OphtoVis</module-->
 		<!--module>KnowWE-Plugin-OphtoVisD3</module-->
 	</modules>
 

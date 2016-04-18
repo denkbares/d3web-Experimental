@@ -176,10 +176,9 @@ public class RepositoryInterceptor extends ServerInterceptor {
 		return (String) request.getAttribute(REPOSITORY_ID_KEY);
 	}
 
-	public static Repository getRepository(HttpServletRequest request) {
+	public static Repository getRepository(HttpServletRequest request) throws RepositoryException {
 
-		Repository repository = (Repository) getRdf2GoCore(request).getUnderlyingModelImplementation();
-		return repository;
+		return getRdf2GoCore(request).getRepositoryConnection().getRepository();
 	}
 
 	public static Rdf2GoCore getRdf2GoCore(HttpServletRequest request) {

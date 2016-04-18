@@ -1,7 +1,7 @@
 package de.knowwe.compile.test;
 
-import org.ontoware.rdf2go.model.node.URI;
-import org.ontoware.rdf2go.model.node.impl.URIImpl;
+import org.openrdf.model.URI;
+import org.openrdf.model.impl.URIImpl;
 
 import de.d3web.strings.Strings;
 import de.knowwe.core.kdom.objects.Term;

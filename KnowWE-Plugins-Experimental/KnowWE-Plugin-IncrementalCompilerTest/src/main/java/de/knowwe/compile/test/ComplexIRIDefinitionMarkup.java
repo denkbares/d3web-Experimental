@@ -25,7 +25,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import org.ontoware.rdf2go.model.node.Node;
+import org.openrdf.model.URI;
 
 import de.knowwe.compile.object.AbstractKnowledgeUnitType;
 import de.knowwe.compile.object.ComplexDefinition;
@@ -129,9 +129,9 @@ class ComplexIRIDefinitionCompileScript extends SimpleKnowledgeUnitCompileScript
 	@Override
 	public void insertIntoRepository(Section<ComplexIRIDefinitionMarkup> section) {
 		List<Section<SimpleReference>> found = new ArrayList<Section<SimpleReference>>();
-		Node subURI = null;
-		Node predURI = null;
-		Node objURI = null;
+		URI subURI = null;
+		URI predURI = null;
+		URI objURI = null;
 
 		Sections.successors(section, SimpleReference.class, found);
 		Section<SimpleDefinition> subject = Sections.successor(section,
@@ -165,7 +165,7 @@ class ComplexIRIDefinitionCompileScript extends SimpleKnowledgeUnitCompileScript
 
 		Rdf2GoCore.getInstance()
 				.addStatements(new SectionIDSource(section), Rdf2GoCore.getInstance()
-						.createStatement(subURI.asResource(), predURI.asURI(), objURI));
+						.createStatement(subURI, predURI, objURI));
 
 		// return new ArrayList<KDOMReportMessage>(0);
 

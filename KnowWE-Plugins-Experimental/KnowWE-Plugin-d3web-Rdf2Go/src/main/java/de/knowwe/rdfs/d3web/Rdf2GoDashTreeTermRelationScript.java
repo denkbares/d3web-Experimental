@@ -23,12 +23,12 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.ontoware.rdf2go.model.Statement;
-import org.ontoware.rdf2go.model.node.BlankNode;
-import org.ontoware.rdf2go.model.node.Literal;
-import org.ontoware.rdf2go.model.node.URI;
-import org.ontoware.rdf2go.vocabulary.RDFS;
-import org.ontoware.rdf2go.vocabulary.XSD;
+import org.openrdf.model.BNode;
+import org.openrdf.model.Literal;
+import org.openrdf.model.Statement;
+import org.openrdf.model.URI;
+import org.openrdf.model.vocabulary.RDFS;
+import org.openrdf.model.vocabulary.XMLSchema;
 
 import de.d3web.strings.Identifier;
 import de.knowwe.core.compile.CompileScript;
@@ -64,20 +64,20 @@ public abstract class Rdf2GoDashTreeTermRelationScript extends DashTreeTermRelat
 		boolean hasParent = Rdf2GoD3webUtils.hasParentDashTreeElement(compiler, parentIdentifier);
 		if (!hasParent) {
 			URI rootURI = getRootURI(core);
-			Rdf2GoUtils.addStatement(core, parentURI, RDFS.subClassOf, rootURI, statements);
+			Rdf2GoUtils.addStatement(core, parentURI, RDFS.SUBCLASSOF, rootURI, statements);
 			Rdf2GoUtils.addStatement(core, rootURI, hasChildURI, parentURI, statements);
 		}
 		int index = 0;
 		for (Identifier childIdentifier : childrenIdentifier) {
 			URI childURI = core.createlocalURI(Rdf2GoUtils.getCleanedExternalForm(childIdentifier));
-			Rdf2GoUtils.addStatement(core, childURI, RDFS.subClassOf, parentURI, statements);
+			Rdf2GoUtils.addStatement(core, childURI, RDFS.SUBCLASSOF, parentURI, statements);
 			Rdf2GoUtils.addStatement(core, parentURI, hasChildURI, childURI, statements);
 
-			BlankNode indexNode = core.createBlankNode();
+			BNode indexNode = core.createBlankNode();
 			URI hasIndexInfoURI = core.createlocalURI("hasIndexInfo");
 			Rdf2GoUtils.addStatement(core, childURI, hasIndexInfoURI, indexNode, statements);
 			URI hasIndexURI = core.createlocalURI("hasIndex");
-			Literal indexLiteral = core.createDatatypeLiteral(Integer.toString(index++), XSD._int);
+			Literal indexLiteral = core.createDatatypeLiteral(Integer.toString(index++), XMLSchema.INTEGER);
 			Rdf2GoUtils.addStatement(core, indexNode, hasIndexURI, indexLiteral, statements);
 			URI indexOfURI = core.createlocalURI("isIndexOf");
 			Rdf2GoUtils.addStatement(core, indexNode, indexOfURI, parentURI, statements);

@@ -22,13 +22,12 @@ package de.knowwe.rdfs.d3web;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.ontoware.aifbcommons.collection.ClosableIterator;
-import org.ontoware.rdf2go.model.QueryResultTable;
-import org.ontoware.rdf2go.model.QueryRow;
+import org.openrdf.query.BindingSet;
 
 import de.d3web.core.knowledge.terminology.QuestionDate;
 import de.d3web.core.knowledge.terminology.QuestionMC;
@@ -53,6 +52,7 @@ import de.knowwe.rdf2go.utils.Rdf2GoUtils;
 /**
  * Provides explanation utility methods.
  * <p>
+ *
  * @author Albrecht Striffler (denkbares GmbH)
  * @created 22.07.2014
  */
@@ -78,8 +78,8 @@ public class Rdf2GoExplanationProvider {
 				.AND_WHERE("?OtherFact lns:hasValue ?SourceValue")
 				.AND_WHERE("?OtherFact prov:wasAttributedTo ?Agent")
 				.AND_WHERE("?Agent rdf:type ?AgentType");
-		QueryResultTable queryRows = core.sparqlSelect(query.toSparql(core), false, 1000);
-		for (QueryRow queryRow : queryRows) {
+		Rdf2GoCore.QueryResultTable queryRows = core.sparqlSelect(query.toSparql(core), false, 1000);
+		for (BindingSet queryRow : queryRows) {
 			Fact fact = new Fact();
 			fact.terminologyObject = queryRow.getValue("SourceObjectName").toString();
 			fact.value = toValue(clean(queryRow.getValue("SourceObjectType")
@@ -141,21 +141,21 @@ public class Rdf2GoExplanationProvider {
 				.AND_WHERE("?Fact lns:hasValue ?Value")
 				.AND_WHERE("?Fact prov:wasAttributedTo ?Agent")
 				.AND_WHERE("?Agent rdf:type ?AgentType");
-		QueryResultTable queryRows = core.sparqlSelect(query.toSparql(core), false, 100);
-		ClosableIterator<QueryRow> iterator = queryRows.iterator();
+		Rdf2GoCore.QueryResultTable queryRows = core.sparqlSelect(query.toSparql(core), false, 100);
+		Iterator<BindingSet> iterator = queryRows.iterator();
 		if (!iterator.hasNext()) {
 			throw new IllegalArgumentException("No Fact found for object name '" + objectName + "'");
 		}
 		Fact fact = new Fact();
 		fact.terminologyObject = objectName;
-		QueryRow queryRow = iterator.next();
+		BindingSet queryRow = iterator.next();
 		fact.value = toValue(clean(queryRow.getValue("ObjectType").toString()), clean(queryRow.getValue("Value")
 				.toString()));
 		fact.agent = clean(queryRow.getValue("Agent").toString());
 		fact.agentType = clean(queryRow.getValue("AgentType").toString());
 		if (iterator.hasNext()) {
 			System.out.println(fact.value + ", " + fact.agent + ", " + fact.agentType);
-			QueryRow next = iterator.next();
+			BindingSet next = iterator.next();
 			System.out.println(clean(next.getValue("Value").toString()) + ", " + clean(next.getValue("Agent")
 					.toString()) + ", " + clean(next.getValue("AgentType").toString()));
 			//throw new IllegalArgumentException("Multiple Facts found for object name '" + objectName + "'");

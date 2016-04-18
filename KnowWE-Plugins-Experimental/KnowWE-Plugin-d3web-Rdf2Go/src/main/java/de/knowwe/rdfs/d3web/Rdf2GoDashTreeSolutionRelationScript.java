@@ -19,7 +19,7 @@
 
 package de.knowwe.rdfs.d3web;
 
-import org.ontoware.rdf2go.model.node.URI;
+import org.openrdf.model.URI;
 
 import de.knowwe.rdf2go.Rdf2GoCore;
 

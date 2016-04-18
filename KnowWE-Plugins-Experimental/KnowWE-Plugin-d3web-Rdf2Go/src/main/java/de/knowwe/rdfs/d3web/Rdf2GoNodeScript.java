@@ -22,9 +22,9 @@ package de.knowwe.rdfs.d3web;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.ontoware.rdf2go.model.Statement;
-import org.ontoware.rdf2go.model.node.URI;
-import org.ontoware.rdf2go.vocabulary.RDF;
+import org.openrdf.model.Statement;
+import org.openrdf.model.URI;
+import org.openrdf.model.vocabulary.RDF;
 
 import de.d3web.diaFlux.flow.Node;
 import de.d3web.strings.Identifier;
@@ -76,7 +76,7 @@ public class Rdf2GoNodeScript extends OntologyCompileScript<NodeType> {
 
 		// rdf:type
 		String nodeClass = getNodeClass(section);
-		Rdf2GoUtils.addStatement(core, termIdentifierURI, RDF.type,
+		Rdf2GoUtils.addStatement(core, termIdentifierURI, RDF.TYPE,
 				nodeClass, statements);
 
 		// lns:hasFlow
