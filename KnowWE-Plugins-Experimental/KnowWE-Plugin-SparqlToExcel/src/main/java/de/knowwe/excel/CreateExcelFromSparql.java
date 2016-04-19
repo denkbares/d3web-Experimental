@@ -52,7 +52,7 @@ public class CreateExcelFromSparql {
 
 		WritableSheet s = wb.createSheet("Result", 0);
 
-		List<String> variables = qrt.getVariables();
+		List<String> variables = qrt.getBindingNames();
 		Iterator<BindingSet> iterator = qrt.iterator();
 
 		// create header
