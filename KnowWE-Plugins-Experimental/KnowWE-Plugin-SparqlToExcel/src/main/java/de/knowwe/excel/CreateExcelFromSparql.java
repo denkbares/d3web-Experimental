@@ -35,6 +35,7 @@ import jxl.write.WriteException;
 import org.openrdf.model.Value;
 import org.openrdf.query.BindingSet;
 
+import com.denkbares.semanticcore.CachedTupleQueryResult;
 import de.d3web.strings.Strings;
 import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.user.UserContext;
@@ -48,7 +49,7 @@ import de.knowwe.rdf2go.Rdf2GoCore;
  */
 public class CreateExcelFromSparql {
 
-	public static void addSparqlResultAsSheet(WritableWorkbook wb, Rdf2GoCore.QueryResultTable qrt, UserContext user, Rdf2GoCore core) throws WriteException, UnsupportedEncodingException {
+	public static void addSparqlResultAsSheet(WritableWorkbook wb, CachedTupleQueryResult qrt, UserContext user, Rdf2GoCore core) throws WriteException, UnsupportedEncodingException {
 
 		WritableSheet s = wb.createSheet("Result", 0);
 

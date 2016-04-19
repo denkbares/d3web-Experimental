@@ -7,6 +7,7 @@ import java.util.List;
 import org.openrdf.model.Value;
 import org.openrdf.query.BindingSet;
 
+import com.denkbares.semanticcore.TupleQueryResult;
 import de.d3web.utils.Log;
 import de.knowwe.core.compile.Compilers;
 import de.knowwe.core.kdom.parsing.Section;
@@ -14,7 +15,6 @@ import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.kdom.defaultMarkup.DefaultMarkupRenderer;
 import de.knowwe.ontology.compile.OntologyCompiler;
-import de.knowwe.rdf2go.Rdf2GoCore.QueryResultTable;
 import de.knowwe.rdf2go.utils.Rdf2GoUtils;
 
 /**
@@ -34,8 +34,8 @@ public class OntologySummaryRenderer extends DefaultMarkupRenderer {
 			String propertyQuery = "SELECT ?x WHERE { ?x rdf:type rdf:Property." +
 					"}";
 			String localNamespace = core.getLocalNamespace();
-			QueryResultTable classResultTable = core.sparqlSelect(classQuery);
-			QueryResultTable propertyResultTable = core.sparqlSelect(propertyQuery);
+			TupleQueryResult classResultTable = core.sparqlSelect(classQuery);
+			TupleQueryResult propertyResultTable = core.sparqlSelect(propertyQuery);
 
 			List<String> classes = new ArrayList<String>();
 			List<String> properties = new ArrayList<String>();

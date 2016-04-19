@@ -27,6 +27,7 @@ import jxl.write.WritableWorkbook;
 import jxl.write.WriteException;
 import jxl.write.biff.RowsExceededException;
 
+import com.denkbares.semanticcore.CachedTupleQueryResult;
 import de.d3web.utils.Log;
 import de.knowwe.core.Attributes;
 import de.knowwe.core.action.AbstractAction;
@@ -75,7 +76,7 @@ public class DownloadSparqlResultAsExcel extends AbstractAction {
 			if (!compilers.isEmpty()) {
 				Rdf2GoCore core = compilers.iterator().next().getRdf2GoCore();
 				String sparql = Rdf2GoUtils.createSparqlString(core, querySection.getText());
-				Rdf2GoCore.QueryResultTable resultSet = core.sparqlSelect(sparql);
+				CachedTupleQueryResult resultSet = core.sparqlSelect(sparql);
 
 				OutputStream outputStream = context.getOutputStream();
 				WritableWorkbook workbook = Workbook.createWorkbook(outputStream);

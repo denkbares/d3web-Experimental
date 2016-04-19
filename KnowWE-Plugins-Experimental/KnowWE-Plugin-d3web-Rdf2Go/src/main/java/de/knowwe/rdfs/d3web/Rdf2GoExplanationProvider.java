@@ -29,6 +29,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.openrdf.query.BindingSet;
 
+import com.denkbares.semanticcore.TupleQueryResult;
 import de.d3web.core.knowledge.terminology.QuestionDate;
 import de.d3web.core.knowledge.terminology.QuestionMC;
 import de.d3web.core.knowledge.terminology.QuestionNum;
@@ -78,7 +79,7 @@ public class Rdf2GoExplanationProvider {
 				.AND_WHERE("?OtherFact lns:hasValue ?SourceValue")
 				.AND_WHERE("?OtherFact prov:wasAttributedTo ?Agent")
 				.AND_WHERE("?Agent rdf:type ?AgentType");
-		Rdf2GoCore.QueryResultTable queryRows = core.sparqlSelect(query.toSparql(core), false, 1000);
+		TupleQueryResult queryRows = core.sparqlSelect(query.toSparql(core), false, 1000);
 		for (BindingSet queryRow : queryRows) {
 			Fact fact = new Fact();
 			fact.terminologyObject = queryRow.getValue("SourceObjectName").toString();
@@ -141,7 +142,7 @@ public class Rdf2GoExplanationProvider {
 				.AND_WHERE("?Fact lns:hasValue ?Value")
 				.AND_WHERE("?Fact prov:wasAttributedTo ?Agent")
 				.AND_WHERE("?Agent rdf:type ?AgentType");
-		Rdf2GoCore.QueryResultTable queryRows = core.sparqlSelect(query.toSparql(core), false, 100);
+		TupleQueryResult queryRows = core.sparqlSelect(query.toSparql(core), false, 100);
 		Iterator<BindingSet> iterator = queryRows.iterator();
 		if (!iterator.hasNext()) {
 			throw new IllegalArgumentException("No Fact found for object name '" + objectName + "'");
