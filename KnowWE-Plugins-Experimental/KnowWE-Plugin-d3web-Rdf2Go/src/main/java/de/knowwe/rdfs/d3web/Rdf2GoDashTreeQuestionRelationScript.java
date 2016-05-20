@@ -21,7 +21,7 @@ package de.knowwe.rdfs.d3web;
 
 import java.util.List;
 
-import org.ontoware.rdf2go.model.node.URI;
+import org.openrdf.model.URI;
 
 import de.d3web.we.kdom.questionTree.QuestionTreeQuestionRelationScript;
 import de.knowwe.core.kdom.parsing.Section;

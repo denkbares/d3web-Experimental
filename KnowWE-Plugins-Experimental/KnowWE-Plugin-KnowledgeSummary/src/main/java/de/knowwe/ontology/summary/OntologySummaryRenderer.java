@@ -4,11 +4,10 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.ontoware.aifbcommons.collection.ClosableIterator;
-import org.ontoware.rdf2go.model.QueryResultTable;
-import org.ontoware.rdf2go.model.QueryRow;
-import org.ontoware.rdf2go.model.node.Node;
+import org.openrdf.model.Value;
+import org.openrdf.query.BindingSet;
 
+import com.denkbares.semanticcore.TupleQueryResult;
 import de.d3web.utils.Log;
 import de.knowwe.core.compile.Compilers;
 import de.knowwe.core.kdom.parsing.Section;
@@ -35,24 +34,24 @@ public class OntologySummaryRenderer extends DefaultMarkupRenderer {
 			String propertyQuery = "SELECT ?x WHERE { ?x rdf:type rdf:Property." +
 					"}";
 			String localNamespace = core.getLocalNamespace();
-			org.ontoware.rdf2go.model.QueryResultTable classResultTable = core.sparqlSelect(classQuery);
-			QueryResultTable propertyResultTable = core.sparqlSelect(propertyQuery);
+			TupleQueryResult classResultTable = core.sparqlSelect(classQuery);
+			TupleQueryResult propertyResultTable = core.sparqlSelect(propertyQuery);
 
 			List<String> classes = new ArrayList<String>();
 			List<String> properties = new ArrayList<String>();
 
-			ClosableIterator<QueryRow> classResultTableIterator = classResultTable.iterator();
+			Iterator<BindingSet> classResultTableIterator = classResultTable.iterator();
 			while(classResultTableIterator.hasNext()) {
-				QueryRow row = classResultTableIterator.next();
-				Node x = row.getValue("x");
-				classes.add(x.toString());
+				BindingSet row = classResultTableIterator.next();
+				Value x = row.getValue("x");
+				classes.add(x.stringValue());
 			}
 
-			ClosableIterator<QueryRow> propertyResultTableIterator = propertyResultTable.iterator();
+			Iterator<BindingSet> propertyResultTableIterator = propertyResultTable.iterator();
 			while(propertyResultTableIterator.hasNext()) {
-				QueryRow row = propertyResultTableIterator.next();
-				Node x = row.getValue("x");
-				properties.add(x.toString());
+				BindingSet row = propertyResultTableIterator.next();
+				Value x = row.getValue("x");
+				properties.add(x.stringValue());
 			}
 
 			Iterator<String> classesIterator = classes.iterator();

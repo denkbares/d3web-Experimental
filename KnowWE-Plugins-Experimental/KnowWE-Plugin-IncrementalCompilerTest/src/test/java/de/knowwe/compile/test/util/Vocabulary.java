@@ -18,7 +18,7 @@
  */
 package de.knowwe.compile.test.util;
 
-import org.ontoware.rdf2go.model.node.URI;
+import org.openrdf.model.URI;
 
 import de.knowwe.rdf2go.Rdf2GoCore;
 

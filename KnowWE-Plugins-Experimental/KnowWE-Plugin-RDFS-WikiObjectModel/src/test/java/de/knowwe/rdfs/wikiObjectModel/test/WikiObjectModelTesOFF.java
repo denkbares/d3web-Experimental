@@ -23,11 +23,11 @@ import java.io.IOException;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.ontoware.rdf2go.model.QueryResultTable;
-import org.ontoware.rdf2go.model.QueryRow;
-import org.ontoware.rdf2go.model.node.Node;
+import org.openrdf.model.Value;
+import org.openrdf.query.BindingSet;
 import utils.TestArticleManager;
 
+import com.denkbares.semanticcore.CachedTupleQueryResult;
 import de.d3web.plugin.test.InitPluginManager;
 import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.parsing.Section;
@@ -62,11 +62,11 @@ public class WikiObjectModelTesOFF {
 				.SELECT("?x")
 				.WHERE("?x rdf:type ns:Image");
 
-		QueryResultTable resultImage = Rdf2GoCore.getInstance().sparqlSelect(queryImage.toString());
+		CachedTupleQueryResult resultImage = Rdf2GoCore.getInstance().sparqlSelect(queryImage.toString());
 		boolean foundImage = false;
-		for (QueryRow queryRow : resultImage) {
-			Node value = queryRow.getValue("x");
-			if (value.toString().endsWith("Wolpertinger.jpg")) {
+		for (BindingSet queryRow : resultImage) {
+			Value value = queryRow.getValue("x");
+			if (value.stringValue().endsWith("Wolpertinger.jpg")) {
 				foundImage = true;
 			}
 		}
@@ -77,12 +77,12 @@ public class WikiObjectModelTesOFF {
 				.SELECT("?x")
 				.WHERE("?x ns:illustrates <http://valid_dummy_base_url/Wiki.jsp?page=TestPage%23Paragraph+121>");
 
-		QueryResultTable resultIllustrates = Rdf2GoCore.getInstance().sparqlSelect(
+		CachedTupleQueryResult resultIllustrates = Rdf2GoCore.getInstance().sparqlSelect(
 				queryIllustrates.toString());
 		boolean foundIllustrates = false;
-		for (QueryRow queryRow : resultIllustrates) {
-			Node value = queryRow.getValue("x");
-			if (value.toString().endsWith("Wolpertinger.jpg")) {
+		for (BindingSet queryRow : resultIllustrates) {
+			Value value = queryRow.getValue("x");
+			if (value.stringValue().endsWith("Wolpertinger.jpg")) {
 				foundIllustrates = true;
 			}
 		}
@@ -102,21 +102,21 @@ public class WikiObjectModelTesOFF {
 				.SELECT("?x")
 				.WHERE("?x ns:describesAspectOf lns:Wolpertinger");
 
-		QueryResultTable resultDescribesAspectOf = Rdf2GoCore.getInstance().sparqlSelect(
+		CachedTupleQueryResult resultDescribesAspectOf = Rdf2GoCore.getInstance().sparqlSelect(
 				querydescribesAspect.toString());
 		boolean foundDescribesAspectOf = false;
 		boolean foundParagraph = false;
 		boolean foundChapter = false;
-		for (QueryRow queryRow : resultDescribesAspectOf) {
-			Node value = queryRow.getValue("x");
-			if (value.toString().endsWith("Wolpertinger.jpg")) {
+		for (BindingSet queryRow : resultDescribesAspectOf) {
+			Value value = queryRow.getValue("x");
+			if (value.stringValue().endsWith("Wolpertinger.jpg")) {
 				foundDescribesAspectOf = true;
 			}
-			if (value.toString().equals(
+			if (value.stringValue().equals(
 					"http://valid_dummy_base_url/Wiki.jsp?page=TestPage%23Paragraph+112")) {
 				foundParagraph = true;
 			}
-			if (value.toString().equals(
+			if (value.stringValue().equals(
 					"http://valid_dummy_base_url/Wiki.jsp?page=TestPage%23Chapter+1")) {
 				foundChapter = true;
 			}
@@ -141,11 +141,11 @@ public class WikiObjectModelTesOFF {
 				.SELECT("?id")
 				.WHERE("<http://valid_dummy_base_url/Wiki.jsp?page=TestPage%23Paragraph+112> ns:hasContentKDOMID ?id");
 
-		QueryResultTable resultKDOMID = Rdf2GoCore.getInstance().sparqlSelect(
+		CachedTupleQueryResult resultKDOMID = Rdf2GoCore.getInstance().sparqlSelect(
 				queryKDOMID.toString());
 		String kdomID = null;
-		for (QueryRow queryRow : resultKDOMID) {
-			Node value = queryRow.getValue("id");
+		for (BindingSet queryRow : resultKDOMID) {
+			Value value = queryRow.getValue("id");
 			kdomID = value.toString().substring(value.toString().lastIndexOf("#KDOM_") + 6);
 		}
 

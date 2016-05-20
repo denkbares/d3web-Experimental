@@ -19,6 +19,7 @@
 package de.knowwe.excel;
 
 import java.io.UnsupportedEncodingException;
+import java.util.Iterator;
 import java.util.List;
 
 import jxl.Cell;
@@ -31,11 +32,10 @@ import jxl.write.WritableFont;
 import jxl.write.WritableSheet;
 import jxl.write.WritableWorkbook;
 import jxl.write.WriteException;
-import org.ontoware.aifbcommons.collection.ClosableIterator;
-import org.ontoware.rdf2go.model.QueryResultTable;
-import org.ontoware.rdf2go.model.QueryRow;
-import org.ontoware.rdf2go.model.node.Node;
+import org.openrdf.model.Value;
+import org.openrdf.query.BindingSet;
 
+import com.denkbares.semanticcore.CachedTupleQueryResult;
 import de.d3web.strings.Strings;
 import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.user.UserContext;
@@ -49,12 +49,12 @@ import de.knowwe.rdf2go.Rdf2GoCore;
  */
 public class CreateExcelFromSparql {
 
-	public static void addSparqlResultAsSheet(WritableWorkbook wb, QueryResultTable qrt, UserContext user, Rdf2GoCore core) throws WriteException, UnsupportedEncodingException {
+	public static void addSparqlResultAsSheet(WritableWorkbook wb, CachedTupleQueryResult qrt, UserContext user, Rdf2GoCore core) throws WriteException, UnsupportedEncodingException {
 
 		WritableSheet s = wb.createSheet("Result", 0);
 
-		List<String> variables = qrt.getVariables();
-		ClosableIterator<QueryRow> iterator = qrt.iterator();
+		List<String> variables = qrt.getBindingNames();
+		Iterator<BindingSet> iterator = qrt.iterator();
 
 		// create header
 		for (int i = 0; i < variables.size(); i++) {
@@ -63,9 +63,9 @@ public class CreateExcelFromSparql {
 
 		int row = 1;
 		while (iterator.hasNext()) {
-			QueryRow queryRow = iterator.next();
+			BindingSet queryRow = iterator.next();
 			for (int i = 0; i < variables.size(); i++) {
-				Node node = queryRow.getValue(variables.get(i));
+				Value node = queryRow.getValue(variables.get(i));
 				if (node != null) {
 					String result = SparqlResultRenderer.getInstance().renderNode(node,
 							variables.get(i), false, user, core, RenderMode.PlainText);

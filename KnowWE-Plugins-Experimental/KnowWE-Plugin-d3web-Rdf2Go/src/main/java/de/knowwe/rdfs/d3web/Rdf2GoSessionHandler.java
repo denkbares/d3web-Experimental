@@ -10,13 +10,13 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Stream;
 
-import org.ontoware.rdf2go.model.Statement;
-import org.ontoware.rdf2go.model.node.BlankNode;
-import org.ontoware.rdf2go.model.node.Literal;
-import org.ontoware.rdf2go.model.node.Resource;
-import org.ontoware.rdf2go.model.node.URI;
-import org.ontoware.rdf2go.vocabulary.RDF;
-import org.ontoware.rdf2go.vocabulary.XSD;
+import org.openrdf.model.BNode;
+import org.openrdf.model.Literal;
+import org.openrdf.model.Resource;
+import org.openrdf.model.Statement;
+import org.openrdf.model.URI;
+import org.openrdf.model.vocabulary.RDF;
+import org.openrdf.model.vocabulary.XMLSchema;
 
 import de.d3web.core.inference.PSMethod;
 import de.d3web.core.knowledge.TerminologyObject;
@@ -49,7 +49,7 @@ public class Rdf2GoSessionHandler {
 
 	public static final String MC_SEPARATOR = ", ";
 	private final Map<String, Statement[]> statementCache = new HashMap<>();
-	private Map<String, BlankNode> factNodeCache = new HashMap<>();
+	private Map<String, BNode> factNodeCache = new HashMap<>();
 	private Map<Object, Resource> agentNodeCache = new HashMap<>();
 
 	private Session session;
@@ -76,7 +76,7 @@ public class Rdf2GoSessionHandler {
 		URI sessionURI = core.createlocalURI(Session.class.getSimpleName());
 
 		// lns:sessionId rdf:type lns:Session
-		Rdf2GoUtils.addStatement(core, sessionIdURI, RDF.type, sessionURI, statementsList);
+		Rdf2GoUtils.addStatement(core, sessionIdURI, RDF.TYPE, sessionURI, statementsList);
 
 		Literal timeLiteral = core.createLiteral(Long.toString(session.getCreationDate().getTime()));
 		URI hasCreationDateURI = core.createlocalURI("hasCreationDate");
@@ -129,10 +129,10 @@ public class Rdf2GoSessionHandler {
 	protected Collection<Statement> generateFactStatements(Session session, Fact fact) {
 		List<Statement> statements = new ArrayList<>();
 
-		BlankNode factNode = getFactNode(fact);
+		BNode factNode = getFactNode(fact);
 
 		// blank node (Fact) rdf:type lns:Fact
-		Rdf2GoUtils.addStatement(core, factNode, RDF.type, Rdf2GoD3webUtils.getFactURI(core),
+		Rdf2GoUtils.addStatement(core, factNode, RDF.TYPE, Rdf2GoD3webUtils.getFactURI(core),
 				statements);
 
 		// lns:sessionID lns:hasFact blank node (Fact)
@@ -158,14 +158,14 @@ public class Rdf2GoSessionHandler {
 		return statements;
 	}
 
-	private void addProvStatements(Session session, Fact fact, Collection<Statement> statements, BlankNode factNode) {
+	private void addProvStatements(Session session, Fact fact, Collection<Statement> statements, BNode factNode) {
 		Set<TerminologyObject> activeDerivationSources = fact.getPSMethod()
 				.getActiveDerivationSources(fact.getTerminologyObject(), session);
 
 		for (TerminologyObject activeDerivationSource : activeDerivationSources) {
 			Fact valueFact = session.getBlackboard().getValueFact(activeDerivationSource);
 			if (valueFact == null) continue;
-			BlankNode sourceFactNode = getFactNode(valueFact);
+			BNode sourceFactNode = getFactNode(valueFact);
 			// blank node (Fact) prov:wasDerivedFrom lns:sourceFactNode
 			Rdf2GoUtils.addStatement(core, factNode, getProvURI("wasDerivedFrom"), sourceFactNode, statements);
 		}
@@ -175,7 +175,7 @@ public class Rdf2GoSessionHandler {
 		Rdf2GoUtils.addStatement(core, factNode, getProvURI("wasAttributedTo"), agentNode, statements);
 
 		// blank node (Agent) rdf:type lns:PSMethod/Section...
-		Rdf2GoUtils.addStatement(core, agentNode, RDF.type, getAgentType(fact), statements);
+		Rdf2GoUtils.addStatement(core, agentNode, RDF.TYPE, getAgentType(fact), statements);
 	}
 
 	private URI getAgentType(Fact fact) {
@@ -208,8 +208,8 @@ public class Rdf2GoSessionHandler {
 		return core.createURI("prov", name);
 	}
 
-	private BlankNode getFactNode(Fact fact) {
-		BlankNode factNode = factNodeCache.get(fact.getTerminologyObject().getName());
+	private BNode getFactNode(Fact fact) {
+		BNode factNode = factNodeCache.get(fact.getTerminologyObject().getName());
 		if (factNode == null) {
 			factNode = core.createBlankNode();
 			factNodeCache.put(fact.getTerminologyObject().getName(), factNode);
@@ -232,19 +232,19 @@ public class Rdf2GoSessionHandler {
 				strings[i++] = choiceID.toString();
 			}
 			String parsableMCValue = Identifier.concatParsable(MC_SEPARATOR, strings);
-			return core.createDatatypeLiteral(parsableMCValue, XSD._string);
+			return core.createDatatypeLiteral(parsableMCValue, XMLSchema.STRING);
 		}
 		else if (value instanceof HeuristicRating) {
 			return Rdf2GoUtils.createDoubleLiteral(core, ((HeuristicRating) value).getScore());
 		}
 		else if (value instanceof Unknown) {
-			return core.createDatatypeLiteral(Unknown.getInstance().getValue().toString(), XSD._string);
+			return core.createDatatypeLiteral(Unknown.getInstance().getValue().toString(), XMLSchema.STRING);
 		}
-		return core.createDatatypeLiteral(value.toString(), XSD._string);
+		return core.createDatatypeLiteral(value.toString(), XMLSchema.STRING);
 	}
 
 	public static Value literalToValue(Question question, Literal literal) {
-		String valueString = literal.getValue();
+		String valueString = literal.getLabel();
 		if (valueString.equals(Unknown.getInstance().getValue().toString())) {
 			return Unknown.getInstance();
 		}
@@ -264,7 +264,7 @@ public class Rdf2GoSessionHandler {
 			}
 			catch (ParseException e) {
 				// should not happen!
-				Log.severe("Unable to parse date from xsd:dateTime literal '" + valueString + "'");
+				Log.severe("Unable to parse date from XMLSchema:dateTime literal '" + valueString + "'");
 				return Unknown.getInstance();
 			}
 		}
