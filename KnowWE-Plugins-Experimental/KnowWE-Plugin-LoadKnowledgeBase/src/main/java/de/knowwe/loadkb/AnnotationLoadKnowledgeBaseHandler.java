@@ -12,6 +12,7 @@ import java.util.UUID;
 
 import de.d3web.core.io.PersistenceManager;
 import de.d3web.core.knowledge.KnowledgeBase;
+import de.d3web.utils.Log;
 import de.d3web.we.knowledgebase.D3webCompiler;
 import de.d3web.we.knowledgebase.KnowledgeBaseType;
 import de.d3web.we.reviseHandler.D3webHandler;
@@ -62,17 +63,19 @@ public class AnnotationLoadKnowledgeBaseHandler implements D3webHandler<Knowledg
 		catch (FileNotFoundException e2) {
 			messages.add(new Message(Message.Type.WARNING,
 					"The file you tried to load does not exist!"));
+			Log.warning("Exception while loading knowledge base file.");
 
 		}
 
 		catch (IOException e) {
-			messages.add(new Message(Message.Type.ERROR, e.getStackTrace().toString()));
+			messages.add(new Message(Message.Type.ERROR, e.getMessage()));
+			Log.warning("Exception while loading knowledge base file.", e);
 		}
 
 		return messages;
 	}
 
-	private KnowledgeBase loadKnowledgeBaseFromFile(D3webCompiler compiler, Section<?> section, String filename) throws IOException, FileNotFoundException {
+	private KnowledgeBase loadKnowledgeBaseFromFile(D3webCompiler compiler, Section<?> section, String filename) throws IOException {
 		WikiAttachment attachment = KnowWEUtils.getAttachment(section.getTitle(),
 				filename);
 
@@ -105,7 +108,7 @@ public class AnnotationLoadKnowledgeBaseHandler implements D3webHandler<Knowledg
 		return kb;
 	}
 
-	private File createKBFile(WikiAttachment attachment, String pathname) throws IOException, FileNotFoundException {
+	private File createKBFile(WikiAttachment attachment, String pathname) throws IOException {
 		File kbFile = new File(pathname,
 				UUID.randomUUID().toString());
 
@@ -113,8 +116,9 @@ public class AnnotationLoadKnowledgeBaseHandler implements D3webHandler<Knowledg
 		OutputStream out = new FileOutputStream(kbFile);
 		byte buf[] = new byte[1024];
 		int len;
-		while ((len = inputStream.read(buf)) > 0)
+		while ((len = inputStream.read(buf)) > 0) {
 			out.write(buf, 0, len);
+		}
 		out.close();
 		inputStream.close();
 		return kbFile;
