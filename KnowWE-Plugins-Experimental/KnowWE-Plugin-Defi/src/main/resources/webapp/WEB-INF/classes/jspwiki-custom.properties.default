@@ -37,25 +37,6 @@
 #
 
 # Introduced this for convenience while editing this file:
-#var.basedir = /denkbares/wikis/content-ontologydebugger
-#var.basedir = /denkbares/workspaces/idea/wikis/wiki-ilme
-#var.basedir = /denkbares/workspaces/d3web/CLAAS-Symptom
-#var.basedir = /denkbares/wikis/CLAAS-Symptom
-#var.basedir = /denkbares/wikis/content-semnet
-#var.basedir = /denkbares/wikis/content-claas-symptom
-#var.basedir = /denkbares/wikis/content-semnet
-#var.basedir = /denkbares/wikis/content_Kneipentest
-#var.basedir = /denkbares/wikis/content_avent
-#var.basedir = /denkbares/wikis/content_casis
-#var.basedir = /denkbares/wikis/content_casis_new
-#var.basedir = /denkbares/wikis/content_drools
-#var.basedir = /denkbares/wikis/content_hermes
-#var.basedir = /denkbares/wikis/content_knowsec
-#var.basedir = /denkbares/wikis/content_sensor
-#var.basedir = /denkbares/wikis/content_stocktool
-#var.basedir = /denkbares/wikis/content_testcases
-#var.basedir = /denkbares/wikis/content_thesis
-#var.basedir = /denkbares/wikis/content_vanilla
 var.basedir = /think-further/Projekte/DEFI/_data/wiki/content
 
 
@@ -848,8 +829,8 @@ mail.smtp.port = 587
 # (because then this mailserver would become an open relay).
 # Therefore you can indicate your account information here...
 #
-mail.smtp.account =  sebastian.furth@think-further.de
-mail.smtp.password = L7mgEN88
+mail.smtp.account =  info@think-further.de
+mail.smtp.password =
 
 # The properties below control connection timeouts and TLS (encryption)
 # if the mailserver supports it. The commented-out values are the defaults.
