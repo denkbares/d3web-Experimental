@@ -40,11 +40,10 @@ public class TypeVisType extends DefaultMarkupType {
 		MARKUP.addAnnotation(ANNOTATION_FORMAT, false);
 		MARKUP.addAnnotation(PackageManager.MASTER_ATTRIBUTE_NAME, false);
 		MARKUP.addAnnotation(ANNOTATION_LANGUAGE, false);
-		MARKUP.addAnnotation(ANNOTATION_DOT_APP, false, dot_apps.values());
+		MARKUP.addAnnotation(ANNOTATION_DOT_APP, false, dot_apps.class);
 		MARKUP.addAnnotation(ANNOTATION_ADD_TO_DOT, false);
-		MARKUP.addAnnotation(ANNOTATION_OUTGOING_EDGES, false, new String[] {
-				"true", "false" });
-		MARKUP.addAnnotation(ANNOTATION_VISUALIZATION, false, Visualizations.values());
+		MARKUP.addAnnotation(ANNOTATION_OUTGOING_EDGES, false, "true", "false");
+		MARKUP.addAnnotation(ANNOTATION_VISUALIZATION, false, Visualizations.class);
 	}
 
 	public TypeVisType() {
