@@ -110,8 +110,7 @@ public class AboutMeRenderer implements Renderer {
 
 		html.append("<p><input type=\"submit\" value=\"Speichern\"/></p>");
 		html.append("<input type=\"hidden\" name=\"action\" value=\"AboutMeSaveAction\" />");
-		html.append("<input type=\"hidden\" name=\"KWiki_Topic\" value=\""
-				+ sec.getTitle() + "\" />");
+		html.append("<input type=\"hidden\" name=\"KWiki_Topic\" value=\"").append(sec.getTitle()).append("\" />");
 		html.append("</form>");
 	}
 
@@ -226,8 +225,9 @@ public class AboutMeRenderer implements Renderer {
 
 		if (avatar == null) avatar = "1000px-Comic_image_missing.svg.jpg";
 		if (!isOwner) {
-			string.append("<img src=\"KnowWEExtension/images/avatars/" + avatar
-					+ "\" height=\"80\" width=\"80\" style=\"float:right;\"/>\n");
+			string.append("<img src=\"KnowWEExtension/images/avatars/")
+					.append(avatar)
+					.append("\" height=\"80\" width=\"80\" style=\"float:right;\"/>\n");
 		}
 		else {
 
@@ -311,13 +311,14 @@ public class AboutMeRenderer implements Renderer {
 					checked = " checked='checked'";
 				}
 
-				string.append("<img style='border:1px solid black;margin-top:6px;' src=\"KnowWEExtension/images/avatars/"
-						+ icon
-						+ "\" height=\"80px\" width=\"80px\" />\n");
-				string.append("<input style='margin:0px 10px 0px 0px;' type=\"radio\" name=\""
-						+ AboutMe.HTML_AVATAR + "\" id=\""
-						+ AboutMe.HTML_AVATAR + "\" value=\""
-						+ icon + "\" " + checked + " />\n");
+				string.append("<img style='border:1px solid black;margin-top:6px;' src=\"KnowWEExtension/images/avatars/")
+						.append(icon)
+						.append("\" height=\"80px\" width=\"80px\" />\n");
+				string.append("<input style='margin:0px 10px 0px 0px;' type=\"radio\" name=\"" + AboutMe.HTML_AVATAR + "\" id=\"" + AboutMe.HTML_AVATAR + "\" value=\"")
+						.append(icon)
+						.append("\" ")
+						.append(checked)
+						.append(" />\n");
 			}
 			string.append("<br />");
 		}

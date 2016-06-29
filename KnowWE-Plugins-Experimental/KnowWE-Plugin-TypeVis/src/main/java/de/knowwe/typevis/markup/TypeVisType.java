@@ -24,11 +24,11 @@ public class TypeVisType extends DefaultMarkupType {
 
 	private enum dot_apps {
 		dot, neato
-	};
+	}
 
 	public enum Visualizations {
 		wheel, force
-	};
+	}
 
 	static {
 		MARKUP = new DefaultMarkup("TypeVis");

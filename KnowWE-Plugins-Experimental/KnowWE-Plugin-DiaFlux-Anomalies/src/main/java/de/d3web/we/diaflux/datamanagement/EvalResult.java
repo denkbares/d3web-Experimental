@@ -39,7 +39,7 @@ public class EvalResult {
 	private final Map<String, Domain> domains;
 
 	public EvalResult() {
-		domains = new HashMap<String, Domain>();
+		domains = new HashMap<>();
 	}
 
 	public EvalResult(NamedObject question, Domain domain) {
@@ -65,8 +65,8 @@ public class EvalResult {
 				result.put(object, Domains.add(thisDomain, otherDomain));
 			}
 		}
-		
-		List<String> list = new LinkedList<String>(this.getObjects());
+
+		List<String> list = new LinkedList<>(this.getObjects());
 		list.removeAll(other.getObjects());
 
 		for (String object : list) {
@@ -98,7 +98,7 @@ public class EvalResult {
 			}
 		}
 
-		List<String> list = new LinkedList<String>(this.getObjects());
+		List<String> list = new LinkedList<>(this.getObjects());
 		list.removeAll(other.getObjects());
 
 		for (String object : list) {
@@ -119,7 +119,7 @@ public class EvalResult {
 
 	public void negate() {
 
-		for (String q : new LinkedList<String>(getObjects())) {
+		for (String q : new LinkedList<>(getObjects())) {
 			put(q, getDomain(q).negate());
 		}
 

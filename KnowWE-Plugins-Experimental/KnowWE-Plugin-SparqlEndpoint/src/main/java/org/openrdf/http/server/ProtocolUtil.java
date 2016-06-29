@@ -152,7 +152,7 @@ public class ProtocolUtil {
 			// Find an acceptable MIME type based on the request headers
 			logAcceptableFormats(request);
 
-			Collection<String> mimeTypes = new ArrayList<String>(16);
+			Collection<String> mimeTypes = new ArrayList<>(16);
 			for (FileFormat format : serviceRegistry.getKeys()) {
 				mimeTypes.addAll(format.getMIMETypes());
 			}

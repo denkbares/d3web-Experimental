@@ -76,8 +76,7 @@ public class FlowCoverage extends KBTest {
 		for (Flow flow : flowSet) {
 			double coverage = result.getFlowCoverage(flow);
 			if (coverage < 1) {
-				bob.append("Flow '" + flow.getName()
-						+ "' is not covered by any testcase.\r");
+				bob.append("Flow '").append(flow.getName()).append("' is not covered by any testcase.\r");
 			}
 		}
 

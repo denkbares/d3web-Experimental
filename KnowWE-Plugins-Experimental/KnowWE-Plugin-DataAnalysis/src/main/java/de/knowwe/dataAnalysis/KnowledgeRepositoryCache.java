@@ -18,8 +18,8 @@ public class KnowledgeRepositoryCache {
 	private KnowledgeRepositoryCache() {
 	}
 
-	private final List<String[]> insertKnowledge = new ArrayList<String[]>();
-	private final List<String[]> removeKnowledge = new ArrayList<String[]>();
+	private final List<String[]> insertKnowledge = new ArrayList<>();
+	private final List<String[]> removeKnowledge = new ArrayList<>();
 
 	public List<String[]> getCachedInsertKnowledge() {
 		return Collections.unmodifiableList(insertKnowledge);

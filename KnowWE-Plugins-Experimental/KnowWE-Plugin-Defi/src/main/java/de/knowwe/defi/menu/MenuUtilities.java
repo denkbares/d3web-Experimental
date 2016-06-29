@@ -42,7 +42,7 @@ public class MenuUtilities {
 	 * Get all units.
 	 */
 	public static List<Section<DashTreeElement>> getAllUnits() {
-		List<Section<DashTreeElement>> units = new LinkedList<Section<DashTreeElement>>();
+		List<Section<DashTreeElement>> units = new LinkedList<>();
 		Article leftMenu = KnowWEUtils.getArticleManager(
 				Environment.DEFAULT_WEB).getArticle("LeftMenu");
 
@@ -60,8 +60,8 @@ public class MenuUtilities {
 	 * Get all root units.
 	 */
 	public static List<Section<DashTreeElement>> getRootUnits() {
-		List<Section<DashTreeElement>> units = new LinkedList<Section<DashTreeElement>>();
-		List<Section<DashTreeElement>> rootUnits = new LinkedList<Section<DashTreeElement>>();
+		List<Section<DashTreeElement>> units = new LinkedList<>();
+		List<Section<DashTreeElement>> rootUnits = new LinkedList<>();
 		Article leftMenu = KnowWEUtils.getArticleManager(
 				Environment.DEFAULT_WEB).getArticle("LeftMenu");
 
@@ -83,7 +83,7 @@ public class MenuUtilities {
 	 * Get all subunits of a root unit.
 	 */
 	public static List<Section<DashTreeElement>> getSubUnits(Section<DashTreeElement> rootUnit, List<Section<DashTreeElement>> units) {
-		List<Section<DashTreeElement>> subUnits = new LinkedList<Section<DashTreeElement>>();
+		List<Section<DashTreeElement>> subUnits = new LinkedList<>();
 		Sections.successors(rootUnit, DashTreeElement.class, subUnits);
 		boolean add = false;
 

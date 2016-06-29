@@ -49,7 +49,7 @@ public class AllPathsShallowStrategy implements DFSStrategy {
 	public AllPathsShallowStrategy(boolean stopOnSnapshot, KnowledgeBase kb) {
 		this.kb = kb;
 		this.stopOnSnapshot = stopOnSnapshot;
-		this.usedStartPaths = new HashSet<Path>();
+		this.usedStartPaths = new HashSet<>();
 	}
 
 	@Override
@@ -59,7 +59,7 @@ public class AllPathsShallowStrategy implements DFSStrategy {
 
 	@Override
 	public List<Path> getInitialStartPaths() {
-		LinkedList<Path> paths = new LinkedList<Path>();
+		LinkedList<Path> paths = new LinkedList<>();
 
 		for (Flow flow : DiaFluxUtils.getFlowSet(kb)) {
 			for (Node node : flow.getStartNodes()) {

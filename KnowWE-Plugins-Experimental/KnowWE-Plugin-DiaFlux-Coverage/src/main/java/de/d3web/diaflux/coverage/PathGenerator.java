@@ -50,7 +50,7 @@ public class PathGenerator {
 		this.strategy = evaluator;
 		this.kb = kb;
 
-		this.startPaths = new HashSet<Path>();
+		this.startPaths = new HashSet<>();
 	}
 
 	public KnowledgeBase getKB() {
@@ -92,7 +92,7 @@ public class PathGenerator {
 			}
 		}
 
-		List<Edge> edges = new LinkedList<Edge>();
+		List<Edge> edges = new LinkedList<>();
 		if (currentNode instanceof EndNode) {
 
 			// we reached the end of the main flowchart

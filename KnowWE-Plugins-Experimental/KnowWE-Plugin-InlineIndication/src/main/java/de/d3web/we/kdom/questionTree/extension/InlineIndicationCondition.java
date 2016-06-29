@@ -107,7 +107,7 @@ public class InlineIndicationCondition extends AbstractType {
 			@SuppressWarnings("rawtypes")
 			Section<QASetDefinition> qDef = Sections.successor(s.getParent(),
 					QASetDefinition.class);
-			Collection<Message> msgs = new HashSet<Message>();
+			Collection<Message> msgs = new HashSet<>();
 			if (finding != null && qDef != null) {
 
 				@SuppressWarnings("unchecked")
@@ -120,7 +120,7 @@ public class InlineIndicationCondition extends AbstractType {
 				}
 
 				// create an contraIndication-rule
-				List<QASet> qasets = new ArrayList<QASet>();
+				List<QASet> qasets = new ArrayList<>();
 				qasets.add(qaset);
 
 				Rule r = RuleFactory.createContraIndicationRule(qasets, new CondNot(condition));

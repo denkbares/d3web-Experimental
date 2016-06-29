@@ -70,7 +70,7 @@ public class TermRenamingActionIncr extends AbstractAction {
 		ReferenceManager referenceManager = IncrementalCompiler.getInstance().getTerminology();
 
 		Map<String, Set<Section<?>>> allTerms =
-				new HashMap<String, Set<Section<?>>>();
+				new HashMap<>();
 
 		// Check all TermDefinitions
 		Collection<Section<? extends SimpleDefinition>> termDefinitions = referenceManager.getTermDefinitions(termIdentifier);
@@ -80,7 +80,7 @@ public class TermRenamingActionIncr extends AbstractAction {
 				articleSecs = allTerms.get(section.getTitle());
 			}
 			else {
-				articleSecs = new HashSet<Section<?>>();
+				articleSecs = new HashSet<>();
 				allTerms.put(section.getTitle(), articleSecs);
 			}
 			articleSecs.add(section);
@@ -94,15 +94,15 @@ public class TermRenamingActionIncr extends AbstractAction {
 				articleSecs = allTerms.get(section.getTitle());
 			}
 			else {
-				articleSecs = new HashSet<Section<?>>();
+				articleSecs = new HashSet<>();
 				allTerms.put(section.getTitle(), articleSecs);
 			}
 			articleSecs.add(section);
 		}
 
 		ArticleManager mgr = Environment.getInstance().getArticleManager(web);
-		Set<String> failures = new HashSet<String>();
-		Set<String> success = new HashSet<String>();
+		Set<String> failures = new HashSet<>();
+		Set<String> success = new HashSet<>();
 		renameTerms(allTerms, replacement, mgr, context, failures,
 				success);
 		generateMessage(failures, success, context, termIdentifier, replacement);
@@ -154,7 +154,7 @@ public class TermRenamingActionIncr extends AbstractAction {
 			if (Environment.getInstance().getWikiConnector().userCanEditArticle(
 					articlename, context.getRequest())) {
 
-				Map<String, String> nodesMap = new HashMap<String, String>();
+				Map<String, String> nodesMap = new HashMap<>();
 				for (Section<?> section : allTerms.get(articlename)) {
 
 					nodesMap.put(section.getID(), replacement);

@@ -54,7 +54,7 @@ public class DebuggerTagHandler extends AbstractTagHandler {
 	public void render(Section<?> section, UserContext userContext,
 			Map<String, String> parameters, RenderResult result) {
 		// Get the page's knowledgebase and prepare some variables
-		StringBuffer buffer = new StringBuffer();
+		StringBuilder buffer = new StringBuilder();
 		String title = userContext.getTitle();
 		String web = userContext.getParameter(Attributes.WEB);
 		// If article already contains a debugger, return error.
@@ -93,9 +93,11 @@ public class DebuggerTagHandler extends AbstractTagHandler {
 		buffer.append("<div id='debugger' class='debugger'>");
 		// trace
 		buffer.append("<div id='debuggerTrace' class='debuggerTrace'>");
-		buffer.append("<span lvl=0 kbid='" + kb.getId()
-				+ "' onClick='KNOWWE.plugin.debuggr.traceClicked(this);'>"
-				+ DebuggerMenuAction.SOLUTIONS_KEY + "</span>");
+		buffer.append("<span lvl=0 kbid='")
+				.append(kb.getId())
+				.append("' onClick='KNOWWE.plugin.debuggr.traceClicked(this);'>")
+				.append(DebuggerMenuAction.SOLUTIONS_KEY)
+				.append("</span>");
 		buffer.append("</div>");
 		// menu
 		buffer.append("<div id='debuggerMenu'>");

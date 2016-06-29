@@ -115,7 +115,7 @@ public class MonitorMarkupContentType extends AbstractType {
 					+ "_q");
 			terminologyHandler.registerTermDefinition(compiler, section, termObjectClass, termIdentifierQ);
 
-			return new ArrayList<Message>(0);
+			return new ArrayList<>(0);
 		}
 
 	}

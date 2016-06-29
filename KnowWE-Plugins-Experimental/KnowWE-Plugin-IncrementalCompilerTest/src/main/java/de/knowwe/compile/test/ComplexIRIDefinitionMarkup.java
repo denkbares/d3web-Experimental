@@ -128,7 +128,7 @@ class ComplexIRIDefinitionCompileScript extends SimpleKnowledgeUnitCompileScript
 
 	@Override
 	public void insertIntoRepository(Section<ComplexIRIDefinitionMarkup> section) {
-		List<Section<SimpleReference>> found = new ArrayList<Section<SimpleReference>>();
+		List<Section<SimpleReference>> found = new ArrayList<>();
 		URI subURI = null;
 		URI predURI = null;
 		URI objURI = null;

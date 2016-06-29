@@ -53,23 +53,23 @@ import de.knowwe.core.utils.KnowWEUtils;
  */
 public class ReferenceManager {
 
-	private final Map<Identifier, TermDefinitionInformation> validObjects = new HashMap<Identifier, TermDefinitionInformation>();
-	private final Map<Identifier, Section<?>> validPredefinedObjects = new HashMap<Identifier, Section<?>>();
+	private final Map<Identifier, TermDefinitionInformation> validObjects = new HashMap<>();
+	private final Map<Identifier, Section<?>> validPredefinedObjects = new HashMap<>();
 
-	private final Map<Identifier, Section<?>> validImportedObjects = new HashMap<Identifier, Section<?>>();
+	private final Map<Identifier, Section<?>> validImportedObjects = new HashMap<>();
 
-	private Map<Identifier, TermDefinitionInformation> validObjectsOld = new HashMap<Identifier, TermDefinitionInformation>();
+	private Map<Identifier, TermDefinitionInformation> validObjectsOld = new HashMap<>();
 
-	private final Map<Identifier, Set<Section<? extends SimpleReference>>> allReferences = new HashMap<Identifier, Set<Section<? extends SimpleReference>>>();
+	private final Map<Identifier, Set<Section<? extends SimpleReference>>> allReferences = new HashMap<>();
 
 	public Map<Identifier, Set<Section<? extends SimpleReference>>> getAllReferences() {
 		return allReferences;
 	}
 
-	private final Map<Identifier, Set<Section<? extends SimpleDefinition>>> allDefinitions = new HashMap<Identifier, Set<Section<? extends SimpleDefinition>>>();
+	private final Map<Identifier, Set<Section<? extends SimpleDefinition>>> allDefinitions = new HashMap<>();
 
 	public void newCompilationStep() {
-		validObjectsOld = new HashMap<Identifier, TermDefinitionInformation>();
+		validObjectsOld = new HashMap<>();
 		validObjectsOld.putAll(validObjects);
 	}
 
@@ -170,9 +170,9 @@ public class ReferenceManager {
 	}
 
 	public Collection<Section<? extends KnowledgeUnit>> getReferencingSlices(Section<? extends Term> section) {
-		Collection<Section<? extends KnowledgeUnit>> result = new HashSet<Section<? extends KnowledgeUnit>>();
+		Collection<Section<? extends KnowledgeUnit>> result = new HashSet<>();
 		Identifier termIdentifier = KnowWEUtils.getTermIdentifier(section);
-		Set<Section<? extends Term>> termSet = new HashSet<Section<? extends Term>>();
+		Set<Section<? extends Term>> termSet = new HashSet<>();
 		Set<Section<? extends SimpleReference>> refs = allReferences.get(termIdentifier);
 		if (refs != null) {
 			termSet.addAll(refs);
@@ -221,7 +221,7 @@ public class ReferenceManager {
 			allReferences.get(identifier).add(section);
 		}
 		else {
-			HashSet<Section<? extends SimpleReference>> set = new HashSet<Section<? extends SimpleReference>>();
+			HashSet<Section<? extends SimpleReference>> set = new HashSet<>();
 			set.add(section);
 			allReferences.put(identifier, set);
 		}
@@ -241,7 +241,7 @@ public class ReferenceManager {
 			allDefinitions.get(identifier).add(section);
 		}
 		else {
-			Set<Section<? extends SimpleDefinition>> set = new HashSet<Section<? extends SimpleDefinition>>();
+			Set<Section<? extends SimpleDefinition>> set = new HashSet<>();
 			set.add(section);
 			allDefinitions.put(identifier, set);
 		}
@@ -263,18 +263,18 @@ public class ReferenceManager {
 		if (allDefinitions.containsKey(identifier)) {
 			return allDefinitions.get(identifier);
 		}
-		return new ArrayList<Section<? extends SimpleDefinition>>();
+		return new ArrayList<>();
 	}
 
 	public Collection<Section<? extends SimpleReference>> getTermReferences(Identifier identifier) {
 		if (allReferences.containsKey(identifier)) {
 			return allReferences.get(identifier);
 		}
-		return new ArrayList<Section<? extends SimpleReference>>();
+		return new ArrayList<>();
 	}
 
 	public Collection<Section<? extends ComplexDefinition>> getReferencingDefinitions(Section<?> section) {
-		Collection<Section<? extends ComplexDefinition>> result = new HashSet<Section<? extends ComplexDefinition>>();
+		Collection<Section<? extends ComplexDefinition>> result = new HashSet<>();
 		Identifier termIdentifier = KnowWEUtils.getTermIdentifier(section);
 		Set<Section<? extends SimpleReference>> refSet = allReferences.get(termIdentifier);
 		if (refSet == null) return result;
@@ -289,23 +289,23 @@ public class ReferenceManager {
 	}
 
 	public Collection<Section<? extends SimpleDefinition>> getAllTermDefinitions() {
-		Set<Section<? extends SimpleDefinition>> result = new HashSet<Section<? extends SimpleDefinition>>();
+		Set<Section<? extends SimpleDefinition>> result = new HashSet<>();
 		for (Identifier termIdentifier : validObjects.keySet()) {
 			Collection<Section<? extends SimpleDefinition>> termDefinitions = this.getTermDefinitions(termIdentifier);
-			if (termDefinitions.size() > 0) {
+			if (!termDefinitions.isEmpty()) {
 				result.add(termDefinitions.iterator().next());
 			}
 		}
 		for (Identifier termIdentifier : validPredefinedObjects.keySet()) {
 			Collection<Section<? extends SimpleDefinition>> termDefinitions = this.getTermDefinitions(termIdentifier);
-			if (termDefinitions.size() > 0) {
+			if (!termDefinitions.isEmpty()) {
 				result.add(termDefinitions.iterator().next());
 			}
 		}
 
 		for (Identifier termIdentifier : validImportedObjects.keySet()) {
 			Collection<Section<? extends SimpleDefinition>> termDefinitions = this.getTermDefinitions(termIdentifier);
-			if (termDefinitions.size() > 0) {
+			if (!termDefinitions.isEmpty()) {
 				result.add(termDefinitions.iterator().next());
 			}
 		}

@@ -48,8 +48,8 @@ public class RedundantStartNodeTest extends DiaFluxTest {
 
 	@Override
 	protected Collection<Flow> doTest(KnowledgeBase testObject, List<Flow> flows) {
-		Collection<Flow> result = new HashSet<Flow>();
-		Collection<StartNode> startNodes = new HashSet<StartNode>();
+		Collection<Flow> result = new HashSet<>();
+		Collection<StartNode> startNodes = new HashSet<>();
 
 		// collect all startnodes from the flows to test
 		for (Flow flow : flows) {

@@ -8,11 +8,11 @@ import de.knowwe.core.kdom.parsing.Section;
 
 public interface KnowledgeUnitCompileScript<T extends Type> {
 
-	public Collection<Section<? extends Term>> getAllReferencesOfKnowledgeUnit(Section<? extends KnowledgeUnit> section);
+	Collection<Section<? extends Term>> getAllReferencesOfKnowledgeUnit(Section<? extends KnowledgeUnit> section);
 
-	public Collection<Section<? extends Term>> getExternalReferencesOfKnowledgeUnit(Section<? extends KnowledgeUnit> section);
+	Collection<Section<? extends Term>> getExternalReferencesOfKnowledgeUnit(Section<? extends KnowledgeUnit> section);
 
-	public void insertIntoRepository(Section<T> section);
+	void insertIntoRepository(Section<T> section);
 
-	public void deleteFromRepository(Section<T> section);
+	void deleteFromRepository(Section<T> section);
 }

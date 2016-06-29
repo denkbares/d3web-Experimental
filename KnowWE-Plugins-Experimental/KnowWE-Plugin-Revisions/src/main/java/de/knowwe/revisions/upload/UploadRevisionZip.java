@@ -50,7 +50,7 @@ public class UploadRevisionZip extends AbstractAction {
 	@Override
 	public void execute(UserActionContext context) throws IOException {
 
-		HashMap<String, String> pages = new HashMap<String, String>();
+		HashMap<String, String> pages = new HashMap<>();
 		List<FileItem> items = null;
 		String zipname = null;
 		try {

@@ -63,7 +63,7 @@ public class GLCityGenerator {
 	public static GLCity generateCity(MetricsSet<Node> metrics, KnowledgeBase kb) {
 
 		Map<Flow, Collection<ComposedNode>> structure = DiaFluxUtils.createFlowStructure(kb);
-		Map<Flow, GLDistrict> city = new HashMap<Flow, GLDistrict>();
+		Map<Flow, GLDistrict> city = new HashMap<>();
 
 		while (!structure.isEmpty()) {
 
@@ -83,7 +83,7 @@ public class GLCityGenerator {
 			// remove leaf from tree
 			for (Flow temp : structure.keySet()) {
 				Collection<ComposedNode> calledFlows = structure.get(temp);
-				for (ComposedNode composedNode : new ArrayList<ComposedNode>(calledFlows)) {
+				for (ComposedNode composedNode : new ArrayList<>(calledFlows)) {
 					if (DiaFluxUtils.getCalledFlow(composedNode) == flow) {
 						calledFlows.remove(composedNode);
 					}
@@ -108,8 +108,8 @@ public class GLCityGenerator {
 
 
 	private static GLDistrict createDistrict(KnowledgeBase kb, Flow flow, MetricsSet<Node> metrics, Map<Flow, GLDistrict> city) {
-		
-		List<GLBuilding> boxes = new LinkedList<GLBuilding>();
+
+		List<GLBuilding> boxes = new LinkedList<>();
 		
 		List<Node> nodes = flow.getNodes();
 		for (Node node : nodes) {
@@ -174,14 +174,14 @@ public class GLCityGenerator {
 	}
 
 	public static GLDistrict createDistrict(List<GLBuilding> boxes, Mapping<GLBuilding> mapper, double margin, double height) {
-		KDNode<GLBuilding> root = RectanglePacker.pack(boxes, new MarginMapper<GLBuilding>(
+		KDNode<GLBuilding> root = RectanglePacker.pack(boxes, new MarginMapper<>(
 				mapper, margin));
 
 		Map<GLBuilding, Rectangle2D> rects =
 				root.visitInorder(new
-						CollectAssignedRectangles<GLBuilding>(margin)).getAssignments();
+						CollectAssignedRectangles<>(margin)).getAssignments();
 
-		Rectangle2D bounds = root.visitInorder(new AddRectanglesVisitor<GLBuilding>()).getBounds();
+		Rectangle2D bounds = root.visitInorder(new AddRectanglesVisitor<>()).getBounds();
 		GLDistrict ground = createGround(bounds.getWidth(), bounds.getHeight(), height);
 
 		for (GLBuilding box : rects.keySet()) {

@@ -79,7 +79,7 @@ public class DefiOtherEventsLogger {
 	}
 
 	public static List<String> getLogLines(String prefix) {
-		LinkedList<String> loglines = new LinkedList<String>();
+		LinkedList<String> loglines = new LinkedList<>();
 		BufferedReader br = null;
 		String line;
 		try {

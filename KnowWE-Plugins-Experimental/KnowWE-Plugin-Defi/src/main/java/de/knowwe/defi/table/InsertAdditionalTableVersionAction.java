@@ -52,21 +52,21 @@ public class InsertAdditionalTableVersionAction extends AbstractAction {
 				tableid, article);
 
 		// find version blocks
-		List<Section<VersionEntry>> versionEntries = new ArrayList<Section<VersionEntry>>();
+		List<Section<VersionEntry>> versionEntries = new ArrayList<>();
 		Sections.successors(contentSectionForTableID, VersionEntry.class,
 				versionEntries);
 		int numberOfExistingVersions = versionEntries.size();
 
 		// find out number of inputs to generate
 		Section<VersionEntry> version0 = versionEntries.get(0);
-		List<Section<InputContent>> inputEntries = new ArrayList<Section<InputContent>>();
+		List<Section<InputContent>> inputEntries = new ArrayList<>();
 		Sections.successors(version0, InputContent.class, inputEntries);
 		int numberOfInputs = inputEntries.size();
 
 		// generate empty inputs
-		Map<Integer, String> emptyInputData = new HashMap<Integer, String>();
+		Map<Integer, String> emptyInputData = new HashMap<>();
 		for (int i = 0; i < numberOfInputs; i++) {
-			emptyInputData.put(new Integer(i), "");
+			emptyInputData.put(i, "");
 		}
 
 		// create new markup for empty input data
@@ -74,7 +74,7 @@ public class InsertAdditionalTableVersionAction extends AbstractAction {
 				numberOfExistingVersions, emptyInputData);
 
 		// insert new markup into page
-		Map<String, String> nodesMap = new HashMap<String, String>();
+		Map<String, String> nodesMap = new HashMap<>();
 		String oldText = contentSectionForTableID.getText();
 		String completeNewText = oldText.substring(0, oldText.length() - 3) + newContent + "-\n";
 		nodesMap.put(contentSectionForTableID.getID(),

@@ -62,8 +62,8 @@ public class GlobalReplaceAction extends AbstractAction {
 
 		String[] replacementArray = replacements.split("__");
 
-		Map<Section<?>, List<WordBasedRenameFinding>> findingsPerSection = new HashMap<Section<?>, List<WordBasedRenameFinding>>();
-		Collection<Article> modifiedArticles = new HashSet<Article>();
+		Map<Section<?>, List<WordBasedRenameFinding>> findingsPerSection = new HashMap<>();
+		Collection<Article> modifiedArticles = new HashSet<>();
 
 		// replaceFindings decodieren
 		for (String string : replacementArray) {
@@ -97,7 +97,7 @@ public class GlobalReplaceAction extends AbstractAction {
 								sec));
 			}
 			else {
-				List<WordBasedRenameFinding> set = new ArrayList<WordBasedRenameFinding>();
+				List<WordBasedRenameFinding> set = new ArrayList<>();
 				set.add(new WordBasedRenameFinding(start, length,
 						WordBasedRenameFinding.getContext(
 								start, sec, art.getRootSection().getText(), length), sec));
@@ -113,7 +113,7 @@ public class GlobalReplaceAction extends AbstractAction {
 			Section<?> sec = entry.getKey();
 			List<WordBasedRenameFinding> list = entry.getValue();
 			Collections.sort(list);
-			StringBuffer buff = new StringBuffer();
+			StringBuilder buff = new StringBuilder();
 			int lastEnd = 0;
 			for (WordBasedRenameFinding finding : list) {
 				int start = finding.getStart();
@@ -164,7 +164,7 @@ public class GlobalReplaceAction extends AbstractAction {
 		for (int i = 0; i < values.length; i++) {
 			summary = summary.replace("{" + i + "}", values[i]);
 		}
-		return errors.toString() + "<p class=\"info box\">" + summary
+		return errors + "<p class=\"info box\">" + summary
 				+ rb.getString("KnowWE.renamingtool.msg.redirect") + "</p>";
 	}
 

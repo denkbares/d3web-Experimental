@@ -54,7 +54,7 @@ public class HasCompileErrorTest extends AbstractTest<Article> {
 				Sections.successors(rootSection,
 						IncrementalTermReference.class)));
 
-		if (erroneousTerms.size() == 0) {
+		if (erroneousTerms.isEmpty()) {
 			return Message.SUCCESS;
 		}
 		else {
@@ -65,7 +65,7 @@ public class HasCompileErrorTest extends AbstractTest<Article> {
 	}
 
 	private <T extends Term> Set<String> extractedErroneousTermNames(ReferenceManager referenceManager, List<Section<T>> terms) {
-		Set<String> erroneousTerms = new HashSet<String>();
+		Set<String> erroneousTerms = new HashSet<>();
 		for (Section<T> def : terms) {
 			if (!referenceManager.isValid(def.get().getTermIdentifier(def))) {
 				erroneousTerms.add(def.get().getTermName(def));

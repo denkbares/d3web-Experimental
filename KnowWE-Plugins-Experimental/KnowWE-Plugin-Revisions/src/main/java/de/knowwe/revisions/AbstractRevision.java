@@ -45,6 +45,7 @@ public abstract class AbstractRevision implements Revision {
 		articleManager = null;
 	}
 
+	@Override
 	public ArticleManager getArticleManager() {
 		if (articleManager == null) {
 			createArticleManager();

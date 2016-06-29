@@ -47,8 +47,8 @@ public class UploadedRevDetails extends AbstractRevDetails {
 	 */
 	@Override
 	protected String getPageDiffOverview(Revision rev, UserActionContext context) {
-		StringBuffer string = new StringBuffer();
-		HashMap<String, Integer> compareDiff = ((UploadedRevision) rev).compareWithCurrentState();
+		StringBuilder string = new StringBuilder();
+		HashMap<String, Integer> compareDiff = rev.compareWithCurrentState();
 
 		// remove the current (revision) page,
 		// restoring a old version of this page should be avoided

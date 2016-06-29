@@ -50,7 +50,7 @@ public class FlowDomain implements Domain {
 
 	private FlowDomain(Flow flow, Collection<EndNode> endNodes) {
 		this.flow = flow;
-		this.endNodes = new HashSet<EndNode>();
+		this.endNodes = new HashSet<>();
 		this.endNodes.addAll(endNodes);
 	}
 
@@ -96,7 +96,7 @@ public class FlowDomain implements Domain {
 	@Override
 	public Domain intersect(Domain domain) {
 		FlowDomain other = (FlowDomain) domain;
-		LinkedList<EndNode> list = new LinkedList<EndNode>(this.getEndNodes());
+		LinkedList<EndNode> list = new LinkedList<>(this.getEndNodes());
 		list.retainAll(other.getEndNodes());
 
 		return new FlowDomain(getFlow(), list);

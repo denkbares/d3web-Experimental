@@ -95,7 +95,7 @@ public class Rdf2GoPropertyHandler extends OntologyHandler<PropertyDeclarationTy
 			return Messages.asList();
 		}
 
-		List<Statement> statements = new ArrayList<Statement>();
+		List<Statement> statements = new ArrayList<>();
 		Rdf2GoCore core = compiler.getRdf2GoCore();
 		for (Identifier namedObject : objects) {
 			String externalForm = Rdf2GoUtils.getCleanedExternalForm(namedObject);
@@ -130,7 +130,7 @@ public class Rdf2GoPropertyHandler extends OntologyHandler<PropertyDeclarationTy
 	}
 
 	private List<Identifier> getObjectIdentifiers(OntologyCompiler compiler, Section<PropertyObjectReference> namendObjectSection) {
-		List<Identifier> objects = new ArrayList<Identifier>(1);
+		List<Identifier> objects = new ArrayList<>(1);
 		Section<PropertyObjectReference.PropertyAnswerReference> answerReferenceSection =
 				Sections.child(namendObjectSection, PropertyObjectReference.PropertyAnswerReference.class);
 		if (answerReferenceSection != null) {

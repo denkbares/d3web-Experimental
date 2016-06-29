@@ -105,7 +105,7 @@ public class DataTagHandler extends AbstractTagHandler {
 
 	private String renderLogDownloadLinks(String title) {
 		StringBuilder loglinks = new StringBuilder();
-		List<WikiAttachment> attachments = new LinkedList<WikiAttachment>();
+		List<WikiAttachment> attachments = new LinkedList<>();
 		try {
 			for (WikiAttachment att : Environment.getInstance().getWikiConnector().getAttachments(
 					title)) {
@@ -119,8 +119,11 @@ public class DataTagHandler extends AbstractTagHandler {
 		loglinks.append(LOG_HEADLINE);
 		loglinks.append("<ul>");
 		for (WikiAttachment wa : attachments) {
-			loglinks.append("<li class='defi_log_dl'><a href='attach/" + wa.getPath() + "'>"
-					+ wa.getFileName() + "</a></li>");
+			loglinks.append("<li class='defi_log_dl'><a href='attach/")
+					.append(wa.getPath())
+					.append("'>")
+					.append(wa.getFileName())
+					.append("</a></li>");
 		}
 		loglinks.append("</ul>");
 
@@ -147,7 +150,7 @@ public class DataTagHandler extends AbstractTagHandler {
 		us.append("<p>Benutzer auswählen: <select id='userDataSelect' name='users' onChange='displayPersonalData(this.options[this.selectedIndex].value)'>");
 		us.append("<option value='' style='display:none'></option>");
 		for (String user : users) {
-			us.append("<option value='" + user + "'>" + user + "</option>");
+			us.append("<option value='").append(user).append("'>").append(user).append("</option>");
 		}
 		us.append("</select></p>");
 	

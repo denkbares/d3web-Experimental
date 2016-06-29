@@ -46,7 +46,7 @@ public class DiaFluxExtractor implements DependencyExtractor {
 	public Collection<Dependency> getDependencies(KnowledgeBase kb) {
 		if (!DiaFluxUtils.hasFlows(kb)) return Collections.emptyList();
 
-		Set<Dependency> result = new HashSet<Dependency>();
+		Set<Dependency> result = new HashSet<>();
 
 		for (Flow flow : DiaFluxUtils.getFlowSet(kb)) {
 

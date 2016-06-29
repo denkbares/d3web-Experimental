@@ -46,7 +46,7 @@ public class Dependency implements Iterable<TerminologyObject> {
 	
 	public Dependency(TerminologyObject object, Collection<? extends TerminologyObject> dependencies, Type type, Class<? extends PSMethod> psMethod, String verbalization) {
 		this.object = object;
-		this.dependencies = new HashSet<TerminologyObject>(dependencies);
+		this.dependencies = new HashSet<>(dependencies);
 		this.type = type;
 		this.psMethod = psMethod;
 		this.verbalization = verbalization;

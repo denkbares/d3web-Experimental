@@ -42,14 +42,14 @@ public class DependencyFinder {
 	private static final Collection<DependencyExtractor> finders;
 
 	static {
-		finders = new LinkedList<DependencyExtractor>();
+		finders = new LinkedList<>();
 		finders.add(new RuleExtractor(PSMethodAbstraction.class));
 		finders.add(new RuleExtractor(PSMethodHeuristic.class));
 		finders.add(new DiaFluxExtractor());
 	}
 
 	public static Collection<Dependency> getDependencies(KnowledgeBase kb) {
-		Collection<Dependency> dependencies = new LinkedList<Dependency>();
+		Collection<Dependency> dependencies = new LinkedList<>();
 
 		for (DependencyExtractor finder : finders) {
 			dependencies.addAll(finder.getDependencies(kb));
@@ -80,12 +80,12 @@ public class DependencyFinder {
 	 */
 	public static Map<TerminologyObject, Collection<Dependency>> getForwardDependencies(KnowledgeBase kb) {
 		Collection<Dependency> dependencies = getDependencies(kb);
-		Map<TerminologyObject, Collection<Dependency>> result = new HashMap<TerminologyObject, Collection<Dependency>>();
+		Map<TerminologyObject, Collection<Dependency>> result = new HashMap<>();
 		
 		for (Dependency dependency : dependencies) {
 			Collection<Dependency> deps = result.get(dependency.getObject());
 			if (deps == null) {
-				deps = new LinkedList<Dependency>();
+				deps = new LinkedList<>();
 				result.put(dependency.getObject(), deps);
 			}
 	
@@ -104,13 +104,13 @@ public class DependencyFinder {
 	 */
 	public static Map<TerminologyObject, Collection<Dependency>> getBackwardDependencies(KnowledgeBase kb) {
 		Collection<Dependency> dependencies = getDependencies(kb);
-		Map<TerminologyObject, Collection<Dependency>> result = new HashMap<TerminologyObject, Collection<Dependency>>();
+		Map<TerminologyObject, Collection<Dependency>> result = new HashMap<>();
 
 		for (Dependency dependency : dependencies) {
 			for (TerminologyObject to : dependency) {
 				Collection<Dependency> deps = result.get(to);
 				if (deps == null) {
-					deps = new LinkedList<Dependency>();
+					deps = new LinkedList<>();
 					result.put(to, deps);
 				}
 

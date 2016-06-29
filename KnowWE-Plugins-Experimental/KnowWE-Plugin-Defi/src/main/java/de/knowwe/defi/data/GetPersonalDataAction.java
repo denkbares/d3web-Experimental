@@ -86,7 +86,7 @@ public class GetPersonalDataAction extends AbstractAction {
 
 	private String getSessionData(String user) {
 		StringBuilder xml = new StringBuilder();
-		List<DefiSessionLogLine> sessionsForUser = new ArrayList<DefiSessionLogLine>();
+		List<DefiSessionLogLine> sessionsForUser = new ArrayList<>();
 		int timeOutsForUser = 0;
 		// session data
 		for (DefiSessionLogLine logLine : DefiSessionEventLogger.getLogLines()) {
@@ -98,22 +98,22 @@ public class GetPersonalDataAction extends AbstractAction {
 
 		String firstSession = "";
 		String lastSession = "";
-		if (sessionsForUser.size() > 0) {
+		if (!sessionsForUser.isEmpty()) {
 			firstSession = sessionsForUser.get(0).getLoginDateTime();
 			lastSession = sessionsForUser.get(sessionsForUser.size() - 1).getLoginDateTime();
 		}
 
-		xml.append(SEP + "Erster Login" + LS + SEP);
-		xml.append("- " + firstSession + LS);
+		xml.append(SEP).append("Erster Login").append(LS).append(SEP);
+		xml.append("- ").append(firstSession).append(LS);
 		xml.append(LS);
-		xml.append(SEP + "Letzter Login" + LS + SEP);
-		xml.append("- " + lastSession + LS);
+		xml.append(SEP).append("Letzter Login").append(LS).append(SEP);
+		xml.append("- ").append(lastSession).append(LS);
 		xml.append(LS);
-		xml.append(SEP + "Anzahl Logins" + LS + SEP);
-		xml.append("- " + sessionsForUser.size() + LS);
+		xml.append(SEP).append("Anzahl Logins").append(LS).append(SEP);
+		xml.append("- ").append(sessionsForUser.size()).append(LS);
 		xml.append(LS);
-		xml.append(SEP + "Anzahl Timeouts" + LS + SEP);
-		xml.append("- " + timeOutsForUser + LS);
+		xml.append(SEP).append("Anzahl Timeouts").append(LS).append(SEP);
+		xml.append("- ").append(timeOutsForUser).append(LS);
 		xml.append(LS);
 
 		return xml.toString();
@@ -124,8 +124,8 @@ public class GetPersonalDataAction extends AbstractAction {
 		List<String> visitedPages = UserUtilities.getVisitedPages(user);
 		List<String> ratedPages = ReadbuttonUtilities.getRatedPages(user);
 		// visits/rates per unit
-		HashMap<Section<DashTreeElement>, Integer> visitsPerUnit = new HashMap<Section<DashTreeElement>, Integer>();
-		HashMap<Section<DashTreeElement>, Integer> ratesPerUnit = new HashMap<Section<DashTreeElement>, Integer>();
+		HashMap<Section<DashTreeElement>, Integer> visitsPerUnit = new HashMap<>();
+		HashMap<Section<DashTreeElement>, Integer> ratesPerUnit = new HashMap<>();
 		for (Section<DashTreeElement> rootUnit : MenuUtilities.getRootUnits()) {
 			visitsPerUnit.put(rootUnit, 0);
 			ratesPerUnit.put(rootUnit, 0);
@@ -142,7 +142,7 @@ public class GetPersonalDataAction extends AbstractAction {
 			}
 		}
 		// visits per page
-		HashMap<String, Integer> visitsPerPage = new HashMap<String, Integer>();
+		HashMap<String, Integer> visitsPerPage = new HashMap<>();
 		List<String> allArticles = DefiUtils.getAllDefiArticleNames();
 		for (String page : allArticles) {
 			visitsPerPage.put(page, 0);
@@ -154,26 +154,31 @@ public class GetPersonalDataAction extends AbstractAction {
 		}
 
 		// render visited pages
-		xml.append(SEP + "Anzahl besuchter Seiten" + LS + SEP);
-		xml.append("- Gesamt: " + visitedPages.size() + LS);
+		xml.append(SEP).append("Anzahl besuchter Seiten").append(LS).append(SEP);
+		xml.append("- Gesamt: ").append(visitedPages.size()).append(LS);
 		for (Section<DashTreeElement> unit : MenuUtilities.getRootUnits()) {
-			xml.append("- " + MenuUtilities.getUnitPagename(unit) + ": "
-					+ visitsPerUnit.get(unit) + LS);
+			xml.append("- ")
+					.append(MenuUtilities.getUnitPagename(unit))
+					.append(": ")
+					.append(visitsPerUnit.get(unit))
+					.append(LS);
 		}
 		xml.append(LS);
 		// render rated pages
-		xml.append(SEP + "Anzahl bewerteter Seiten" + LS + SEP);
-		xml.append("- Gesamt: " + ratedPages.size() + LS);
+		xml.append(SEP).append("Anzahl bewerteter Seiten").append(LS).append(SEP);
+		xml.append("- Gesamt: ").append(ratedPages.size()).append(LS);
 		for (Section<DashTreeElement> unit : MenuUtilities.getRootUnits()) {
-			xml.append("- " + MenuUtilities.getUnitPagename(unit) + ": "
-					+ ratesPerUnit.get(unit) + LS);
+			xml.append("- ")
+					.append(MenuUtilities.getUnitPagename(unit))
+					.append(": ")
+					.append(ratesPerUnit.get(unit))
+					.append(LS);
 		}
 		xml.append(LS);
 		// render number of visits per page
-		xml.append(SEP + "Anzahl Besuche pro Seite" + LS + SEP);
+		xml.append(SEP).append("Anzahl Besuche pro Seite").append(LS).append(SEP);
 		for (String page : allArticles) {
-			xml.append("- " + page + ": "
-					+ visitsPerPage.get(page) + LS);
+			xml.append("- ").append(page).append(": ").append(visitsPerPage.get(page)).append(LS);
 		}
 		xml.append(LS);
 
@@ -183,18 +188,18 @@ public class GetPersonalDataAction extends AbstractAction {
 	private String getExternalLinkData(String user) {
 		StringBuilder xml = new StringBuilder();
 		List<String> logLines = DefiOtherEventsLogger.getLogLines(DefiOtherEventsLogger.EXT_LINK_PREFIX);
-		List<String> logLinesForUser = new LinkedList<String>();
+		List<String> logLinesForUser = new LinkedList<>();
 
 		for (String logline : logLines) {
 			if (logline.split(DefiOtherEventsLogger.SEPARATOR)[1].equals(user)) logLinesForUser.add(logline);
 		}
 
 		// render external link data
-		xml.append(SEP + "Externe Seiten besucht" + LS + SEP);
-		xml.append("- " + (logLinesForUser.size() > 0) + LS);
+		xml.append(SEP).append("Externe Seiten besucht").append(LS).append(SEP);
+		xml.append("- ").append(logLinesForUser.size() > 0).append(LS);
 		xml.append(LS);
-		xml.append(SEP + "Anzahl Besuche von externen Seite" + LS + SEP);
-		xml.append("- " + logLinesForUser.size() + LS);
+		xml.append(SEP).append("Anzahl Besuche von externen Seite").append(LS).append(SEP);
+		xml.append("- ").append(logLinesForUser.size()).append(LS);
 		xml.append(LS);
 
 		return xml.toString();
@@ -204,8 +209,8 @@ public class GetPersonalDataAction extends AbstractAction {
 		StringBuilder xml = new StringBuilder();
 		List<DefiCommentLogLine> userComments = UserUtilities.getComments(user);
 		int NumberOfStartComments = 0;
-		HashMap<Section<DashTreeElement>, Integer> commentsPerUnit = new HashMap<Section<DashTreeElement>, Integer>();
-		HashMap<Section<DashTreeElement>, Integer> startcomPerUnit = new HashMap<Section<DashTreeElement>, Integer>();
+		HashMap<Section<DashTreeElement>, Integer> commentsPerUnit = new HashMap<>();
+		HashMap<Section<DashTreeElement>, Integer> startcomPerUnit = new HashMap<>();
 		for (Section<DashTreeElement> rootUnit : MenuUtilities.getRootUnits()) {
 			commentsPerUnit.put(rootUnit, 0);
 			startcomPerUnit.put(rootUnit, 0);
@@ -222,18 +227,24 @@ public class GetPersonalDataAction extends AbstractAction {
 			}
 		}
 
-		xml.append(SEP + "Anzahl der Forenbeiträge" + LS + SEP);
-		xml.append("- Gesamt: " + userComments.size() + LS);
+		xml.append(SEP).append("Anzahl der Forenbeiträge").append(LS).append(SEP);
+		xml.append("- Gesamt: ").append(userComments.size()).append(LS);
 		for (Section<DashTreeElement> unit : MenuUtilities.getRootUnits()) {
-			xml.append("- " + MenuUtilities.getUnitPagename(unit) + ": "
-					+ commentsPerUnit.get(unit) + LS);
+			xml.append("- ")
+					.append(MenuUtilities.getUnitPagename(unit))
+					.append(": ")
+					.append(commentsPerUnit.get(unit))
+					.append(LS);
 		}
 		xml.append(LS);
-		xml.append(SEP + "Anzahl der Startbeiträge" + LS + SEP);
-		xml.append("- Gesamt: " + NumberOfStartComments + LS);
+		xml.append(SEP).append("Anzahl der Startbeiträge").append(LS).append(SEP);
+		xml.append("- Gesamt: ").append(NumberOfStartComments).append(LS);
 		for (Section<DashTreeElement> unit : MenuUtilities.getRootUnits()) {
-			xml.append("- " + MenuUtilities.getUnitPagename(unit) + ": "
-					+ startcomPerUnit.get(unit) + LS);
+			xml.append("- ")
+					.append(MenuUtilities.getUnitPagename(unit))
+					.append(": ")
+					.append(startcomPerUnit.get(unit))
+					.append(LS);
 		}
 		xml.append(LS);
 		return xml.toString();
@@ -242,7 +253,7 @@ public class GetPersonalDataAction extends AbstractAction {
 	private String getEmergencyPlanData(String user) {
 		StringBuilder xml = new StringBuilder();
 		Article dataPage = UserUtilities.getDataPage(user);
-		List<String> ids = new LinkedList<String>();
+		List<String> ids = new LinkedList<>();
 		Date lastChange = null;
 		boolean planChanged = false;
 		SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yy, HH:mm");
@@ -283,17 +294,17 @@ public class GetPersonalDataAction extends AbstractAction {
 			}
 		}
 
-		xml.append(SEP + "Notfallplan erstellt" + LS + SEP);
-		xml.append("- " + planChanged + LS);
+		xml.append(SEP).append("Notfallplan erstellt").append(LS).append(SEP);
+		xml.append("- ").append(planChanged).append(LS);
 		xml.append(LS);
-		xml.append(SEP + "Datum der letzten Bearbeitung des Notfallplans" + LS + SEP);
-		xml.append("- " + lastChangeString + LS);
+		xml.append(SEP).append("Datum der letzten Bearbeitung des Notfallplans").append(LS).append(SEP);
+		xml.append("- ").append(lastChangeString).append(LS);
 		xml.append(LS);
-		xml.append(SEP + "Notfallplan aufgerufen" + LS + SEP);
-		xml.append("- " + (!lastVisit.equals("")) + LS);
+		xml.append(SEP).append("Notfallplan aufgerufen").append(LS).append(SEP);
+		xml.append("- ").append(!lastVisit.equals("")).append(LS);
 		xml.append(LS);
-		xml.append(SEP + "Letzter Aufrufs des Notfallplans" + LS + SEP);
-		xml.append("- " + lastVisit + LS);
+		xml.append(SEP).append("Letzter Aufrufs des Notfallplans").append(LS).append(SEP);
+		xml.append("- ").append(lastVisit).append(LS);
 		xml.append(LS);
 
 		return xml.toString();
@@ -303,7 +314,7 @@ public class GetPersonalDataAction extends AbstractAction {
 		StringBuilder xml = new StringBuilder();
 		boolean feedback = false;
 		List<String> logLines = DefiOtherEventsLogger.getLogLines(DefiOtherEventsLogger.FEEDBACK_PREFIX);
-		List<String> logLinesForUser = new ArrayList<String>();
+		List<String> logLinesForUser = new ArrayList<>();
 		for (String logline : logLines) {
 			String logUser = logline.split(DefiOtherEventsLogger.SEPARATOR)[1];
 			if (logUser.equals(user)) logLinesForUser.add(logline);
@@ -311,7 +322,7 @@ public class GetPersonalDataAction extends AbstractAction {
 
 		String firstDate = "";
 		String lastDate = "";
-		feedback = logLinesForUser.size() > 0;
+		feedback = !logLinesForUser.isEmpty();
 
 		if (feedback) {
 			firstDate = logLinesForUser.get(0).split(DefiOtherEventsLogger.SEPARATOR)[2];
@@ -319,14 +330,14 @@ public class GetPersonalDataAction extends AbstractAction {
 					DefiOtherEventsLogger.SEPARATOR)[2];
 		}
 
-		xml.append(SEP + "Abschlussfragebogen ausgefüllt" + LS + SEP);
-		xml.append("- " + feedback + LS);
+		xml.append(SEP).append("Abschlussfragebogen ausgefüllt").append(LS).append(SEP);
+		xml.append("- ").append(feedback).append(LS);
 		xml.append(LS);
-		xml.append(SEP + "Abschlussfragebogen - Ersten Speicherung" + LS + SEP);
-		xml.append("- " + firstDate + LS);
+		xml.append(SEP).append("Abschlussfragebogen - Ersten Speicherung").append(LS).append(SEP);
+		xml.append("- ").append(firstDate).append(LS);
 		xml.append(LS);
-		xml.append(SEP + "Abschlussfragebogen - Letzte Speicherung" + LS + SEP);
-		xml.append("- " + lastDate + LS);
+		xml.append(SEP).append("Abschlussfragebogen - Letzte Speicherung").append(LS).append(SEP);
+		xml.append("- ").append(lastDate).append(LS);
 		xml.append(LS);
 		return xml.toString();
 	}

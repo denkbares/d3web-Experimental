@@ -48,10 +48,12 @@ public class SimpleResponseView implements View {
 	private SimpleResponseView() {
 	}
 
+	@Override
 	public String getContentType() {
 		return CONTENT_TYPE;
 	}
 
+	@Override
 	@SuppressWarnings("rawtypes")
 	public void render(Map model, HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
@@ -59,7 +61,7 @@ public class SimpleResponseView implements View {
 		if (sc == null) {
 			sc = DEFAULT_SC;
 		}
-		response.setStatus(sc.intValue());
+		response.setStatus(sc);
 
 		response.setContentType(CONTENT_TYPE);
 

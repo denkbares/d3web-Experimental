@@ -61,7 +61,7 @@ public class ForumBoxAction extends AbstractAction {
 				topic, context.getRequest());
 
 		if (canEditPage) {
-			if (text != null && text.length() > 0) { // don't add an empty box
+			if (text != null && !text.isEmpty()) { // don't add an empty box
 
 				// // ISO 8859-1 --> UTF-8
 				// Charset iso = Charset.forName("ISO-8859-1");
@@ -85,7 +85,7 @@ public class ForumBoxAction extends AbstractAction {
 					article = Environment.getInstance().getArticle(web, topic);
 				}
 				Section<?> sec = article.getRootSection();
-				List<Section<XMLTail>> found = new ArrayList<Section<XMLTail>>();
+				List<Section<XMLTail>> found = new ArrayList<>();
 
 				String save = "";
 
@@ -107,7 +107,7 @@ public class ForumBoxAction extends AbstractAction {
 							XMLTail.class, found);
 				}
 
-				if (found.size() != 0 && !save.isEmpty()) {
+				if (!found.isEmpty() && !save.isEmpty()) {
 					Section<?> changeSec = found.get(found.size() - 1);
 					try {
 						Sections.replace(context, changeSec.getID(), save);

@@ -45,18 +45,18 @@ public class OCDomain implements Domain {
 
 	public OCDomain(QuestionOC question, Collection<Choice> choices) {
 		this.question = question;
-		this.choices = new HashSet<Choice>();
+		this.choices = new HashSet<>();
 		this.choices.addAll(choices);
 	}
 
 	public OCDomain(QuestionOC question, Choice choice) {
-		this(question, Arrays.asList(choice));
+		this(question, Collections.singletonList(choice));
 	}
 
 	@Override
 	public OCDomain add(Domain d) {
 		OCDomain domain = (OCDomain) d;
-		Collection<Choice> result = new LinkedList<Choice>();
+		Collection<Choice> result = new LinkedList<>();
 		result.addAll(domain.getChoices());
 		result.addAll(this.getChoices());
 
@@ -65,7 +65,7 @@ public class OCDomain implements Domain {
 
 	@Override
 	public OCDomain negate() {
-		Collection<Choice> result = new LinkedList<Choice>(getQuestion().getAllAlternatives());
+		Collection<Choice> result = new LinkedList<>(getQuestion().getAllAlternatives());
 		result.removeAll(getChoices());
 		return new OCDomain(getQuestion(), result);
 	}
@@ -89,7 +89,7 @@ public class OCDomain implements Domain {
 	@Override
 	public OCDomain intersect(Domain d) {
 		OCDomain domain = (OCDomain) d;
-		Collection<Choice> result = new LinkedList<Choice>(this.getChoices());
+		Collection<Choice> result = new LinkedList<>(this.getChoices());
 		result.retainAll(domain.getChoices());
 		return new OCDomain(getQuestion(), result);
 	}

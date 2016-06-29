@@ -52,7 +52,7 @@ public class WordNetProvider implements LexiconProvider {
     @Override
     public List<String> getSynonyms(String word) {
         Synset[] synsets = database.getSynsets(word);
-        ArrayList<String> synsetList = new ArrayList<String>(synsets.length);
+        ArrayList<String> synsetList = new ArrayList<>(synsets.length);
         for (int i = 0; i < synsets.length; i++) {
             for (int j = 0; j < synsets[i].getWordForms().length; j++)
                 if(!synsets[i].getWordForms()[j].equals(word)) {
@@ -92,7 +92,7 @@ public class WordNetProvider implements LexiconProvider {
     @Override
     public Set<WordCategory> getWordCategories(String word) {
 
-        Set<WordCategory> categories = new HashSet<WordCategory>();
+        Set<WordCategory> categories = new HashSet<>();
         ArrayList synset;
 
         //get all Synsets for the word

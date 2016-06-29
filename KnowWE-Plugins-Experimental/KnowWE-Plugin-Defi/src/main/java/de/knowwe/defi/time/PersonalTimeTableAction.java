@@ -58,7 +58,7 @@ public class PersonalTimeTableAction extends AbstractAction {
 		}
 		// timetable already exists
 		else {
-			Map<String, String> nodesMap = new HashMap<String, String>();
+			Map<String, String> nodesMap = new HashMap<>();
 			Section<RootType> rootSection = Environment.getInstance().getArticle(
 					Environment.DEFAULT_WEB, pageName).getRootSection();
 			Section<TimeTableMarkup> timetemplate = Sections.successor(
@@ -79,11 +79,11 @@ public class PersonalTimeTableAction extends AbstractAction {
 
 	private String createTimeTable(String[] dates) {
 		StringBuilder timetable = new StringBuilder();
-		timetable.append("%%Zeitplan" + System.getProperty("line.separator"));
+		timetable.append("%%Zeitplan").append(System.getProperty("line.separator"));
 		for (String date : dates) {
-			timetable.append(date + System.getProperty("line.separator"));
+			timetable.append(date).append(System.getProperty("line.separator"));
 		}
-		timetable.append("%" + System.getProperty("line.separator"));
+		timetable.append("%").append(System.getProperty("line.separator"));
 		return timetable.toString();
 	}
 

@@ -42,6 +42,7 @@ public class MarginMapper<I> implements Mapping<I> {
 		this.margin = margin;
 	}
 
+	@Override
 	public Dimension2D map(I object) {
 		Dimension2D dim = delegate.map(object);
 

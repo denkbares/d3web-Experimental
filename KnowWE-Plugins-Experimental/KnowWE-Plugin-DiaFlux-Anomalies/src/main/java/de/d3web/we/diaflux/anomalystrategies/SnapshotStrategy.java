@@ -44,21 +44,25 @@ public class SnapshotStrategy implements DFSStrategy {
 
 	public SnapshotStrategy(KnowledgeBase kb) {
 		this.delegate = new AllPathsStrategy(true, kb);
-		this.anomalies = new LinkedList<Path>();
+		this.anomalies = new LinkedList<>();
 	}
 
+	@Override
 	public List<Path> getInitialStartPaths() {
 		return delegate.getInitialStartPaths();
 	}
 
+	@Override
 	public boolean followEdge(Edge edge, Path path) {
 		return delegate.followEdge(edge, path);
 	}
 
+	@Override
 	public boolean offer(DiaFluxElement el, Path path) {
 		return delegate.offer(el, path);
 	}
 
+	@Override
 	public void found(Path path) {
 		delegate.found(path);
 		// Circular path without Snapshot
@@ -69,14 +73,17 @@ public class SnapshotStrategy implements DFSStrategy {
 		}
 	}
 
+	@Override
 	public Path createStartPath(Path path) {
 		return delegate.createStartPath(path);
 	}
 
+	@Override
 	public boolean enterSubflow(ComposedNode node, Path path) {
 		return delegate.enterSubflow(node, path);
 	}
 
+	@Override
 	public void finished(Path path) {
 		delegate.finished(path);
 	}

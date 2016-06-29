@@ -60,13 +60,13 @@ public class FlowDomainTest {
 		n2 = new EndNode("2", "2");
 		n3 = new EndNode("3", "3");
 
-		List<Node> nodes = new ArrayList<Node>();
+		List<Node> nodes = new ArrayList<>();
 		nodes.add(n1);
 		nodes.add(n2);
 		nodes.add(n3);
 
 		flow = FlowFactory.createFlow(kb, "TestFlow", nodes,
-				new ArrayList<Edge>());
+				new ArrayList<>());
 	}
 
 	@Test
@@ -115,7 +115,7 @@ public class FlowDomainTest {
 	@Test
 	public void testEmpty() {
 		assertThat(new FlowDomain(n1).isEmpty(), is(false));
-		assertThat(((FlowDomain) new FlowDomain(n1).intersect(new FlowDomain(n2))).isEmpty(),
+		assertThat(new FlowDomain(n1).intersect(new FlowDomain(n2)).isEmpty(),
 				is(true));
 	}
 
@@ -145,7 +145,7 @@ public class FlowDomainTest {
 		assertThat(((FlowDomain) new FlowDomain(n1).negate()).getEndNodes(),
 				both(hasItems(n2, n3)).and(not(hasItems(n1))));
 
-		assertThat(((FlowDomain) new FlowDomain(flow).negate()).isEmpty(),
+		assertThat(new FlowDomain(flow).negate().isEmpty(),
 				is(true));
 
 		assertThat(((FlowDomain) new FlowDomain(n1).negate().negate()).getEndNodes(),

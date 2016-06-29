@@ -73,12 +73,12 @@ public class DiaFluxCoverageRenderer extends DefaultMarkupRenderer {
 		KnowledgeBase kb = result.getKb();
 		FlowSet flowSet = DiaFluxUtils.getFlowSet(kb);
 
-		if (flowSet.size() == 0) {
+		if (flowSet.isEmpty()) {
 			string.append("No DiaFlux model found.");
 			return;
 		}
 
-		List<Flow> flows = new ArrayList<Flow>(flowSet.getFlows());
+		List<Flow> flows = new ArrayList<>(flowSet.getFlows());
 
 		Collections.sort(flows, new Comparator<Flow>() {
 
@@ -92,8 +92,7 @@ public class DiaFluxCoverageRenderer extends DefaultMarkupRenderer {
 		String web = user.getWeb();
 
 		builder.append("<div id='coverage' class='diafluxcoverage' height='500'>\n");
-		builder.append("<input id='coveragesection' type='hidden' value='" + section.getID()
-				+ "'/>");
+		builder.append("<input id='coveragesection' type='hidden' value='").append(section.getID()).append("'/>");
 		builder.append("<select name='coverageSelector' onchange='DiaFlux.Coverage.refresh(this);'>");
 
 		Flow selectedFlow = null;
@@ -109,7 +108,7 @@ public class DiaFluxCoverageRenderer extends DefaultMarkupRenderer {
 					builder.append("selected='selected' ");
 					selectedFlow = flow;
 				}
-				builder.append("value='" + flowSec.getID() + "'>");
+				builder.append("value='").append(flowSec.getID()).append("'>");
 				builder.append(name);
 				builder.append("</option>");
 			}
@@ -128,9 +127,9 @@ public class DiaFluxCoverageRenderer extends DefaultMarkupRenderer {
 		builder.append("</div>");
 
 		builder.append("<div name='coverageresult'>");
-		builder.append("FlowCoverage: " + result.getFlowCoverage(selectedFlow)).append("<br>");
-		builder.append("NodeCoverage: " + result.getNodeCoverage(selectedFlow)).append("<br>");
-		builder.append("EdgeCoverage: " + result.getEdgeCoverage(selectedFlow)).append("<br>");
+		builder.append("FlowCoverage: ").append(result.getFlowCoverage(selectedFlow)).append("<br>");
+		builder.append("NodeCoverage: ").append(result.getNodeCoverage(selectedFlow)).append("<br>");
+		builder.append("EdgeCoverage: ").append(result.getEdgeCoverage(selectedFlow)).append("<br>");
 
 		builder.append("</div>");
 

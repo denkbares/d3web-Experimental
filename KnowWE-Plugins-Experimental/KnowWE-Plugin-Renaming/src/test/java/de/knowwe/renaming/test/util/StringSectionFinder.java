@@ -54,7 +54,7 @@ public class StringSectionFinder implements SectionFinder {
 		if (last) index = text.lastIndexOf(string);
 
 		if (index == -1) return null;
-		List<SectionFinderResult> result = new ArrayList<SectionFinderResult>();
+		List<SectionFinderResult> result = new ArrayList<>();
 		// return result;
 		result.add(new SectionFinderResult(index, index + string.length()));
 		return result;

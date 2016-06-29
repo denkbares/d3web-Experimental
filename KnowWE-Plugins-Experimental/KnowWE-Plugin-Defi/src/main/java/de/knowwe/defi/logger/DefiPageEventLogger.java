@@ -28,6 +28,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -57,7 +58,7 @@ public class DefiPageEventLogger {
 		// find last entry for user and fill end
 		updateLastEntry(line);
 		// write new entry
-		writeToPageLog(Arrays.asList(line.toString()), true);
+		writeToPageLog(Collections.singletonList(line.toString()), true);
 	}
 
 	private static void writeToPageLog(List<String> logLines, boolean append) {
@@ -91,7 +92,7 @@ public class DefiPageEventLogger {
 	private static void updateLastEntry(DefiPageLogLine newEntry) {
 		DefiPageLogLine lastEntry = findLastEntryForUser(newEntry.getUser());
 		if (lastEntry == null) return;
-		List<String> userlog = new LinkedList<String>();
+		List<String> userlog = new LinkedList<>();
 		boolean added = false;
 
 		lastEntry.setEndDate(newEntry.getStartDate());
@@ -112,7 +113,7 @@ public class DefiPageEventLogger {
 	public static void updateLastEntryOnLogout(String user, String date, String time) {
 		DefiPageLogLine lastEntry = findLastEntryForUser(user);
 		if (lastEntry == null) return;
-		List<String> userlog = new LinkedList<String>();
+		List<String> userlog = new LinkedList<>();
 		boolean added = false;
 
 		lastEntry.setEndDate(date);
@@ -157,7 +158,7 @@ public class DefiPageEventLogger {
 	}
 
 	public static List<DefiPageLogLine> getLogLines() {
-		LinkedList<DefiPageLogLine> loglines = new LinkedList<DefiPageLogLine>();
+		LinkedList<DefiPageLogLine> loglines = new LinkedList<>();
 		BufferedReader br = null;
 		String line;
 		try {

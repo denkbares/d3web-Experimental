@@ -30,7 +30,7 @@ import java.util.Map;
  */
 public class CollectAssignedRectangles<I> implements Visitor<I> {
 
-	private final Map<I, Rectangle2D> rects = new HashMap<I, Rectangle2D>();
+	private final Map<I, Rectangle2D> rects = new HashMap<>();
 	private final double margin;
 
 	public CollectAssignedRectangles(double margin) {

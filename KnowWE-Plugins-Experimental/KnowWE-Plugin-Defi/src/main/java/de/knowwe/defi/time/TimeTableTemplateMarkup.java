@@ -48,8 +48,8 @@ public class TimeTableTemplateMarkup extends DefaultMarkupType {
 	}
 
 	public static List<Integer> getNumbersOfDays(Section<TimeTableTemplateMarkup> s) {
-		List<Integer> result = new ArrayList<Integer>();
-		List<Section<NumberOfDaysT>> found = new ArrayList<Section<NumberOfDaysT>>();
+		List<Integer> result = new ArrayList<>();
+		List<Section<NumberOfDaysT>> found = new ArrayList<>();
 		Sections.successors(s, NumberOfDaysT.class, found);
 		for (Section<NumberOfDaysT> section : found) {
 			if (!section.hasErrorInSubtree()) {

@@ -33,11 +33,11 @@ public class CommentType extends AbstractType {
 
 		if (commentTypes != null && !commentTypes.isEmpty()) {
 
-			StringBuffer regexString = new StringBuffer();
+			StringBuilder regexString = new StringBuilder();
 
 			regexString.append("(");
 			for (String elem : commentTypes.keySet()) {
-				regexString.append(elem + "|");
+				regexString.append(elem).append("|");
 			}
 			regexString.replace(regexString.length() - 1, regexString.length(), ")");
 

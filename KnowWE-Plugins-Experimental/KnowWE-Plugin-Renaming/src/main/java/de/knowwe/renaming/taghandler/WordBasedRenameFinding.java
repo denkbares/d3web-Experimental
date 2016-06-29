@@ -102,9 +102,10 @@ public class WordBasedRenameFinding implements Comparable<WordBasedRenameFinding
 
 			if (curWords > words.length) return null;
 
-			StringBuffer context = new StringBuffer();
-			for (int i = 0; i < curWords; i++)
-				context.append(" " + words[i]);
+			StringBuilder context = new StringBuilder();
+			for (int i = 0; i < curWords; i++) {
+				context.append(" ").append(words[i]);
+			}
 
 			return context.toString();
 
@@ -177,9 +178,10 @@ public class WordBasedRenameFinding implements Comparable<WordBasedRenameFinding
 
 			if (curWords > words.length) return null;
 
-			StringBuffer context = new StringBuffer();
-			for (int i = 0; i < curWords; i++)
-				context.append(" " + words[i]);
+			StringBuilder context = new StringBuilder();
+			for (int i = 0; i < curWords; i++) {
+				context.append(" ").append(words[i]);
+			}
 
 			return context.toString();
 

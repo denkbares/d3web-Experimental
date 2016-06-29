@@ -49,11 +49,11 @@ public class RedundantExitNodeTest extends DiaFluxTest {
 	
 	@Override
 	protected Collection<Flow> doTest(KnowledgeBase testObject, List<Flow> flows) {
-		Collection<Flow> result = new HashSet<Flow>();
+		Collection<Flow> result = new HashSet<>();
 
 		nextFlow: for (Flow flow : flows) {
 			// at least 2 results are needed.
-			List<EndNode> exitNodes = new LinkedList<EndNode>(flow.getExitNodes());
+			List<EndNode> exitNodes = new LinkedList<>(flow.getExitNodes());
 			if (exitNodes.size() < 2) continue;
 
 			Collection<ComposedNode> callingNodes = DiaFluxUtils.getCallingNodes(flow);

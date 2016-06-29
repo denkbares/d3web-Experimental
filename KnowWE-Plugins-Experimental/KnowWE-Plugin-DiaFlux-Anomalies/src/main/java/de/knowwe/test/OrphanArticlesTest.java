@@ -46,11 +46,11 @@ import de.knowwe.jspwiki.types.LinkType;
  * @author Reinhard Hatko
  * @created 27.03.2013
  */
+@SuppressWarnings("UnnecessaryUnboxing")
 public class OrphanArticlesTest extends AbstractTest<ArticleManager> {
 
 	// Root articles, that are not linked anywhere
-	public static final Collection<String> ROOTS = Arrays.asList(new String[] {
-			"leftmenu", "leftmenufooter", "moremenu", "main", "objectinfopage" });
+	public static final Collection<String> ROOTS = Arrays.asList("leftmenu", "leftmenufooter", "moremenu", "main", "objectinfopage");
 
 	private static final Pattern EMPTY_PATTERN = Pattern.compile("\\s*");
 
@@ -115,11 +115,11 @@ public class OrphanArticlesTest extends AbstractTest<ArticleManager> {
 	}
 
 	protected static boolean checkBooleanArg(String[] args, int index) {
-		return args.length >= index + 1 && Boolean.valueOf(args[index]).booleanValue();
+		return args.length >= index + 1 && Boolean.valueOf(args[index]);
 	}
 
 	protected static Collection<Article> filterArticles(Collection<Article> allArticles, Collection<Pattern> ignorePatterns) {
-		Collection<Article> result = new LinkedList<Article>();
+		Collection<Article> result = new LinkedList<>();
 
 		for (Article article : allArticles) {
 			if (!TestingUtils.isIgnored(article.getTitle(), ignorePatterns)) result.add(article);
@@ -136,7 +136,7 @@ public class OrphanArticlesTest extends AbstractTest<ArticleManager> {
 	 */
 	protected static Collection<String> getAllArticlesLowercase(ArticleManager
 			manager) {
-		Collection<String> titles = new ArrayList<String>();
+		Collection<String> titles = new ArrayList<>();
 
 		// match lower case...
 		for (Article article : manager.getArticles()) {
@@ -156,7 +156,7 @@ public class OrphanArticlesTest extends AbstractTest<ArticleManager> {
 
 	protected static List<String> getTitlesCorrectCase(ArticleManager manager,
 			Collection<String> titles) {
-		List<String> result = new ArrayList<String>();
+		List<String> result = new ArrayList<>();
 
 		for (Article article : manager.getArticles()) {
 			if (titles.contains(article.getTitle().toLowerCase())) {
@@ -169,7 +169,7 @@ public class OrphanArticlesTest extends AbstractTest<ArticleManager> {
 
 	private static void filterEmpty(Collection<String> result, ArticleManager
 			manager) {
-		for (String title : new ArrayList<String>(result)) {
+		for (String title : new ArrayList<>(result)) {
 			String text = manager.getArticle(title).getRootSection().getText();
 			if (EMPTY_PATTERN.matcher(text).matches()) {
 				result.remove(title);

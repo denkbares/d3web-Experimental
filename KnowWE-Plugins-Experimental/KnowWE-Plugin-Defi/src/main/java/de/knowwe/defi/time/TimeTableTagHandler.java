@@ -63,9 +63,11 @@ public class TimeTableTagHandler extends AbstractTagHandler {
 		timetable.append("<form name='timetable_all'><table>");
 		timetable.append("<tr><th>Einheit</th><th>Beginn nach Erstellung (in Tagen)</th></tr>");
 		for (int i = 0; i < units.size(); i++) {
-			timetable.append("<tr><td>" + MenuUtilities.getUnitPagename(units.get(i))
-					+ "</td><td><input type='text' size='10' value='" + timeTableTemplate.get(i)
-					+ "'/></td></tr>");
+			timetable.append("<tr><td>")
+					.append(MenuUtilities.getUnitPagename(units.get(i)))
+					.append("</td><td><input type='text' size='10' value='")
+					.append(timeTableTemplate.get(i))
+					.append("'/></td></tr>");
 		}
 		timetable.append("</table>");
 		timetable.append("<input type='button' onClick='changeTimeTableTemplate()' value='Bestätigen' /></form>");
@@ -76,14 +78,15 @@ public class TimeTableTagHandler extends AbstractTagHandler {
 		timetable.append("<p>Benutzer: <select name='users' onChange='displayPersonalTimeTable(this.options[this.selectedIndex].value)'>");
 		timetable.append("<option value='' style='display:none;'></option>");
 		for (String user : users) {
-			timetable.append("<option value='" + user + "'>" + user + "</option>");
+			timetable.append("<option value='").append(user).append("'>").append(user).append("</option>");
 		}
 		timetable.append("</select></p>");
 		timetable.append("<form name='timetable_single'><table>");
 		timetable.append("<tr><th>Einheit</th><th>Beginn (Datum)</th></tr>");
 		for (Section<DashTreeElement> unit : units) {
-			timetable.append("<tr><td>" + MenuUtilities.getUnitPagename(unit)
-					+ "</td><td><input type='text' size='10' /></td></tr>");
+			timetable.append("<tr><td>")
+					.append(MenuUtilities.getUnitPagename(unit))
+					.append("</td><td><input type='text' size='10' /></td></tr>");
 		}
 		timetable.append("</table>");
 		timetable.append("<input type='button' onclick='changePersonalTimeTable();' value='Bestätigen' /></form>");

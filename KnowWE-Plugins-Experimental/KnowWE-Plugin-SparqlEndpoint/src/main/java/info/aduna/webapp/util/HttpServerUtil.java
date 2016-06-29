@@ -170,7 +170,7 @@ public class HttpServerUtil {
 	 * @return A List of {@link HeaderElement} objects.
 	 */
 	public static List<HeaderElement> getHeaderElements(HttpServletRequest request, String headerName) {
-		List<HeaderElement> elemList = new ArrayList<HeaderElement>(8);
+		List<HeaderElement> elemList = new ArrayList<>(8);
 
 		@SuppressWarnings("unchecked")
 		Enumeration<String> headerValues = request.getHeaders(headerName);
@@ -182,7 +182,7 @@ public class HttpServerUtil {
 			for (String subValue : subValues) {
 				// Ignore any empty header elements
 				subValue = subValue.trim();
-				if (subValue.length() > 0) {
+				if (!subValue.isEmpty()) {
 					elemList.add(HeaderElement.parse(subValue));
 				}
 			}
@@ -200,7 +200,7 @@ public class HttpServerUtil {
 	 * @return A <tt>List</tt> of <tt>String</tt>s.
 	 */
 	public static List<String> splitHeaderString(String s, char splitChar) {
-		List<String> result = new ArrayList<String>(8);
+		List<String> result = new ArrayList<>(8);
 
 		boolean parsingQuotedString = false;
 		int i, startIdx = 0;

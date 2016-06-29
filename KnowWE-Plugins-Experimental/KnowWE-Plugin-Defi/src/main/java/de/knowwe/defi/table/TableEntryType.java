@@ -51,7 +51,7 @@ public class TableEntryType extends DefaultMarkupType {
 	}
 
 	public static List<Section<VersionEntry>> getVersionBlocks(Section<TableEntryType> s) {
-		List<Section<VersionEntry>> found = new ArrayList<Section<VersionEntry>>();
+		List<Section<VersionEntry>> found = new ArrayList<>();
 		Sections.successors(s, VersionEntry.class, found);
 		return found;
 	}
@@ -69,7 +69,7 @@ class TableEntryContentType extends AbstractType {
 class VersionEntry extends AbstractType {
 
 	public static List<Section<ContentEntry>> getEntries(Section<VersionEntry> s) {
-		List<Section<ContentEntry>> found = new ArrayList<Section<ContentEntry>>();
+		List<Section<ContentEntry>> found = new ArrayList<>();
 		Sections.successors(s, ContentEntry.class, found);
 		return found;
 	}

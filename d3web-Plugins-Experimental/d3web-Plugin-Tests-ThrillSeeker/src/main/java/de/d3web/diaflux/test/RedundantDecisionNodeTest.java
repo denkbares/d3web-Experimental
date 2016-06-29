@@ -50,7 +50,7 @@ public class RedundantDecisionNodeTest extends DiaFluxTest {
 
 	@Override
 	protected Collection<Flow> doTest(KnowledgeBase testObject, List<Flow> flows) {
-		Collection<ActionNode> decisionNodes = new HashSet<ActionNode>();
+		Collection<ActionNode> decisionNodes = new HashSet<>();
 
 		for (Flow flow : flows) {
 			nextNode:
@@ -67,7 +67,7 @@ public class RedundantDecisionNodeTest extends DiaFluxTest {
 
 		}
 
-		Collection<Flow> result = new HashSet<Flow>();
+		Collection<Flow> result = new HashSet<>();
 		// find the flows to the redundant nodes
 		for (ActionNode node : decisionNodes) {
 			result.add(node.getFlow());

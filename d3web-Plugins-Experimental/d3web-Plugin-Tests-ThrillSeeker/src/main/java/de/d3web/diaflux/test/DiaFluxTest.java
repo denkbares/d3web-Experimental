@@ -59,13 +59,13 @@ public abstract class DiaFluxTest extends KBTest {
 		if (testObject == null) throw new IllegalArgumentException("No knowledge base provided.");
 		if (!DiaFluxUtils.hasFlows(testObject)) return new Message(Type.SUCCESS);
 
-		List<Flow> flows = new ArrayList<Flow>(
+		List<Flow> flows = new ArrayList<>(
 				D3webTestUtils.filterNamed(DiaFluxUtils.getFlowSet(testObject).getFlows(), ignores));
 
 		Collection<Flow> erroneousFlows = doTest(testObject, flows);
 
-		if (erroneousFlows.size() > 0) {
-			List<Flow> sortedFlows = new ArrayList<Flow>(erroneousFlows);
+		if (!erroneousFlows.isEmpty()) {
+			List<Flow> sortedFlows = new ArrayList<>(erroneousFlows);
 			Collections.sort(sortedFlows, new NamedObjectComparator());
 			String error = formatErrorMessage(sortedFlows, args);
 			return D3webTestUtils.createFailure(sortedFlows, error);

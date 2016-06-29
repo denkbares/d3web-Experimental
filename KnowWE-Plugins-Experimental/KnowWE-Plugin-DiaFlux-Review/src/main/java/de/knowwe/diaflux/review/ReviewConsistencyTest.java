@@ -47,7 +47,7 @@ public class ReviewConsistencyTest extends AbstractTest<Article> {
 	@Override
 	public Message execute(Article testObject, String[] args, String[]... ignores) throws InterruptedException {
 		WikiConnector connector = Environment.getInstance().getWikiConnector();
-		Collection<String> missingFlows = new LinkedList<String>();
+		Collection<String> missingFlows = new LinkedList<>();
 		try {
 			List<WikiAttachment> list = connector.getAttachments(testObject.getTitle());
 			for (WikiAttachment attachment : list) {

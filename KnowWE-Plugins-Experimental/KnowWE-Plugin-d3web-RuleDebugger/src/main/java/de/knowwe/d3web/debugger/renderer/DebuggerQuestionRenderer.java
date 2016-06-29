@@ -134,7 +134,7 @@ public class DebuggerQuestionRenderer {
 		boolean active;
 		String[] values = valueText.substring(1, valueText.length() - 1).split(", ");
 
-		for (Choice choice : ((QuestionChoice) q).getAllAlternatives()) {
+		for (Choice choice : q.getAllAlternatives()) {
 			buffer.appendHtml("<p onClick='KNOWWE.plugin.debuggr.questionMCclicked(this, " + inside
 					+ ")' ");
 			buffer.appendHtml("rel=\"{kbid: '" + kbid + "', web:'" + web + "', ns:'" + title

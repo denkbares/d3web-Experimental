@@ -47,7 +47,7 @@ public class UnusedSolutionTest extends KBObjectsTest {
 
 	@Override
 	protected List<TerminologyObject> getBaseObjects(KnowledgeBase kb, String[] args) {
-		return new ArrayList<TerminologyObject>(kb.getManager().getSolutions());
+		return new ArrayList<>(kb.getManager().getSolutions());
 	}
 
 

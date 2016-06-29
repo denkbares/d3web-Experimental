@@ -19,10 +19,10 @@ import de.knowwe.core.utils.KnowWEUtils;
  */
 public class ImportManager {
 
-	private static Map<Section<? extends AbstractType>, Set<Section<?>>> imports = new HashMap<Section<? extends AbstractType>, Set<Section<?>>>();
+	private static Map<Section<? extends AbstractType>, Set<Section<?>>> imports = new HashMap<>();
 
-	private static Map<Section<? extends AbstractType>, Set<Section<?>>> justImported = new HashMap<Section<? extends AbstractType>, Set<Section<?>>>();
-	private static Map<Section<? extends AbstractType>, Set<Section<?>>> justRemoved = new HashMap<Section<? extends AbstractType>, Set<Section<?>>>();
+	private static Map<Section<? extends AbstractType>, Set<Section<?>>> justImported = new HashMap<>();
+	private static Map<Section<? extends AbstractType>, Set<Section<?>>> justRemoved = new HashMap<>();
 
 	public static void addImport(Section<? extends AbstractType> key, Set<Section<?>> terms) {
 		imports.put(key, terms);
@@ -31,12 +31,12 @@ public class ImportManager {
 
 	public static void addImport(Section<? extends AbstractType> key, Section<?> term) {
 		if (!imports.containsKey(key)) {
-			imports.put(key, new HashSet<Section<?>>());
+			imports.put(key, new HashSet<>());
 		}
 		imports.get(key).add(term);
 
 		if (!justImported.containsKey(key)) {
-			justImported.put(key, new HashSet<Section<?>>());
+			justImported.put(key, new HashSet<>());
 		}
 		justImported.get(key).add(term);
 	}
@@ -48,7 +48,7 @@ public class ImportManager {
 
 	public static Map<Section<? extends AbstractType>, Set<Section<?>>> fetchNewImports() {
 		Map<Section<? extends AbstractType>, Set<Section<?>>> result =
-				new HashMap<Section<? extends AbstractType>, Set<Section<?>>>();
+				new HashMap<>();
 		result.putAll(justImported);
 		justImported.clear();
 		return result;
@@ -56,7 +56,7 @@ public class ImportManager {
 
 	public static Map<Section<? extends AbstractType>, Set<Section<?>>> fetchRemovedImports() {
 		Map<Section<? extends AbstractType>, Set<Section<?>>> result =
-				new HashMap<Section<? extends AbstractType>, Set<Section<?>>>();
+				new HashMap<>();
 		result.putAll(justRemoved);
 		justRemoved.clear();
 		return result;

@@ -37,7 +37,7 @@ public abstract class AbstractWikiRevDetails extends AbstractRevDetails {
 
 	@Override
 	protected String getPageDiffOverview(Revision rev, UserActionContext context) {
-		StringBuffer string = new StringBuffer();
+		StringBuilder string = new StringBuilder();
 		HashMap<String, Integer> compareDiff = rev.compareWithCurrentState();
 
 		// remove the current (revision) page,
@@ -81,11 +81,10 @@ public abstract class AbstractWikiRevDetails extends AbstractRevDetails {
 	protected void appendRevisionActions(Revision rev, StringBuffer result) {
 		Date date = ((DatedRevision) rev).getDate();
 
-		result.append("<a onClick=\"restoreRev(" + date.getTime()
-				+ ");\">Restore</a>");
+		result.append("<a onClick=\"restoreRev(").append(date.getTime()).append(");\">Restore</a>");
 		result.append("\n");
-		result.append("<a onClick=\"downloadRev(" +
-				date.getTime()
-				+ ");\" title='Download this revision'>Download</a>");
+		result.append("<a onClick=\"downloadRev(")
+				.append(date.getTime())
+				.append(");\" title='Download this revision'>Download</a>");
 	}
 }

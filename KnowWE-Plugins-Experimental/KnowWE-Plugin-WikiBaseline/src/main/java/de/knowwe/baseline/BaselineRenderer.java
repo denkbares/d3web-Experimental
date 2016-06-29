@@ -75,7 +75,7 @@ public class BaselineRenderer implements Renderer {
 		renderDropdown("Differences between", baselines, selection1, bob);
 		baselines.add(0, CreateBaselineAction.createCurrentBaseline(user));
 		renderDropdown("and", baselines, selection2, bob);
-		bob.append("<input type=\"hidden\" value=\"" + section.getID() + "\">");
+		bob.append("<input type=\"hidden\" value=\"").append(section.getID()).append("\">");
 		bob.append("</div>");
 	}
 
@@ -115,7 +115,7 @@ public class BaselineRenderer implements Renderer {
 	 * @return
 	 */
 	private static List<Baseline> loadBaselines(String title) {
-		List<Baseline> result = new LinkedList<Baseline>();
+		List<Baseline> result = new LinkedList<>();
 		try {
 			Collection<WikiAttachment> attachments = getBaselineAttachments(title);
 			for (WikiAttachment wikiAttachment : attachments) {
@@ -131,7 +131,7 @@ public class BaselineRenderer implements Renderer {
 	}
 
 	private static Collection<WikiAttachment> getBaselineAttachments(String title) throws IOException {
-		Collection<WikiAttachment> bases = new LinkedList<WikiAttachment>();
+		Collection<WikiAttachment> bases = new LinkedList<>();
 		List<WikiAttachment> attachments = Environment.getInstance().getWikiConnector().getAttachments(
 				title);
 		for (WikiAttachment wikiAttachment : attachments) {

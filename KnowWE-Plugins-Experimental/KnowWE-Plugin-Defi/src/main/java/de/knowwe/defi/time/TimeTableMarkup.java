@@ -43,8 +43,8 @@ public class TimeTableMarkup extends DefaultMarkupType {
 	}
 
 	public static List<Date> getDates(Section<TimeTableMarkup> s) {
-		List<Date> result = new ArrayList<Date>();
-		List<Section<DateT>> found = new ArrayList<Section<DateT>>();
+		List<Date> result = new ArrayList<>();
+		List<Section<DateT>> found = new ArrayList<>();
 		Sections.successors(s, DateT.class, found);
 		for (Section<DateT> section : found) {
 			if (!section.hasErrorInSubtree()) {

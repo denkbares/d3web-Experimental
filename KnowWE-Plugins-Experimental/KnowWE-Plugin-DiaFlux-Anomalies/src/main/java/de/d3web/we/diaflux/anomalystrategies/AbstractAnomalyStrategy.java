@@ -39,7 +39,7 @@ public abstract class AbstractAnomalyStrategy extends AllPathsStrategy {
 	protected final KnowledgeBase kb;
 	// protected final Collection<Path> usedStartPaths;
 	protected long counter = 0;
-	protected final HashMap<Node, Path> anomalies = new HashMap<Node, Path>();
+	protected final HashMap<Node, Path> anomalies = new HashMap<>();
 
 	public AbstractAnomalyStrategy(KnowledgeBase kb) {
 		super(false, kb);
@@ -49,7 +49,7 @@ public abstract class AbstractAnomalyStrategy extends AllPathsStrategy {
 
 	@Override
 	public List<Path> getInitialStartPaths() {
-		LinkedList<Path> paths = new LinkedList<Path>();
+		LinkedList<Path> paths = new LinkedList<>();
 
 		for (Node node : DiaFluxUtils.getAutostartNodes(kb)) {
 			paths.add(new Path(node));

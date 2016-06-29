@@ -36,7 +36,7 @@ public interface Evaluator {
 	 * @param condition
 	 * @return
 	 */
-	public boolean canEvaluate(Condition condition);
+	boolean canEvaluate(Condition condition);
 
 	/**
 	 * evaluates the condition and returns a new EvalResult
@@ -46,6 +46,6 @@ public interface Evaluator {
 	 * @param kb TODO
 	 * @return
 	 */
-	public EvalResult evaluate(Condition condition, KnowledgeBase kb);
+	EvalResult evaluate(Condition condition, KnowledgeBase kb);
 
 }

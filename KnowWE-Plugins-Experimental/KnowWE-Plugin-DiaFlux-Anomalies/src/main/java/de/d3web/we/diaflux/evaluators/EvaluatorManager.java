@@ -34,7 +34,7 @@ public class EvaluatorManager implements Evaluator {
 
 	private static EvaluatorManager evalManager;
 
-	private final List<Evaluator> evaluators = new LinkedList<Evaluator>();
+	private final List<Evaluator> evaluators = new LinkedList<>();
 
 	private EvaluatorManager() {
 		// Numeric Evaluators

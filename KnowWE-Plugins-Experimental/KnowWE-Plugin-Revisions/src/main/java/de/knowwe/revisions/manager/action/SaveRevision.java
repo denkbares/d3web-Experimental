@@ -65,7 +65,7 @@ public class SaveRevision extends AbstractAction {
 			markup += "%";
 
 			Article a = Environment.getInstance().getArticle(context.getWeb(), context.getTitle());
-			HashMap<String, String> sectionsMap = new HashMap<String, String>();
+			HashMap<String, String> sectionsMap = new HashMap<>();
 			Section<?> s = a.getRootSection();
 			sectionsMap.put(s.getID(), s.getText().concat(markup));
 			Sections.replace(context, sectionsMap).sendErrors(context);

@@ -88,7 +88,7 @@ class CoveredPathsStrategyShallow implements DFSStrategy {
 
 		if (caseObject == null) return Collections.emptyList();
 
-		List<Path> startingPaths = new LinkedList<Path>();
+		List<Path> startingPaths = new LinkedList<>();
 		List<FlowRun> runs = caseObject.getRuns();
 
 		for (Flow flow : DiaFluxUtils.getFlowSet(session)) {

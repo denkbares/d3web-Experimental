@@ -94,5 +94,5 @@ public enum WordClass {
     Sport,
     Technik,
     umgangssprachlich,
-    Zoologie;
+    Zoologie
 }

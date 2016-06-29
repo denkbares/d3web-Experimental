@@ -58,10 +58,12 @@ public class TupleQueryResultView extends QueryResultView {
 	private TupleQueryResultView() {
 	}
 
+	@Override
 	public String getContentType() {
 		return null;
 	}
 
+	@Override
 	@SuppressWarnings("rawtypes")
 	public void render(Map model, HttpServletRequest request, HttpServletResponse response)
 			throws IOException {
@@ -75,8 +77,7 @@ public class TupleQueryResultView extends QueryResultView {
 		boolean headersOnly = (Boolean) model.get(HEADERS_ONLY);
 
 		if (!headersOnly) {
-			OutputStream out = response.getOutputStream();
-			try {
+			try (OutputStream out = response.getOutputStream()) {
 				TupleQueryResultWriter qrWriter = qrWriterFactory.getWriter(out);
 				TupleQueryResult tupleQueryResult = (TupleQueryResult) model.get(QUERY_RESULT_KEY);
 				QueryResults.report(tupleQueryResult, qrWriter);
@@ -92,9 +93,6 @@ public class TupleQueryResultView extends QueryResultView {
 			catch (TupleQueryResultHandlerException e) {
 				logger.error("Serialization error", e);
 				response.sendError(SC_INTERNAL_SERVER_ERROR, "Serialization error: " + e.getMessage());
-			}
-			finally {
-				out.close();
 			}
 		}
 		//logEndOfRequest(request);

@@ -41,7 +41,7 @@ public abstract class AbstractKnowledgeUnitCompileScript<T extends Type> impleme
 		Collection<Section<Term>> allReferencesOfCompilationUnit = CompileUtils.getAllLocalReferencesOfCompilationUnit(section);
 
 		// some evil workaround because of generics problem
-		Collection<Section<? extends Term>> result = new ArrayList<Section<? extends Term>>();
+		Collection<Section<? extends Term>> result = new ArrayList<>();
 		for (Section<Term> ref : allReferencesOfCompilationUnit) {
 			result.add(ref);
 		}
@@ -52,6 +52,7 @@ public abstract class AbstractKnowledgeUnitCompileScript<T extends Type> impleme
 
 	}
 
+	@Override
 	public abstract Collection<Section<? extends Term>> getExternalReferencesOfKnowledgeUnit(Section<? extends KnowledgeUnit> section);
 
 }

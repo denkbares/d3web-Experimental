@@ -94,9 +94,13 @@ public class ReadStatusTagHandler extends AbstractTagHandler {
 			if (current.compareTo(unitDate) >= 0) {
 				if (current.compareTo(warningDate) == -1) readstatus.append("<li class='readstatus'>");
 				else readstatus.append("<li class='readstatusWARN'>");
-				readstatus.append("In <a href='Wiki.jsp?page=" + getPageName(unit) + "'>"
-						+ getLabel(unit) + "</a> haben Sie " + unread
-						+ " Bewertungen noch nicht abgegeben.");
+				readstatus.append("In <a href='Wiki.jsp?page=")
+						.append(getPageName(unit))
+						.append("'>")
+						.append(getLabel(unit))
+						.append("</a> haben Sie ")
+						.append(unread)
+						.append(" Bewertungen noch nicht abgegeben.");
 				readstatus.append("</li>");
 
 				unitsOpen = true;
@@ -130,7 +134,7 @@ public class ReadStatusTagHandler extends AbstractTagHandler {
 	 * @return
 	 */
 	private List<String> searchForReadbuttons(List<Section<DashTreeElement>> units) {
-		List<String> readbuttons = new LinkedList<String>();
+		List<String> readbuttons = new LinkedList<>();
 
 		for (Section<DashTreeElement> s : units) {
 			Article unit = KnowWEUtils.getArticleManager(

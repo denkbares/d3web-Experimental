@@ -68,7 +68,7 @@ public class DebuggerMainAction extends AbstractAction {
 	 * Render the debugger's main-part
 	 */
 	public String renderMain(UserActionContext context) {
-		StringBuffer buffer = new StringBuffer();
+		StringBuilder buffer = new StringBuilder();
 		try {
 			// knoweledgebase id
 			String kbID = context.getParameter("kbid");
@@ -104,7 +104,7 @@ public class DebuggerMainAction extends AbstractAction {
 			rules = DebugUtilities.getRulesWithTO(to, kb);
 
 			// Get all influential TerminologyObjects
-			List<TerminologyObject> iTos = new LinkedList<TerminologyObject>();
+			List<TerminologyObject> iTos = new LinkedList<>();
 			for (Rule r : rules) {
 				for (TerminologyObject tobj : r.getCondition().getTerminalObjects()) {
 					if (!iTos.contains(tobj)) iTos.add(tobj);
@@ -121,18 +121,32 @@ public class DebuggerMainAction extends AbstractAction {
 
 				// highlight the solution's state
 				if (rate != "") {
-					if (rate.equals("UNCLEAR")) buffer.append("<p style='background-color:"
-							+ DebugUtilities.COLOR_UNCLEAR + "'>" + sid + " (UNCLEAR)</p>");
-					else if (rate.equals("EXCLUDED")) buffer.append("<p style='background-color:"
-							+ DebugUtilities.COLOR_EXCLUDED + "'>" + sid + " (EXCLUDED)</p>");
-					else if (rate.equals("SUGGESTED")) buffer.append("<p style='background-color:"
-							+ DebugUtilities.COLOR_SUGGESTED + "'>" + sid + " (SUGGESTED)</p>");
-					else if (rate.equals("ESTABLISHED")) buffer.append("<p style='background-color:"
-							+ DebugUtilities.COLOR_ESTABLISHED + "'>" + sid + " (ESTABLISHED)</p>");
+					if (rate.equals("UNCLEAR")) {
+						buffer.append("<p style='background-color:" + DebugUtilities.COLOR_UNCLEAR + "'>")
+								.append(sid)
+								.append(" (UNCLEAR)</p>");
+					}
+					else if (rate.equals("EXCLUDED")) {
+						buffer.append("<p style='background-color:" + DebugUtilities.COLOR_EXCLUDED + "'>")
+								.append(sid)
+								.append(" (EXCLUDED)</p>");
+					}
+					else if (rate.equals("SUGGESTED")) {
+						buffer.append("<p style='background-color:" + DebugUtilities.COLOR_SUGGESTED + "'>")
+								.append(sid)
+								.append(" (SUGGESTED)</p>");
+					}
+					else if (rate.equals("ESTABLISHED")) {
+						buffer.append("<p style='background-color:" + DebugUtilities.COLOR_ESTABLISHED + "'>")
+								.append(sid)
+								.append(" (ESTABLISHED)</p>");
+					}
 				}
 			}
 			int select = 0;
-			if (iTos.size() == 0) buffer.append("<p>" + noInfluentialRules + "</p>");
+			if (iTos.isEmpty()) {
+				buffer.append("<p>" + noInfluentialRules + "</p>");
+			}
 			// select-tag
 			else {
 				buffer.append("<p>"
@@ -141,9 +155,12 @@ public class DebuggerMainAction extends AbstractAction {
 				buffer.append("<option>" + allElements + "</option>");
 				for (TerminologyObject tobj : iTos) {
 					select++;
-					if (select == selectInd) buffer.append("<option selected='yes'>" + tobj
-							+ "</option>");
-					else buffer.append("<option>" + tobj + "</option>");
+					if (select == selectInd) {
+						buffer.append("<option selected='yes'>").append(tobj).append("</option>");
+					}
+					else {
+						buffer.append("<option>").append(tobj).append("</option>");
+					}
 				}
 				buffer.append("</select></p>");
 			}
@@ -169,8 +186,13 @@ public class DebuggerMainAction extends AbstractAction {
 					buffer.append("style='border-color:gray;color:gray;'");
 				}
 
-				buffer.append(" ruleid='" + r.hashCode() + "' kbid='" + kb.getId() + "'>"
-						+ renderAction(r.getAction()) + "</li>");
+				buffer.append(" ruleid='")
+						.append(r.hashCode())
+						.append("' kbid='")
+						.append(kb.getId())
+						.append("'>")
+						.append(renderAction(r.getAction()))
+						.append("</li>");
 			}
 			buffer.append("</ul>");
 
@@ -178,9 +200,14 @@ public class DebuggerMainAction extends AbstractAction {
 			select = 0;
 			for (TerminologyObject tobj : iTos) {
 				select++;
-				if (select == selectInd) buffer.append("<ul id='" + tobj
-						+ "_rules' style='display:block;'>");
-				else buffer.append("<ul id='" + tobj + "_rules' style='display:none;'>");
+				if (select == selectInd) {
+					buffer.append("<ul id='")
+							.append(tobj)
+							.append("_rules' style='display:block;'>");
+				}
+				else {
+					buffer.append("<ul id='").append(tobj).append("_rules' style='display:none;'>");
+				}
 
 				for (Rule r : rules) {
 					if (!r.getCondition().getTerminalObjects().contains(tobj)) continue;
@@ -199,8 +226,13 @@ public class DebuggerMainAction extends AbstractAction {
 						buffer.append("style='border-color:gray;color:gray;'");
 					}
 
-					buffer.append(" ruleid='" + r.hashCode() + "' kbid='" + kb.getId() + "'>"
-							+ renderAction(r.getAction()) + "</li>");
+					buffer.append(" ruleid='")
+							.append(r.hashCode())
+							.append("' kbid='")
+							.append(kb.getId())
+							.append("'>")
+							.append(renderAction(r.getAction()))
+							.append("</li>");
 				}
 				buffer.append("</ul>");
 			}
@@ -216,12 +248,14 @@ public class DebuggerMainAction extends AbstractAction {
 	 * Get the rendering for an action.
 	 */
 	public String renderAction(PSAction action) {
-		StringBuffer buffer = new StringBuffer();
+		StringBuilder buffer = new StringBuilder();
 
 		if (action instanceof ActionHeuristicPS) {
 			ActionHeuristicPS ac = (ActionHeuristicPS) action;
-			buffer.append("<span class='debuggerSolution'>" + ac.getSolution().getName()
-					+ "</span> = " + ac.getScore());
+			buffer.append("<span class='debuggerSolution'>")
+					.append(ac.getSolution().getName())
+					.append("</span> = ")
+					.append(ac.getScore());
 		}
 		else if (action instanceof ActionContraIndication) {
 			buffer.append(action.toString());
@@ -235,18 +269,25 @@ public class DebuggerMainAction extends AbstractAction {
 		else if (action instanceof ActionNextQASet) {
 			ActionNextQASet anq = (ActionNextQASet) action;
 			for (int i = 0; i < anq.getQASets().size(); i++) {
-				if (i < anq.getQASets().size() - 1) buffer.append("<span class='debuggerAction'>"
-						+ anq.getQASets().get(i).getName() + "</span>, ");
-				else buffer.append("<span class='debuggerAction'>"
-						+ anq.getQASets().get(i).getName()
-						+ "</span>");
+				if (i < anq.getQASets().size() - 1) {
+					buffer.append("<span class='debuggerAction'>")
+							.append(anq.getQASets().get(i).getName())
+							.append("</span>, ");
+				}
+				else {
+					buffer.append("<span class='debuggerAction'>")
+							.append(anq.getQASets().get(i).getName())
+							.append("</span>");
+				}
 			}
 		}
 		else if (action instanceof ActionSetQuestion) {
 			ActionSetQuestion asv = (ActionSetQuestion) action;
-			buffer.append("<span class='debuggerAction'>" + asv.getQuestion()
-					+ "</span> = <span class='debuggerValue'>"
-					+ asv.getValue() + "</span>");
+			buffer.append("<span class='debuggerAction'>")
+					.append(asv.getQuestion())
+					.append("</span> = <span class='debuggerValue'>")
+					.append(asv.getValue())
+					.append("</span>");
 		}
 		else {
 			buffer.append(action.toString());

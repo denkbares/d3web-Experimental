@@ -34,6 +34,6 @@ import de.knowwe.core.kdom.Type;
  */
 public interface KnowledgeUnit extends Type, Editable {
 
-	public KnowledgeUnitCompileScript<?> getCompileScript();
+	KnowledgeUnitCompileScript<?> getCompileScript();
 
 }

@@ -86,7 +86,7 @@ public class DatedRevision extends AbstractRevision {
 	 * @created 22.04.2013
 	 */
 	protected void cacheArticleVersions() {
-		articleVersions = new HashMap<String, Integer>();
+		articleVersions = new HashMap<>();
 
 		WikiConnector wiki = Environment.getInstance().getWikiConnector();
 		Collection<String> titles = wiki.getAllArticles(web).keySet();
@@ -122,7 +122,7 @@ public class DatedRevision extends AbstractRevision {
 	@Override
 	public HashMap<String, Integer> compareWithCurrentState() {
 		HashMap<String, Integer> pageVersions = getArticleVersions();
-		HashMap<String, Integer> result = new HashMap<String, Integer>();
+		HashMap<String, Integer> result = new HashMap<>();
 
 		WikiConnector wiki = Environment.getInstance().getWikiConnector();
 		Collection<String> titles = wiki.getAllArticles(web).keySet();

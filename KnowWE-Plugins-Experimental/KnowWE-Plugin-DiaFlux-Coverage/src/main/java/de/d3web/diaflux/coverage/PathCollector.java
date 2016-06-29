@@ -38,7 +38,7 @@ public class PathCollector implements DFSStrategy {
 
 	public PathCollector(DFSStrategy delegate) {
 		this.delegate = delegate;
-		this.paths = new HashSet<Path>();
+		this.paths = new HashSet<>();
 	}
 
 	@Override
@@ -51,22 +51,27 @@ public class PathCollector implements DFSStrategy {
 		return paths;
 	}
 
+	@Override
 	public List<Path> getInitialStartPaths() {
 		return delegate.getInitialStartPaths();
 	}
 
+	@Override
 	public boolean followEdge(Edge edge, Path path) {
 		return delegate.followEdge(edge, path);
 	}
 
+	@Override
 	public boolean offer(DiaFluxElement el, Path path) {
 		return delegate.offer(el, path);
 	}
 
+	@Override
 	public Path createStartPath(Path path) {
 		return delegate.createStartPath(path);
 	}
 
+	@Override
 	public boolean enterSubflow(ComposedNode node, Path path) {
 		return delegate.enterSubflow(node, path);
 	}

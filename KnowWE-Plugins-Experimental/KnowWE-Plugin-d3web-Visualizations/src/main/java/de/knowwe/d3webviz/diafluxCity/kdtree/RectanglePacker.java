@@ -45,7 +45,7 @@ public class RectanglePacker {
 	public static void main(String[] args) {
 
 		// List<Dimension2D> dimensions = generateRandomDimensions(200, 1, 50);
-		List<Dimension2D> dimensions = new ArrayList<Dimension2D>();
+		List<Dimension2D> dimensions = new ArrayList<>();
 		dimensions.add(new Dimension(20, 20));
 		dimensions.add(new Dimension(20, 20));
 		dimensions.add(new Dimension(20, 20));
@@ -69,6 +69,7 @@ public class RectanglePacker {
 
 		Collections.sort(objects, new Comparator<I>() {
 
+			@Override
 			public int compare(I o1, I o2) {
 				Dimension2D dim1 = map.map(o1);
 				Dimension2D dim2 = map.map(o2);
@@ -86,7 +87,7 @@ public class RectanglePacker {
 
 		sortObjects(objects, map);
 
-		KDNode<I> tree = new KDNode<I>(new Rectangle2D.Double(0, 0, sumOfDim.getWidth(),
+		KDNode<I> tree = new KDNode<>(new Rectangle2D.Double(0, 0, sumOfDim.getWidth(),
 				sumOfDim.getHeight()));
 
 		for (I object : objects) {
@@ -94,19 +95,19 @@ public class RectanglePacker {
 
 			// System.out.println("insert: " + dim);
 
-			List<KDNode<I>> nodes = tree.visitInorder(new CollectEmptyLeavesOfSizeVisitor<I>(dim)).getNodes();
-			NavigableMap<Double, KDNode<I>> preservers = new TreeMap<Double, KDNode<I>>();
-			NavigableMap<Double, KDNode<I>> expanders = new TreeMap<Double, KDNode<I>>(
+			List<KDNode<I>> nodes = tree.visitInorder(new CollectEmptyLeavesOfSizeVisitor<>(dim)).getNodes();
+			NavigableMap<Double, KDNode<I>> preservers = new TreeMap<>();
+			NavigableMap<Double, KDNode<I>> expanders = new TreeMap<>(
 					new Comparator<Double>() {
 
 						@Override
 						public int compare(Double o2, Double o1) {
-							return (int) (Math.abs(1 - o1.doubleValue()) - Math.abs(1
-									- o2.doubleValue()));
+							return (int) (Math.abs(1 - o1) - Math.abs(1
+									- o2));
 						}
 
 					}
-					);
+			);
 
 			for (KDNode<I> node : nodes) {
 				Rectangle2D tempCovRec = (Rectangle2D) covRec.clone();
@@ -178,7 +179,7 @@ public class RectanglePacker {
 	 * @return
 	 */
 	public static List<Dimension2D> generateRandomDimensions(int count, int min, int max) {
-		List<Dimension2D> dimensions = new ArrayList<Dimension2D>(count);
+		List<Dimension2D> dimensions = new ArrayList<>(count);
 
 		for (int i = 0; i < count; i++) {
 			dimensions.add(createDimensionRect(min, max));
@@ -208,8 +209,8 @@ public class RectanglePacker {
 	}
 
 	public static <T> void printResult(KDNode<T> root, String pathname) {
-		List<Rectangle2D> rects = root.visitInorder(new CollectRectanglesVisitor<T>(0)).getRects();
-		Rectangle2D bounds = root.visitInorder(new AddRectanglesVisitor<T>()).getBounds();
+		List<Rectangle2D> rects = root.visitInorder(new CollectRectanglesVisitor<>(0)).getRects();
+		Rectangle2D bounds = root.visitInorder(new AddRectanglesVisitor<>()).getBounds();
 		Dimension2D dim = KDUtils.getDimension(bounds);
 		try {
 

@@ -50,8 +50,8 @@ public class XMLTag {
 	 */
 	public XMLTag(String name) {
 		this.name = name;
-		attributes = new Hashtable<String, String>();
-		children = new LinkedList<XMLTag>();
+		attributes = new Hashtable<>();
+		children = new LinkedList<>();
 		content = "\n";
 	}
 
@@ -63,8 +63,8 @@ public class XMLTag {
 	public XMLTag(Node node) {
 		// will create an XMLTag from a Node !
 
-		attributes = new Hashtable<String, String>();
-		children = new LinkedList<XMLTag>();
+		attributes = new Hashtable<>();
+		children = new LinkedList<>();
 		content = "\n";
 
 		// name
@@ -106,7 +106,7 @@ public class XMLTag {
 	 * @return the value of the requested attribute
 	 */
 	public String getAttribute(String attr) {
-		return (String) attributes.get(attr);
+		return attributes.get(attr);
 	}
 
 	/**
@@ -188,7 +188,7 @@ public class XMLTag {
 	 */
 	@Override
 	public String toString() {
-		StringBuffer ret = new StringBuffer();
+		StringBuilder ret = new StringBuilder();
 
 		ret.append("<");
 		ret.append(name);
@@ -198,18 +198,17 @@ public class XMLTag {
 			String key = enumeration.nextElement();
 			String value = attributes.get(key);
 
-			ret.append(" " + key + "='" + value + "'");
+			ret.append(" ").append(key).append("='").append(value).append("'");
 		}
 		ret.append(">\n");
 
-		Iterator<XMLTag> iter = children.iterator();
-		while (iter.hasNext()) {
-			ret.append(iter.next().toString());
+		for (XMLTag aChildren : children) {
+			ret.append(aChildren.toString());
 		}
 
-		ret.append(content + "\n");
+		ret.append(content).append("\n");
 
-		ret.append("</" + name + ">\n");
+		ret.append("</").append(name).append(">\n");
 
 		return ret.toString();
 	}

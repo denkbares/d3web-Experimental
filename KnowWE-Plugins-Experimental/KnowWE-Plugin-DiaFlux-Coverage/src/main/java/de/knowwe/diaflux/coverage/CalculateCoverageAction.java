@@ -127,7 +127,7 @@ public class CalculateCoverageAction extends AbstractAction {
 		Set<String> packageNames = coverageSec.getPackageNames();
 		String[] packageArray = packageNames.toArray(new String[packageNames.size()]);
 		Collection<Section<?>> sectionsOfPackages = packageManager.getSectionsOfPackage(packageArray);
-		List<DiaFluxCoverageTrace> results = new LinkedList<DiaFluxCoverageTrace>();
+		List<DiaFluxCoverageTrace> results = new LinkedList<>();
 		for (Section<?> potentioalTestCaseSection : sectionsOfPackages) {
 			if (!(potentioalTestCaseSection.get() instanceof DefaultMarkupType)) continue;
 			TestCaseProviderStorage testCaseProviderStorage = de.knowwe.testcases.TestCaseUtils.getTestCaseProviderStorage(

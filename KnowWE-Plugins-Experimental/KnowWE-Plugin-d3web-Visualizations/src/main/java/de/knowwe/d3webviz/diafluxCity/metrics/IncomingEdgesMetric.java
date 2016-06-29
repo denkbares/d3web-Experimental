@@ -28,6 +28,7 @@ import de.d3web.diaFlux.flow.Node;
  */
 public class IncomingEdgesMetric implements Metric<Node, Double> {
 
+	@Override
 	public Double getValue(Node object) {
 		return Math.max(object.getIncomingEdges().size(), 0.5);
 	}

@@ -58,12 +58,12 @@ public abstract class KBObjectsTest extends KBTest {
 	public Message execute(KnowledgeBase kb, String[] args, String[]... ignores) throws InterruptedException {
 		if (kb == null) throw new IllegalArgumentException("No knowledge base provided.");
 
-		List<TerminologyObject> objects = new ArrayList<TerminologyObject>(
+		List<TerminologyObject> objects = new ArrayList<>(
 				D3webTestUtils.filter(getBaseObjects(kb, args), ignores, getAdditionalIgnores(args)));
 
 		List<TerminologyObject> errorObjects = doTest(kb, objects, args);
 
-		if (errorObjects.size() > 0) {
+		if (!errorObjects.isEmpty()) {
 			Collections.sort(errorObjects, new NamedObjectComparator());
 			String error = formatErrorMessage(errorObjects, args);
 			return D3webTestUtils.createFailure(errorObjects,

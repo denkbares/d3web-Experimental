@@ -39,15 +39,12 @@ public class CommentModule implements Instantiation {
 	private static void importTypes() {
 		ResourceBundle rb = ResourceBundle.getBundle("commentTypes");
 
-		Map<String, String> types = new HashMap<String, String>();
-		Map<String, Integer> ids = new HashMap<String, Integer>();
+		Map<String, String> types = new HashMap<>();
+		Map<String, Integer> ids = new HashMap<>();
 
-		Iterator<String> it = rb.keySet().iterator();
-
-		while (it.hasNext()) {
-			String type = it.next();
+		for (String type : rb.keySet()) {
 			String path = rb.getString(type);
-			if (path == null || path.length() == 0) {
+			if (path == null || path.isEmpty()) {
 				path = rb.getString("DEFAULT");
 			}
 			types.put(type, path);

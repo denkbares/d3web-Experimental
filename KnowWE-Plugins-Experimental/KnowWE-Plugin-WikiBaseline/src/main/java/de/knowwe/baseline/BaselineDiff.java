@@ -76,9 +76,9 @@ public class BaselineDiff {
 	public BaselineDiff(Baseline base1, Baseline base2) {
 		this.base1 = base1;
 		this.base2 = base2;
-		this.addedArticles = new LinkedList<ArticleVersion>();
-		this.removedArticles = new LinkedList<String>();
-		this.changedArticles = new HashMap<String, ArticleVersion[]>();
+		this.addedArticles = new LinkedList<>();
+		this.removedArticles = new LinkedList<>();
+		this.changedArticles = new HashMap<>();
 
 		calculateDiff(base1, base2);
 
@@ -104,8 +104,8 @@ public class BaselineDiff {
 			}
 			
 		}
-		
-		Collection<String> newArticles = new LinkedList<String>(base2.getArticles());
+
+		Collection<String> newArticles = new LinkedList<>(base2.getArticles());
 		newArticles.removeAll(base1.getArticles());
 
 		for (String title : newArticles) {

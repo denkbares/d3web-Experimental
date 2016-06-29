@@ -54,10 +54,12 @@ public class PrivateCommunicationTaghandler extends AbstractTagHandler {
 		if (numberOfNewEntries != 0) html.append("<div class='privatecom' style='border-right: 30px solid green'>");
 		else html.append("<div class='privatecom' style='border-right: 30px solid grey'>");
 
-		html.append("<span>Private Kommunikation mit " + to + "</span>");
-		html.append("<input type='button' value='Pers&ouml;nliche Nachricht' onclick='newChat(\""
-				+ names[0] + "\", \"" + names[1]
-				+ "\");return false' />");
+		html.append("<span>Private Kommunikation mit ").append(to).append("</span>");
+		html.append("<input type='button' value='Pers&ouml;nliche Nachricht' onclick='newChat(\"")
+				.append(names[0])
+				.append("\", \"")
+				.append(names[1])
+				.append("\");return false' />");
 		html.append("</div>");
 
 		return html.toString();

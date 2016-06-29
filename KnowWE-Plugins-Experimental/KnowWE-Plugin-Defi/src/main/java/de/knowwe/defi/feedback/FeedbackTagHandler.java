@@ -49,7 +49,7 @@ public class FeedbackTagHandler extends AbstractTagHandler {
 	public static final String QUESTION26 = "Haben Sie sonst noch Wünsche, Kritik oder Erfahrungen, die Sie uns mitteilen möchten?";
 
 	/** units and subunits */
-	public static final Map<Integer, String> UNITS = new HashMap<Integer, String>();
+	public static final Map<Integer, String> UNITS = new HashMap<>();
 
 	static {
 		UNITS.put(1, "Einheit 1 - Kennenlernen");
@@ -139,7 +139,7 @@ public class FeedbackTagHandler extends AbstractTagHandler {
 
 		// question 1
 		title = "1) " + QUESTION1;
-		answers = new LinkedList<String>();
+		answers = new LinkedList<>();
 		answers.add("Trifft für mich voll zu.");
 		answers.add("Trifft für mich zu.");
 		answers.add("Unentschieden.");
@@ -150,7 +150,7 @@ public class FeedbackTagHandler extends AbstractTagHandler {
 
 		// question 2
 		title = "2) " + QUESTION2;
-		answers = new LinkedList<String>();
+		answers = new LinkedList<>();
 		answers.add("Trifft für mich überhaupt nicht zu.");
 		answers.add("Trifft für mich eher nicht zu.");
 		answers.add("Unentschieden.");
@@ -161,7 +161,7 @@ public class FeedbackTagHandler extends AbstractTagHandler {
 
 		// question 3
 		title = "3) " + QUESTION3;
-		answers = new LinkedList<String>();
+		answers = new LinkedList<>();
 		answers.add("Trifft für mich voll zu.");
 		answers.add("Trifft für mich zu.");
 		answers.add("Unentschieden.");
@@ -172,7 +172,7 @@ public class FeedbackTagHandler extends AbstractTagHandler {
 
 		// question 4
 		title = "4) " + QUESTION4;
-		answers = new LinkedList<String>();
+		answers = new LinkedList<>();
 		answers.add("Trifft für mich überhaupt nicht zu.");
 		answers.add("Trifft für mich eher nicht zu.");
 		answers.add("Unentschieden.");
@@ -195,7 +195,7 @@ public class FeedbackTagHandler extends AbstractTagHandler {
 
 		// question 7
 		title = "7) " + QUESTION7 + "<br/>" + HINT_MUTIPLE;
-		answers = new LinkedList<String>();
+		answers = new LinkedList<>();
 		answers.add("zu wenig - ich hätte mir die Inhalte ausführlicher gewünscht.");
 		answers.add("zu wenig - ich hätte mir mehr zusätzliche Inhalte gewünscht.");
 		answers.add("zu viel.");
@@ -212,7 +212,7 @@ public class FeedbackTagHandler extends AbstractTagHandler {
 
 		// question 9
 		title = "9) " + QUESTION9;
-		answers = new LinkedList<String>();
+		answers = new LinkedList<>();
 		answers.add("Nein");
 		answers.add("Ja, ich habe mitgelesen");
 		answers.add("Ja, ich habe mitgelesen und eigene Beiträge geschrieben");
@@ -221,7 +221,7 @@ public class FeedbackTagHandler extends AbstractTagHandler {
 
 		// question 10
 		title = "10) " + QUESTION10;
-		answers = new LinkedList<String>();
+		answers = new LinkedList<>();
 		answers.add("Trifft für mich voll zu.");
 		answers.add("Trifft für mich zu.");
 		answers.add("Unentschieden.");
@@ -233,7 +233,7 @@ public class FeedbackTagHandler extends AbstractTagHandler {
 
 		// question 11
 		title = "11) " + QUESTION11;
-		answers = new LinkedList<String>();
+		answers = new LinkedList<>();
 		answers.add("Trifft für mich voll zu.");
 		answers.add("Trifft für mich zu.");
 		answers.add("Unentschieden.");
@@ -245,7 +245,7 @@ public class FeedbackTagHandler extends AbstractTagHandler {
 
 		// question 12
 		title = "12) " + QUESTION12;
-		answers = new LinkedList<String>();
+		answers = new LinkedList<>();
 		answers.add("Trifft für mich voll zu.");
 		answers.add("Trifft für mich zu.");
 		answers.add("Unentschieden.");
@@ -257,7 +257,7 @@ public class FeedbackTagHandler extends AbstractTagHandler {
 
 		// question 13
 		title = "13) " + QUESTION13;
-		answers = new LinkedList<String>();
+		answers = new LinkedList<>();
 		answers.add("Trifft für mich voll zu.");
 		answers.add("Trifft für mich zu.");
 		answers.add("Unentschieden.");
@@ -269,7 +269,7 @@ public class FeedbackTagHandler extends AbstractTagHandler {
 
 		// question 14
 		title = "14) " + QUESTION14;
-		answers = new LinkedList<String>();
+		answers = new LinkedList<>();
 		answers.add("Trifft für mich voll zu.");
 		answers.add("Trifft für mich zu.");
 		answers.add("Unentschieden.");
@@ -281,7 +281,7 @@ public class FeedbackTagHandler extends AbstractTagHandler {
 
 		// question 15
 		title = "15) " + QUESTION15;
-		answers = new LinkedList<String>();
+		answers = new LinkedList<>();
 		answers.add("Trifft für mich voll zu.");
 		answers.add("Trifft für mich zu.");
 		answers.add("Unentschieden.");
@@ -293,7 +293,7 @@ public class FeedbackTagHandler extends AbstractTagHandler {
 
 		// question 16
 		title = "16) " + QUESTION16;
-		answers = new LinkedList<String>();
+		answers = new LinkedList<>();
 		answers.add("Trifft für mich voll zu.");
 		answers.add("Trifft für mich zu.");
 		answers.add("Unentschieden.");
@@ -312,7 +312,7 @@ public class FeedbackTagHandler extends AbstractTagHandler {
 
 		// question 18
 		title = "18) " + QUESTION18;
-		answers = new LinkedList<String>();
+		answers = new LinkedList<>();
 		answers.add("Trifft für mich voll zu.");
 		answers.add("Trifft für mich zu.");
 		answers.add("Unentschieden.");
@@ -323,7 +323,7 @@ public class FeedbackTagHandler extends AbstractTagHandler {
 
 		// question 19
 		title = "19) " + QUESTION19;
-		answers = new LinkedList<String>();
+		answers = new LinkedList<>();
 		answers.add("Trifft für mich voll zu.");
 		answers.add("Trifft für mich zu.");
 		answers.add("Unentschieden.");
@@ -335,7 +335,7 @@ public class FeedbackTagHandler extends AbstractTagHandler {
 
 		// question 20
 		title = "20) " + QUESTION20;
-		answers = new LinkedList<String>();
+		answers = new LinkedList<>();
 		answers.add("Ich war (fast) jeden Tag hier.");
 		answers.add("Mehrmals die Woche");
 		answers.add("1-2 Mal pro Woche.");
@@ -345,7 +345,7 @@ public class FeedbackTagHandler extends AbstractTagHandler {
 
 		// question 21
 		title = "21) " + QUESTION21;
-		answers = new LinkedList<String>();
+		answers = new LinkedList<>();
 		answers.add("In den Inhalten.");
 		answers.add("Im Forum.");
 		answers.add("Ausgeglichen.");
@@ -354,7 +354,7 @@ public class FeedbackTagHandler extends AbstractTagHandler {
 
 		// question 22
 		title = "22) " + QUESTION22;
-		answers = new LinkedList<String>();
+		answers = new LinkedList<>();
 		answers.add("...zu kurz.");
 		answers.add("...zu lang.");
 		answers.add("...genau passend.");
@@ -363,7 +363,7 @@ public class FeedbackTagHandler extends AbstractTagHandler {
 
 		// question 23
 		title = "23) " + QUESTION23;
-		answers = new LinkedList<String>();
+		answers = new LinkedList<>();
 		answers.add("Ich konnte mich schnell hier \"einleben\" und fand mich gut zurecht.");
 		answers.add("Ich habe einige Zeit gebraucht, bis ich mich zurecht fand, dann ging es aber gut.");
 		answers.add("Ich hatte immer wieder Schwierigkeiten bei der Benutzung der Plattform.");
@@ -378,7 +378,7 @@ public class FeedbackTagHandler extends AbstractTagHandler {
 
 		// question 25
 		title = "25) " + QUESTION25;
-		answers = new LinkedList<String>();
+		answers = new LinkedList<>();
 		answers.add("Ich würde prinzipiell an einem neuen Angebot teilnehmen.");
 		answers.add("Ich würde teilnehmen, wenn Verbesserungen am ICD-Forum stattfinden (bitte auswählen)");
 		answers.add("Ich würde mir ein verbessertes Angebot mit einer stärkeren Beteiligung von Kardiologen und des ICD-Herstellers wünschen.");
@@ -413,13 +413,20 @@ public class FeedbackTagHandler extends AbstractTagHandler {
 		StringBuilder html = new StringBuilder();
 		int aCounter = 0;
 
-		html.append("<table id='q" + qnum + "'>");
-		html.append("<tr><td class='rowhead' colspan='2'>" + title + "</td><tr/>");
+		html.append("<table id='q").append(qnum).append("'>");
+		html.append("<tr><td class='rowhead' colspan='2'>").append(title).append("</td><tr/>");
 		for (int i = 1; i <= answers.size(); i++) {
 			aCounter++;
-			html.append("<tr><td class='radio'><input type='radio' value='" + answers.get(i - 1)
-					+ "' id='q" + qnum + "_" + aCounter + "' name='q" + qnum + "'></td>");
-			html.append("<td class='answer'>" + answers.get(i - 1) + "</td></tr>");
+			html.append("<tr><td class='radio'><input type='radio' value='")
+					.append(answers.get(i - 1))
+					.append("' id='q")
+					.append(qnum)
+					.append("_")
+					.append(aCounter)
+					.append("' name='q")
+					.append(qnum)
+					.append("'></td>");
+			html.append("<td class='answer'>").append(answers.get(i - 1)).append("</td></tr>");
 		}
 		html.append("</table>");
 
@@ -433,13 +440,20 @@ public class FeedbackTagHandler extends AbstractTagHandler {
 		StringBuilder html = new StringBuilder();
 		int aCounter = 0;
 
-		html.append("<table id='q" + qnum + "'>");
-		html.append("<tr><td class='rowhead' colspan='2'>" + title + "</td></tr>");
+		html.append("<table id='q").append(qnum).append("'>");
+		html.append("<tr><td class='rowhead' colspan='2'>").append(title).append("</td></tr>");
 		for (int i = 1; i <= answers.size(); i++) {
 			aCounter++;
-			html.append("<tr><td class='radio'><input type='checkbox' value='" + answers.get(i - 1)
-					+ "' id='q" + qnum + "_" + aCounter + "' name='q" + qnum + "'></td>");
-			html.append("<td class='answer'>" + answers.get(i - 1) + "</td></tr>");
+			html.append("<tr><td class='radio'><input type='checkbox' value='")
+					.append(answers.get(i - 1))
+					.append("' id='q")
+					.append(qnum)
+					.append("_")
+					.append(aCounter)
+					.append("' name='q")
+					.append(qnum)
+					.append("'></td>");
+			html.append("<td class='answer'>").append(answers.get(i - 1)).append("</td></tr>");
 		}
 		html.append("</table>");
 
@@ -453,13 +467,13 @@ public class FeedbackTagHandler extends AbstractTagHandler {
 		StringBuilder html = new StringBuilder();
 		int aCounter = 0;
 
-		html.append("<table id='q" + qnum + "'>");
-		html.append("<tr><td class='rowhead' colspan='4'>" + title + "</td></tr>");
+		html.append("<table id='q").append(qnum).append("'>");
+		html.append("<tr><td class='rowhead' colspan='4'>").append(title).append("</td></tr>");
 
 		for (int i = 1; i <= 3; i++) {
 			// unit 1,2,3 - unit 4,5,6
-			html.append("<tr><td class='rowhead2' colspan='2'>" + UNITS.get(i) + "</td>");
-			html.append("<td class='rowhead2' colspan='2'>" + UNITS.get(i + 3) + "</td></tr>");
+			html.append("<tr><td class='rowhead2' colspan='2'>").append(UNITS.get(i)).append("</td>");
+			html.append("<td class='rowhead2' colspan='2'>").append(UNITS.get(i + 3)).append("</td></tr>");
 			// - rows
 			for (int j = 1; j <= 6; j++) {
 				// cells
@@ -467,12 +481,19 @@ public class FeedbackTagHandler extends AbstractTagHandler {
 				if (UNITS.containsKey(i * 10 + j)) {
 					// radiobutton
 					aCounter++;
-					html.append("<td class='radio'><input type='checkbox' value='"
-							+ UNITS.get(i) + " - " + UNITS.get(i * 10 + j) + "' id='q" + qnum + "_"
-							+ aCounter + "' name='q" + qnum
-							+ "-1'></td>");
+					html.append("<td class='radio'><input type='checkbox' value='")
+							.append(UNITS.get(i))
+							.append(" - ")
+							.append(UNITS.get(i * 10 + j))
+							.append("' id='q")
+							.append(qnum)
+							.append("_")
+							.append(aCounter)
+							.append("' name='q")
+							.append(qnum)
+							.append("-1'></td>");
 					// answer
-					html.append("<td class='answer2'>" + UNITS.get(i * 10 + j) + "</td>");
+					html.append("<td class='answer2'>").append(UNITS.get(i * 10 + j)).append("</td>");
 				}
 				else {
 					html.append("<td></td>");
@@ -480,15 +501,23 @@ public class FeedbackTagHandler extends AbstractTagHandler {
 				if (UNITS.containsKey((i + 3) * 10 + j)) {
 					// radiobutton
 					aCounter++;
-					html.append("<td class='radio'><input type='checkbox' value='"
-							+ UNITS.get(i + 3) + " - " + UNITS.get((i + 3) * 10 + j) + "' id='q"
-							+ qnum
-							+ "_" + aCounter
-							+ "' name='q"
-							+ qnum + "-1'></td>");
+					html.append("<td class='radio'><input type='checkbox' value='")
+							.append(UNITS.get(i + 3))
+							.append(" - ")
+							.append(UNITS.get((i + 3) * 10 + j))
+							.append("' id='q")
+							.append(qnum)
+							.append("_")
+							.append(aCounter)
+							.append("' name='q")
+							.append(qnum)
+							.append("-1'></td>");
 					// answer
-					html.append("<td class='answer2'>" + UNITS.get(i + 3) + " - "
-							+ UNITS.get((i + 3) * 10 + j) + "</td>");
+					html.append("<td class='answer2'>")
+							.append(UNITS.get(i + 3))
+							.append(" - ")
+							.append(UNITS.get((i + 3) * 10 + j))
+							.append("</td>");
 				}
 				else {
 					html.append("<td></td>");
@@ -507,10 +536,11 @@ public class FeedbackTagHandler extends AbstractTagHandler {
 	private String renderTextareaTable(int qnum, String title) {
 		StringBuilder html = new StringBuilder();
 
-		html.append("<table id='q" + qnum + "'>");
-		html.append("<tr><td class='rowhead' colspan='2'>" + title + "</td></tr>");
-		html.append("<tr><td colspan='2'><textarea id='q" + qnum
-				+ "_1' cols='70' rows='6' style='font-size:100%;'></textarea></td></tr>");
+		html.append("<table id='q").append(qnum).append("'>");
+		html.append("<tr><td class='rowhead' colspan='2'>").append(title).append("</td></tr>");
+		html.append("<tr><td colspan='2'><textarea id='q")
+				.append(qnum)
+				.append("_1' cols='70' rows='6' style='font-size:100%;'></textarea></td></tr>");
 		html.append("</table>");
 
 		return html.toString();
@@ -523,35 +553,66 @@ public class FeedbackTagHandler extends AbstractTagHandler {
 		StringBuilder html = new StringBuilder();
 		int aCounter = 0;
 
-		html.append("<table id='q" + qnum + "'>");
-		html.append("<tr><td class='rowhead' colspan='2'>" + title + "</td></tr>");
+		html.append("<table id='q").append(qnum).append("'>");
+		html.append("<tr><td class='rowhead' colspan='2'>").append(title).append("</td></tr>");
 		// 2 radiobuttons
 		for (int i = 1; i <= 2; i++) {
 			aCounter++;
-			html.append("<tr><td class='radio'><input type='radio' value='" + answers.get(i - 1)
-					+ "' id='q" + qnum + "_" + aCounter + "' name='q" + qnum + "'></td>");
-			html.append("<td class='answer'>" + answers.get(i - 1) + "</td></tr>");
+			html.append("<tr><td class='radio'><input type='radio' value='")
+					.append(answers.get(i - 1))
+					.append("' id='q")
+					.append(qnum)
+					.append("_")
+					.append(aCounter)
+					.append("' name='q")
+					.append(qnum)
+					.append("'></td>");
+			html.append("<td class='answer'>").append(answers.get(i - 1)).append("</td></tr>");
 		}
 		// 2 checkboxes
 		for (int i = 3; i <= 4; i++) {
 			aCounter++;
-			html.append("<tr><td class='radio'><input type='checkbox' value='" + answers.get(i - 1)
-					+ "' id='q" + qnum + "_" + aCounter + "' name='q" + qnum + "'></td>");
-			html.append("<td class='answer'>" + answers.get(i - 1) + "</td></tr>");
+			html.append("<tr><td class='radio'><input type='checkbox' value='")
+					.append(answers.get(i - 1))
+					.append("' id='q")
+					.append(qnum)
+					.append("_")
+					.append(aCounter)
+					.append("' name='q")
+					.append(qnum)
+					.append("'></td>");
+			html.append("<td class='answer'>").append(answers.get(i - 1)).append("</td></tr>");
 		}
 		// checkbox + textarea
 		aCounter++;
-		html.append("<tr><td class='radio'><input type='checkbox' value='" + answers.get(4)
-				+ "' id='q" + qnum + "_" + aCounter + "' name='q" + qnum + "'></td>");
-		html.append("<td class='answer'>" + answers.get(4) + "</td></tr>");
+		html.append("<tr><td class='radio'><input type='checkbox' value='")
+				.append(answers.get(4))
+				.append("' id='q")
+				.append(qnum)
+				.append("_")
+				.append(aCounter)
+				.append("' name='q")
+				.append(qnum)
+				.append("'></td>");
+		html.append("<td class='answer'>").append(answers.get(4)).append("</td></tr>");
 		aCounter++;
-		html.append("<tr><td colspan='2'><textarea id='q" + qnum + "_" + aCounter
-				+ "' cols='70' rows='6' style='font-size:100%;'></textarea></td></tr>");
+		html.append("<tr><td colspan='2'><textarea id='q")
+				.append(qnum)
+				.append("_")
+				.append(aCounter)
+				.append("' cols='70' rows='6' style='font-size:100%;'></textarea></td></tr>");
 		// radiobox
 		aCounter++;
-		html.append("<tr><td class='radio'><input type='radio' value='" + answers.get(5)
-				+ "' id='q" + qnum + "_" + aCounter + "' name='q" + qnum + "'></td>");
-		html.append("<td class='answer'>" + answers.get(5) + "</td></tr>");
+		html.append("<tr><td class='radio'><input type='radio' value='")
+				.append(answers.get(5))
+				.append("' id='q")
+				.append(qnum)
+				.append("_")
+				.append(aCounter)
+				.append("' name='q")
+				.append(qnum)
+				.append("'></td>");
+		html.append("<td class='answer'>").append(answers.get(5)).append("</td></tr>");
 		html.append("</table>");
 
 		return html.toString();

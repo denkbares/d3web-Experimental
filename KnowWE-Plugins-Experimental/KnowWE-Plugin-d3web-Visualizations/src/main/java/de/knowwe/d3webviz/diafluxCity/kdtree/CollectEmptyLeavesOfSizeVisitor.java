@@ -32,7 +32,7 @@ import java.util.List;
 public class CollectEmptyLeavesOfSizeVisitor<I> implements Visitor<I> {
 
 	private final Dimension2D minSize = new DoubleDimension();
-	private final List<KDNode<I>> nodes = new LinkedList<KDNode<I>>();
+	private final List<KDNode<I>> nodes = new LinkedList<>();
 
 	public CollectEmptyLeavesOfSizeVisitor(Dimension2D dim) {
 		this.minSize.setSize(dim);

@@ -62,7 +62,7 @@ public class TableUtils {
 		String contentString = "";
 		if (contentTable != null) {
 			List<Section<VersionEntry>> versionBlocks = TableEntryType.getVersionBlocks(contentTable);
-			if (versionBlocks.size() > 0) {
+			if (!versionBlocks.isEmpty()) {
 				Section<VersionEntry> versionBlock = versionBlocks.get(version);
 				List<Section<ContentEntry>> entries = VersionEntry.getEntries(versionBlock);
 				for (Section<ContentEntry> section : entries) {

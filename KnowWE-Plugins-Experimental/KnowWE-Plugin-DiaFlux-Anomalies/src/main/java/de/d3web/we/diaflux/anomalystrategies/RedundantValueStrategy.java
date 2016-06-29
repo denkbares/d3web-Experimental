@@ -45,8 +45,8 @@ import de.d3web.indication.ActionNextQASet;
  */
 public class RedundantValueStrategy extends AbstractAnomalyStrategy {
 
-	TreeSet<String> everUsed = new TreeSet<String>();
-	TreeMap<String, Node> everAsked = new TreeMap<String, Node>();
+	TreeSet<String> everUsed = new TreeSet<>();
+	TreeMap<String, Node> everAsked = new TreeMap<>();
 
 	// TreeSet<String> weakRemain = new TreeSet<String>();
 
@@ -158,7 +158,7 @@ public class RedundantValueStrategy extends AbstractAnomalyStrategy {
 
 	@SuppressWarnings("unused")
 	private List<String> getConditionVar(Edge edge) {
-		List<String> result = new LinkedList<String>();
+		List<String> result = new LinkedList<>();
 		for (TerminologyObject ob : edge.getCondition().getTerminalObjects()) {
 			result.add(ob.getName());
 		}
@@ -167,7 +167,7 @@ public class RedundantValueStrategy extends AbstractAnomalyStrategy {
 
 	@SuppressWarnings("unused")
 	private List<String> getAskedValues(ActionNextQASet action) {
-		List<String> result = new LinkedList<String>();
+		List<String> result = new LinkedList<>();
 
 		for (QASet set : action.getQASets()) {
 			if (set instanceof QContainer) {

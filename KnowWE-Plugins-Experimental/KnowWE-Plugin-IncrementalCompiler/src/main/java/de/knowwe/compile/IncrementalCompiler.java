@@ -77,8 +77,8 @@ public class IncrementalCompiler implements EventListener {
 
 	private EqualStringHazardFilter hazardFilter = null;
 
-	private Collection<Section<? extends KnowledgeUnit>> potentiallyNewKnowledgeSlices = new HashSet<Section<? extends KnowledgeUnit>>();
-	private Collection<Section<? extends KnowledgeUnit>> knowledgeSlicesToRemove = new HashSet<Section<? extends KnowledgeUnit>>();
+	private Collection<Section<? extends KnowledgeUnit>> potentiallyNewKnowledgeSlices = new HashSet<>();
+	private Collection<Section<? extends KnowledgeUnit>> knowledgeSlicesToRemove = new HashSet<>();
 
 	// TODO: how to implement singleton plugin?
 	private static IncrementalCompiler instance;
@@ -131,10 +131,8 @@ public class IncrementalCompiler implements EventListener {
 	public void deregisterImportedTerminology(Section<? extends AbstractType> key) {
 
 		Set<Section<?>> imports = ImportManager.getImports(key);
-		Iterator<Section<?>> it = imports.iterator();
 
-		while (it.hasNext()) {
-			Section<?> termIdentifier = it.next();
+		for (Section<?> termIdentifier : imports) {
 			terminology.deregisterTermDefinition(termIdentifier);
 			terminology.removeImportedObject(KnowWEUtils.getTermIdentifier(termIdentifier));
 		}
@@ -157,7 +155,7 @@ public class IncrementalCompiler implements EventListener {
 		public PreDefinedTerm() {
 			super(DefaultGlobalCompiler.class, String.class);
 			this.addCompileScript(Priority.HIGH,
-					new AssertSingleTermDefinitionScript<DefaultGlobalCompiler>(
+					new AssertSingleTermDefinitionScript<>(
 							DefaultGlobalCompiler.class));
 		}
 
@@ -173,7 +171,7 @@ public class IncrementalCompiler implements EventListener {
 
 	@Override
 	public Collection<Class<? extends Event>> getEvents() {
-		List<Class<? extends Event>> list = new ArrayList<Class<? extends Event>>();
+		List<Class<? extends Event>> list = new ArrayList<>();
 		list.add(ArticleRegisteredEvent.class);
 		return list;
 	}
@@ -200,8 +198,8 @@ public class IncrementalCompiler implements EventListener {
 		}
 
 		// reset knowledge slice sets
-		potentiallyNewKnowledgeSlices = new HashSet<Section<? extends KnowledgeUnit>>();
-		knowledgeSlicesToRemove = new HashSet<Section<? extends KnowledgeUnit>>();
+		potentiallyNewKnowledgeSlices = new HashSet<>();
+		knowledgeSlicesToRemove = new HashSet<>();
 
 		// update references --- necessary??
 		registerNewSectionsInReferenceManager(newSectionsNotReused);
@@ -344,7 +342,7 @@ public class IncrementalCompiler implements EventListener {
 			Collection<Section<? extends Term>> externalReferencesOfKnowledgeUnit = compileScript.getExternalReferencesOfKnowledgeUnit(
 					unit);
 			if (externalReferencesOfKnowledgeUnit != null
-					&& externalReferencesOfKnowledgeUnit.size() > 0) {
+					&& !externalReferencesOfKnowledgeUnit.isEmpty()) {
 				KnowWEUtils.storeObject(unit,
 						EXTERNAL_REFERENCES_OF_KNOWLEDGEUNIT, externalReferencesOfKnowledgeUnit);
 
@@ -461,10 +459,10 @@ public class IncrementalCompiler implements EventListener {
 	}
 
 	public Collection<Message> checkDefinition(Identifier termIdentifier) {
-		Collection<Message> messages = new ArrayList<Message>();
+		Collection<Message> messages = new ArrayList<>();
 
 		Collection<Section<? extends SimpleDefinition>> termDefiningSections = terminology.getTermDefinitions(termIdentifier);
-		if (termDefiningSections.size() == 0) {
+		if (termDefiningSections.isEmpty()) {
 			messages.add(Messages.noSuchObjectError(termIdentifier.toString()));
 			return messages;
 		}

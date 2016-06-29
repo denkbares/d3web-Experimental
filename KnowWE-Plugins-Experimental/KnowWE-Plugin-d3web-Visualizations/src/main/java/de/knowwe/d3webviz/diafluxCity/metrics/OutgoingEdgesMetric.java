@@ -29,6 +29,7 @@ import de.d3web.diaFlux.flow.Node;
  */
 public class OutgoingEdgesMetric implements Metric<Node, Double> {
 
+	@Override
 	public Double getValue(Node object) {
 		if (object instanceof EndNode) return 1d;
 		else {

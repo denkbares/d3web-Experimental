@@ -40,6 +40,7 @@ import de.d3web.diaFlux.inference.DiaFluxUtils;
  * @author Reinhard Hatko
  * @created 13.09.2011
  */
+@SuppressWarnings("UnnecessaryUnboxing")
 public class DefaultCoverageResult implements CoverageResult {
 
 	private final Map<Flow, Double> flowCoverage;
@@ -54,27 +55,27 @@ public class DefaultCoverageResult implements CoverageResult {
 	private PathIndex pathCoverage;
 
 	private DefaultCoverageResult(Map<Node, Integer> nodeCount, Map<Edge, Integer> edgeCount, Map<Path, Integer> pathCount, KnowledgeBase kb) {
-		this.edges = new HashMap<Edge, Integer>(edgeCount);
-		this.nodes = new HashMap<Node, Integer>(nodeCount);
-		this.paths = new HashMap<Path, Integer>(pathCount);
+		this.edges = new HashMap<>(edgeCount);
+		this.nodes = new HashMap<>(nodeCount);
+		this.paths = new HashMap<>(pathCount);
 		this.kb = kb;
 
-		this.flowCoverage = new HashMap<Flow, Double>();
-		this.nodeCoverage = new HashMap<Flow, Double>();
-		this.edgeCoverage = new HashMap<Flow, Double>();
+		this.flowCoverage = new HashMap<>();
+		this.nodeCoverage = new HashMap<>();
+		this.edgeCoverage = new HashMap<>();
 
 	}
 
 	private void setEdgeCoverage(Flow flow, double coverage) {
-		this.edgeCoverage.put(flow, Double.valueOf(coverage));
+		this.edgeCoverage.put(flow, coverage);
 	}
 
 	private void setNodeCoverage(Flow flow, double coverage) {
-		this.nodeCoverage.put(flow, Double.valueOf(coverage));
+		this.nodeCoverage.put(flow, coverage);
 	}
 
 	private void setFlowCoverage(Flow flow, double coverage) {
-		this.flowCoverage.put(flow, Double.valueOf(coverage));
+		this.flowCoverage.put(flow, coverage);
 	}
 
 	@Override
@@ -99,7 +100,7 @@ public class DefaultCoverageResult implements CoverageResult {
 
 	private double getValue(Map<Flow, Double> map, Flow flow) {
 		if (!map.containsKey(flow)) return 0;
-		return map.get(flow).doubleValue();
+		return map.get(flow);
 	}
 
 	@Override
@@ -132,6 +133,7 @@ public class DefaultCoverageResult implements CoverageResult {
 		return Collections.unmodifiableMap(nodes);
 	}
 
+	@Override
 	public Map<Path, Integer> getPathCounts() {
 		return Collections.unmodifiableMap(paths);
 	}
@@ -190,7 +192,7 @@ public class DefaultCoverageResult implements CoverageResult {
 	}
 
 	public static Collection<Edge> getValidEdges(Collection<Node> validnodes) {
-		Set<Edge> edges = new HashSet<Edge>();
+		Set<Edge> edges = new HashSet<>();
 
 		for (Node node : validnodes) {
 			// edges.addAll(node.getIncomingEdges());
@@ -201,7 +203,7 @@ public class DefaultCoverageResult implements CoverageResult {
 	}
 
 	public static Collection<Node> getValidNodes(Flow flow) {
-		Set<Node> nodes = new HashSet<Node>(flow.getNodes());
+		Set<Node> nodes = new HashSet<>(flow.getNodes());
 
 		// Do not consider Commentnodes, unless they are used to route nodes...
 		for (CommentNode commentNode : flow.getNodesOfClass(CommentNode.class)) {
@@ -214,9 +216,9 @@ public class DefaultCoverageResult implements CoverageResult {
 	}
 
 	public static CoverageResult calculateResult(Collection<DiaFluxCoverageTrace> coverages, KnowledgeBase kb) {
-		Map<Edge, Integer> edgeSum = new HashMap<Edge, Integer>();
-		Map<Node, Integer> nodeSum = new HashMap<Node, Integer>();
-		Map<Path, Integer> pathSum = new HashMap<Path, Integer>();
+		Map<Edge, Integer> edgeSum = new HashMap<>();
+		Map<Node, Integer> nodeSum = new HashMap<>();
+		Map<Path, Integer> pathSum = new HashMap<>();
 
 		for (DiaFluxCoverageTrace coverage : coverages) {
 			sumUp(nodeSum, coverage.getNodeCounts());
@@ -251,7 +253,7 @@ public class DefaultCoverageResult implements CoverageResult {
 	}
 
 	public static CoverageResult calculateResult(DiaFluxCoverageTrace coverage, KnowledgeBase kb) {
-		return calculateResult(Arrays.asList(coverage), kb);
+		return calculateResult(Collections.singletonList(coverage), kb);
 	}
 
 }

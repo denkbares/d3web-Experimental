@@ -46,7 +46,7 @@ public class DependencyGenerator {
 
 	public DependencyGenerator(KnowledgeBase kb) {
 		this.kb = kb;
-		this.dependencies = new LinkedList<Dependency>();
+		this.dependencies = new LinkedList<>();
 	}
 
 	public boolean isShowType() {
@@ -108,8 +108,8 @@ public class DependencyGenerator {
 	 */
 	private void createLinksWithDependency(StringBuilder bob) {
 		bob.append("\"links\": [");
-		List<Pair<?, ?>> edges = new LinkedList<Pair<?, ?>>();
-		List<Object> indizes = new LinkedList<Object>();
+		List<Pair<?, ?>> edges = new LinkedList<>();
+		List<Object> indizes = new LinkedList<>();
 		next:
 		for (Dependency dep : dependencies) {
 
@@ -167,8 +167,8 @@ public class DependencyGenerator {
 	 */
 	protected void createLinksOnly(StringBuilder bob) {
 		bob.append("\"links\": [");
-		List<Object> indizes = new LinkedList<Object>();
-		List<Pair<?, ?>> edges = new LinkedList<Pair<?, ?>>();
+		List<Object> indizes = new LinkedList<>();
+		List<Pair<?, ?>> edges = new LinkedList<>();
 		next:
 		for (Dependency dep : dependencies) {
 
@@ -200,7 +200,7 @@ public class DependencyGenerator {
 	private void appendNodes(StringBuilder bob, List<Object> indizes) {
 		bob.append("\"nodes\": [");
 
-		List<TerminologyObject> objects = new LinkedList<TerminologyObject>();
+		List<TerminologyObject> objects = new LinkedList<>();
 		objects.addAll(kb.getManager().getQuestions());
 		objects.addAll(kb.getManager().getSolutions());
 

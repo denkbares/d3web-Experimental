@@ -30,7 +30,7 @@ import java.util.List;
  */
 public class CollectRectanglesVisitor<T extends Object> implements Visitor<T> {
 
-	private final List<Rectangle2D> rects = new LinkedList<Rectangle2D>();
+	private final List<Rectangle2D> rects = new LinkedList<>();
 	private final double margin;
 
 	public CollectRectanglesVisitor(double margin) {

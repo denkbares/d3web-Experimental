@@ -39,7 +39,7 @@ public class NumDomain implements Domain {
 	private final List<NumericalInterval> intervals;
 
 	public NumDomain(List<NumericalInterval> intervals) {
-		this.intervals = new LinkedList<NumericalInterval>();
+		this.intervals = new LinkedList<>();
 		setIntervals(intervals);
 	}
 
@@ -54,7 +54,7 @@ public class NumDomain implements Domain {
 		this(new NumericalInterval(Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY));
 		NumericalInterval interval = question.getInfoStore().getValue(BasicProperties.QUESTION_NUM_RANGE);
 		if (interval != null) {
-			setIntervals(Arrays.asList(interval));
+			setIntervals(Collections.singletonList(interval));
 		}
 	}
 
@@ -63,14 +63,14 @@ public class NumDomain implements Domain {
 	}
 
 	public NumDomain(NumericalInterval interval) {
-		this(Arrays.asList(interval));
+		this(Collections.singletonList(interval));
 	}
 
 
 	@Override
 	public NumDomain add(Domain d) {
 		NumDomain domain = (NumDomain) d;
-		List<NumericalInterval> intervals = new LinkedList<NumericalInterval>();
+		List<NumericalInterval> intervals = new LinkedList<>();
 		intervals.addAll(this.intervals);
 		intervals.addAll(domain.intervals);
 
@@ -116,9 +116,9 @@ public class NumDomain implements Domain {
 	@Override
 	public NumDomain negate() {
 
-		List<NumericalInterval> intervals = new LinkedList<NumericalInterval>();
-		List<NumericalInterval> leftBounded = new LinkedList<NumericalInterval>();
-		List<NumericalInterval> rightBounded = new LinkedList<NumericalInterval>();
+		List<NumericalInterval> intervals = new LinkedList<>();
+		List<NumericalInterval> leftBounded = new LinkedList<>();
+		List<NumericalInterval> rightBounded = new LinkedList<>();
 
 		for (NumericalInterval interval : this.intervals) {
 			rightBounded.add(new NumericalInterval(Double.NEGATIVE_INFINITY,
@@ -210,7 +210,7 @@ public class NumDomain implements Domain {
 	@Override
 	public NumDomain intersect(Domain d) {
 		NumDomain domain = (NumDomain) d;
-		LinkedList<NumericalInterval> intervals = new LinkedList<NumericalInterval>();
+		LinkedList<NumericalInterval> intervals = new LinkedList<>();
 
 		for (NumericalInterval interval : this.intervals) {
 			for (NumericalInterval other : domain.intervals) {

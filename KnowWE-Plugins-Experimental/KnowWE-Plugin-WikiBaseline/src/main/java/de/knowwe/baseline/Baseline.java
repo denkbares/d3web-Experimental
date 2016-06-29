@@ -36,7 +36,7 @@ public class Baseline implements Comparable<Baseline> {
 		this.name = name;
 		this.username = username;
 		this.date = date;
-		this.articles = new HashMap<String, Integer>();
+		this.articles = new HashMap<>();
 	}
 
 	public long getDate() {
@@ -56,7 +56,7 @@ public class Baseline implements Comparable<Baseline> {
 	}
 
 	public void addArticle(String title, int version) {
-		articles.put(title, Integer.valueOf(version));
+		articles.put(title, version);
 	}
 
 	public boolean contains(String title) {
@@ -69,7 +69,7 @@ public class Baseline implements Comparable<Baseline> {
 			return -1;
 		}
 		else {
-			return version.intValue();
+			return version;
 		}
 	}
 

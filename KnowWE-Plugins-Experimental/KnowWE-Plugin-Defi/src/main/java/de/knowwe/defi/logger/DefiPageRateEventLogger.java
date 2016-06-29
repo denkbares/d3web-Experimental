@@ -29,6 +29,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import de.knowwe.core.Environment;
@@ -52,12 +53,12 @@ public class DefiPageRateEventLogger {
 
 	public static void logEvent(DefiPageRatedEvent event) {
 		DefiPageRateLogLine logline = new DefiPageRateLogLine(event);
-		writePageRate(Arrays.asList(logline), true);
+		writePageRate(Collections.singletonList(logline), true);
 	}
 
 	public static void closeLogline(DefiPageRateClosedEvent event) {
 		List<DefiPageRateLogLine> logLines = getLogLines();
-		ArrayList<DefiPageRateLogLine> newLogLines = new ArrayList<DefiPageRateLogLine>();
+		ArrayList<DefiPageRateLogLine> newLogLines = new ArrayList<>();
 		String discussed = event.getDiscussed();
 
 		for (DefiPageRateLogLine line : logLines) {
@@ -78,7 +79,7 @@ public class DefiPageRateEventLogger {
 	}
 
 	public static List<DefiPageRateLogLine> getLogLines() {
-		ArrayList<DefiPageRateLogLine> loglines = new ArrayList<DefiPageRateLogLine>();
+		ArrayList<DefiPageRateLogLine> loglines = new ArrayList<>();
 		BufferedReader br = null;
 		String line;
 		try {

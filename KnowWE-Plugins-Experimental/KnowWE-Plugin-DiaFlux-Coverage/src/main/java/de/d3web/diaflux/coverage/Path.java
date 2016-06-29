@@ -20,6 +20,7 @@ package de.d3web.diaflux.coverage;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Deque;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -42,8 +43,8 @@ public class Path implements Iterable<DiaFluxElement> {
 	private final Deque<ComposedNode> callStack;
 
 	private Path(List<DiaFluxElement> path, Deque<ComposedNode> callStack) {
-		this.path = new ArrayList<DiaFluxElement>(path);
-		this.callStack = new LinkedList<ComposedNode>(callStack);
+		this.path = new ArrayList<>(path);
+		this.callStack = new LinkedList<>(callStack);
 	}
 
 	private Path(Path path) {
@@ -51,11 +52,11 @@ public class Path implements Iterable<DiaFluxElement> {
 	}
 
 	public Path(DiaFluxElement node) {
-		this(Arrays.asList(node), new LinkedList<ComposedNode>());
+		this(Collections.singletonList(node), new LinkedList<>());
 	}
 	
 	protected Path(DiaFluxElement node, Deque<ComposedNode> callStack) {
-		this(Arrays.asList(node), callStack);
+		this(Collections.singletonList(node), callStack);
 	}
 
 	void append(DiaFluxElement el) {
@@ -67,7 +68,7 @@ public class Path implements Iterable<DiaFluxElement> {
 	}
 
 	public Deque<ComposedNode> getCallStack() {
-		return new LinkedList<ComposedNode>(callStack);
+		return new LinkedList<>(callStack);
 	}
 
 	void enterFlow(ComposedNode node) {

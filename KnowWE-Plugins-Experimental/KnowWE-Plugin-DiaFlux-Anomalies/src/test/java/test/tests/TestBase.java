@@ -92,8 +92,8 @@ public abstract class TestBase {
 		ActionNode questionNode1 = new ActionNode("questionNode1_ID", action1);
 	
 		ActionNode questionNode2 = new ActionNode("questionNode2_ID", action2);
-	
-		LinkedList<Node> nodesList = new LinkedList<Node>(Arrays.asList(startNode, endNode,
+
+		LinkedList<Node> nodesList = new LinkedList<>(Arrays.asList(startNode, endNode,
 				questionNode1, snaphot1, questionNode2));
 	
 		// ---------------------------------
@@ -111,9 +111,8 @@ public abstract class TestBase {
 	
 		Edge question2ToEnd = FlowFactory.createEdge("question2ToSnap2_ID", questionNode2,
 				endNode, condition2);
-	
-	
-		List<Edge> edgesList = new LinkedList<Edge>(Arrays.asList(startToQuestion1,
+
+		List<Edge> edgesList = new LinkedList<>(Arrays.asList(startToQuestion1,
 				question1ToSnap, snap1ToQuestion2, question2ToEnd));
 	
 		Flow testFlow = FlowFactory.createFlow(kb, "Main", nodesList, edgesList);

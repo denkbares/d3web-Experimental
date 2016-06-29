@@ -31,6 +31,7 @@ import de.knowwe.d3webviz.diafluxCity.kdtree.RectanglePacker.Mapping;
  */
 public class GLNodeMapper implements Mapping<GLBuilding> {
 
+	@Override
 	public Dimension2D map(GLBuilding object) {
 
 		DoubleDimension dimension = new DoubleDimension(object.getLength(),

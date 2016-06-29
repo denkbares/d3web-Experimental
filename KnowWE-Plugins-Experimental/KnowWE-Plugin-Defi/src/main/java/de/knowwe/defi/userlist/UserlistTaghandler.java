@@ -56,13 +56,16 @@ public class UserlistTaghandler extends AbstractTagHandler {
 		for (int i = 0; i < users.length; i++) {
 			if (!users[i].startsWith("Patient")) {
 				userlist.append("<tr>");
-				userlist.append("<td><img src=\"KnowWEExtension/images/avatars/"
-						+ getAvatar(users[i])
-						+ "\" height=\"80px\" width=\"80px\" alt=\"avatar\" /></td>");
-				userlist.append("<td><a href='" + JSPWikiConnector.LINK_PREFIX + users[i] + "'>"
-						+ users[i]
-						+ "</a><br />- " + getStatus(activeUsers, users[i])
-						+ " -</td>");
+				userlist.append("<td><img src=\"KnowWEExtension/images/avatars/")
+						.append(getAvatar(users[i]))
+						.append("\" height=\"80px\" width=\"80px\" alt=\"avatar\" /></td>");
+				userlist.append("<td><a href='" + JSPWikiConnector.LINK_PREFIX)
+						.append(users[i])
+						.append("'>")
+						.append(users[i])
+						.append("</a><br />- ")
+						.append(getStatus(activeUsers, users[i]))
+						.append(" -</td>");
 				userlist.append("</tr>");
 			}
 		}

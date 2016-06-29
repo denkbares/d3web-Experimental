@@ -28,5 +28,5 @@ public enum WordCategory {
     verb,
     adjective,
     adverb,
-    adjectiveSatellite;
+    adjectiveSatellite
 }

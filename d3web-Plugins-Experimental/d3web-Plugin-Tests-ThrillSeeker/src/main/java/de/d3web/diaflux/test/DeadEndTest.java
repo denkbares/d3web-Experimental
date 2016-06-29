@@ -50,7 +50,7 @@ public class DeadEndTest extends DiaFluxTest {
 
 	@Override
 	protected Collection<Flow> doTest(KnowledgeBase testObject, List<Flow> flows) {
-		Collection<Flow> result = new HashSet<Flow>();
+		Collection<Flow> result = new HashSet<>();
 
 		for (Flow flow : flows) {
 			nextnode:

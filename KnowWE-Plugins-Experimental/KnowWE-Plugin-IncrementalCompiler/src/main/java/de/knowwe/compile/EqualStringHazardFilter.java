@@ -29,12 +29,12 @@ public class EqualStringHazardFilter {
 		// and remove it from both (once respectively!)
 
 		// transform Section-collections to CompileSection-collections
-		Collection<CompileSection<? extends KnowledgeUnit>> removeSet = new ArrayList<CompileSection<? extends KnowledgeUnit>>();
+		Collection<CompileSection<? extends KnowledgeUnit>> removeSet = new ArrayList<>();
 		for (Section<? extends KnowledgeUnit> section : remove) {
 			removeSet.add(CompileSection.create(section));
 		}
 
-		Collection<CompileSection<? extends KnowledgeUnit>> insertSet = new ArrayList<CompileSection<? extends KnowledgeUnit>>();
+		Collection<CompileSection<? extends KnowledgeUnit>> insertSet = new ArrayList<>();
 		for (Section<? extends KnowledgeUnit> section : insert) {
 			insertSet.add(CompileSection.create(section));
 		}
@@ -88,7 +88,7 @@ public class EqualStringHazardFilter {
 				KnowledgeUnit.class);
 
 		// old external refs are stored as they cannot be retrieved any more
-		Collection<Section<? extends Term>> allOldReferences = new HashSet<Section<? extends Term>>();
+		Collection<Section<? extends Term>> allOldReferences = new HashSet<>();
 		@SuppressWarnings("unchecked")
 		Collection<Section<? extends Term>> oldExternalReferences = (Collection<Section<? extends Term>>) (KnowWEUtils.getStoredObject(
 				oldSection, IncrementalCompiler.EXTERNAL_REFERENCES_OF_KNOWLEDGEUNIT));
@@ -104,7 +104,7 @@ public class EqualStringHazardFilter {
 
 		// for the new unit the normal way of fetching all refs can be used.
 
-		Collection<Section<? extends Term>> referencesOfOtherSection = new HashSet<Section<? extends Term>>();
+		Collection<Section<? extends Term>> referencesOfOtherSection = new HashSet<>();
 		KnowledgeUnitCompileScript<?> compileScript = castedOtherSection.get().getCompileScript();
 		if (compileScript != null) {
 			referencesOfOtherSection = compileScript.getAllReferencesOfKnowledgeUnit(
@@ -127,7 +127,7 @@ public class EqualStringHazardFilter {
 	 * @return
 	 */
 	private Collection<String> resolveTermNames(Collection<Section<? extends Term>> referencesOfSection2) {
-		Collection<String> termNames = new HashSet<String>();
+		Collection<String> termNames = new HashSet<>();
 
 		for (Section<? extends Term> section : referencesOfSection2) {
 			termNames.add(section.get().getTermName(section));
@@ -145,14 +145,14 @@ public class EqualStringHazardFilter {
 		// and remove it from both (once respectively!)
 
 		// transform Section-collections to CompileSection-collections
-		Collection<CompileSection<IncrementalTermDefinition>> removeSet = new ArrayList<CompileSection<IncrementalTermDefinition>>();
+		Collection<CompileSection<IncrementalTermDefinition>> removeSet = new ArrayList<>();
 		for (Section<IncrementalTermDefinition> section : remove) {
-			removeSet.add(new CompileSection<IncrementalTermDefinition>(section));
+			removeSet.add(new CompileSection<>(section));
 		}
 
-		Collection<CompileSection<IncrementalTermDefinition>> insertSet = new ArrayList<CompileSection<IncrementalTermDefinition>>();
+		Collection<CompileSection<IncrementalTermDefinition>> insertSet = new ArrayList<>();
 		for (Section<IncrementalTermDefinition> section : insert) {
-			insertSet.add(new CompileSection<IncrementalTermDefinition>(section));
+			insertSet.add(new CompileSection<>(section));
 		}
 
 		boolean changes = false; // for efficiency only

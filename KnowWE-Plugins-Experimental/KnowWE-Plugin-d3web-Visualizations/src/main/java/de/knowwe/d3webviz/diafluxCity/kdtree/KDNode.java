@@ -105,8 +105,8 @@ public class KDNode<I> {
 			Rectangle2D[] childs = doSplitFor(dim);
 			// System.out.println(indent() + "\tnew left: " + childs[0]);
 			// System.out.println(indent() + "\tnew right: " + childs[1]);
-			this.left = new KDNode<I>(this, childs[0]);
-			this.right = new KDNode<I>(this, childs[1]);
+			this.left = new KDNode<>(this, childs[0]);
+			this.right = new KDNode<>(this, childs[1]);
 			return insert(value, map);
 
 		}

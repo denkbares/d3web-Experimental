@@ -70,7 +70,7 @@ public class ReadbuttonUtilities {
 	 * Returns a list of all rated pages.
 	 */
 	public static List<String> getRatedPages(String user) {
-		List<String> ratedPages = new ArrayList<String>();
+		List<String> ratedPages = new ArrayList<>();
 		for (DefiPageRateLogLine line : DefiPageRateEventLogger.getLogLines()) {
 
 			if (user.equals(line.getUser())) {

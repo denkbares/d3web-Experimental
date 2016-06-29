@@ -64,7 +64,7 @@ public class CompileUtils {
 	 * @return
 	 */
 	public static Collection<Section<? extends Type>> findSectionsNotReused(Article parsedArticle) {
-		Collection<Section<? extends Type>> result = new LinkedList<Section<? extends Type>>();
+		Collection<Section<? extends Type>> result = new LinkedList<>();
 		addNonReusedSection(parsedArticle.getRootSection(), result);
 
 		Map<Section<? extends AbstractType>, Set<Section<?>>> newImports = ImportManager.fetchNewImports();
@@ -98,7 +98,7 @@ public class CompileUtils {
 	 * @return
 	 */
 	public static Collection<Section<? extends Type>> findOldNonReusedSections(Article lastVersionOfArticle) {
-		Collection<Section<? extends Type>> result = new HashSet<Section<? extends Type>>();
+		Collection<Section<? extends Type>> result = new HashSet<>();
 		if (lastVersionOfArticle == null) return result;
 		addOldNonReusedSection(lastVersionOfArticle.getRootSection(), result,
 				lastVersionOfArticle);
@@ -132,7 +132,7 @@ public class CompileUtils {
 	 * @return
 	 */
 	public static Collection<Section<? extends KnowledgeUnit>> filterKnowledgeUnits(Collection<Section<?>> oldSectionsNotReused) {
-		Collection<Section<? extends KnowledgeUnit>> result = new HashSet<Section<? extends KnowledgeUnit>>();
+		Collection<Section<? extends KnowledgeUnit>> result = new HashSet<>();
 		for (Section<? extends Type> section : oldSectionsNotReused) {
 			if (section.get() instanceof KnowledgeUnit) {
 				Section<KnowledgeUnit> castedSection = Sections.cast(section, KnowledgeUnit.class);
@@ -153,7 +153,7 @@ public class CompileUtils {
 	 */
 	@SuppressWarnings("rawtypes")
 	public static Collection<Section<IncrementalTermDefinition>> filterDefinitions(Collection<Section<? extends Type>> oldSectionsNotReused) {
-		Collection<Section<IncrementalTermDefinition>> result = new HashSet<Section<IncrementalTermDefinition>>();
+		Collection<Section<IncrementalTermDefinition>> result = new HashSet<>();
 		for (Section<? extends Type> section : oldSectionsNotReused) {
 			if (section.get() instanceof IncrementalTermDefinition<?>) {
 				result.add(Sections.cast(section, IncrementalTermDefinition.class));
@@ -163,13 +163,13 @@ public class CompileUtils {
 	}
 
 	public static Collection<Section<Term>> getAllLocalReferencesOfCompilationUnit(Section<? extends KnowledgeUnit> section) {
-		List<Section<Term>> result = new ArrayList<Section<Term>>();
+		List<Section<Term>> result = new ArrayList<>();
 		Sections.successors(section, Term.class, result);
 		return result;
 	}
 
 	public static Collection<Section<SimpleReference>> getAllReferencesOfComplexDefinition(Section<? extends ComplexDefinition> section) {
-		List<Section<SimpleReference>> result = new ArrayList<Section<SimpleReference>>();
+		List<Section<SimpleReference>> result = new ArrayList<>();
 		Sections.successors(section, SimpleReference.class, result);
 		return result;
 	}
@@ -177,14 +177,14 @@ public class CompileUtils {
 	public static String createLinkToDefinition(Identifier termIdentifier, UserContext user) {
 		Collection<Section<? extends SimpleReference>> termReferences = IncrementalCompiler.getInstance().getTerminology().getTermReferences(
 				termIdentifier);
-		if (termReferences != null && termReferences.size() > 0) {
+		if (termReferences != null && !termReferences.isEmpty()) {
 			return createLinkToDefinition(termReferences.iterator().next(),
 					termIdentifier.getLastPathElement(), user);
 		}
 
 		Collection<Section<? extends SimpleDefinition>> termDefinitions = IncrementalCompiler.getInstance().getTerminology().getTermDefinitions(
 				termIdentifier);
-		if (termDefinitions != null && termDefinitions.size() > 0) {
+		if (termDefinitions != null && !termDefinitions.isEmpty()) {
 			return createLinkToDefinition(termDefinitions.iterator().next(), user);
 		}
 
@@ -200,7 +200,7 @@ public class CompileUtils {
 
 		Collection<Section<? extends SimpleDefinition>> definitions = IncrementalCompiler.getInstance().getTerminology().getTermDefinitions(
 				KnowWEUtils.getTermIdentifier(section));
-		if (definitions != null && definitions.size() > 0) {
+		if (definitions != null && !definitions.isEmpty()) {
 
 			return createLinkToDef(definitions.iterator().next(), linktext, user);
 

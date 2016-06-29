@@ -40,7 +40,7 @@ public class IncrementalTermReferenceCorrectionProvider implements CorrectionPro
 
 	@Override
 	public List<Suggestion> getSuggestions(TermCompiler compiler, Section<?> section, int threshold) {
-		List<Suggestion> suggestions = new LinkedList<Suggestion>();
+		List<Suggestion> suggestions = new LinkedList<>();
 		if (!(section.get() instanceof SimpleReference)) {
 			return suggestions;
 		}

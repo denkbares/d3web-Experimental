@@ -56,7 +56,7 @@ public class ReplaceSectionUtils {
 			Collection<String> ids,
 			Map<String, String> sectionsMap) {
 
-		Map<String, String> sectionsMapForCurrentTitle = new HashMap<String, String>();
+		Map<String, String> sectionsMapForCurrentTitle = new HashMap<>();
 		for (String id : ids) {
 			sectionsMapForCurrentTitle.put(id, sectionsMap.get(id));
 		}
@@ -109,13 +109,13 @@ public class ReplaceSectionUtils {
 	}
 
 	private static Map<String, Collection<String>> getIdsByTitle(Collection<String> allIds) {
-		Map<String, Collection<String>> idsByTitle = new HashMap<String, Collection<String>>();
+		Map<String, Collection<String>> idsByTitle = new HashMap<>();
 		for (String id : allIds) {
 			Section<?> section = Sections.get(id);
 			String title = section == null ? null : section.getTitle();
 			Collection<String> ids = idsByTitle.get(title);
 			if (ids == null) {
-				ids = new ArrayList<String>();
+				ids = new ArrayList<>();
 				idsByTitle.put(title, ids);
 			}
 			ids.add(id);

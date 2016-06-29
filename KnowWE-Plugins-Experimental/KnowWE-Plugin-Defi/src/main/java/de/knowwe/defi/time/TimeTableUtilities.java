@@ -54,7 +54,7 @@ public class TimeTableUtilities {
 		WikiEngine eng = WikiEngine.getInstance(Environment.getInstance().getContext(), null);
 		UserDatabase udb = eng.getUserManager().getUserDatabase();
 		UserProfile userProfile;
-		List<Date> dates = new ArrayList<Date>();
+		List<Date> dates = new ArrayList<>();
 		ArticleManager mgr = KnowWEUtils.getArticleManager(Environment.DEFAULT_WEB);
 		Article article = mgr.getArticle(getTimeTablePageForUser(user));
 		Section<TimeTableMarkup> timetable = null;
@@ -70,7 +70,7 @@ public class TimeTableUtilities {
 			return null;
 		}
 
-		if (article == null || timetable == null || TimeTableMarkup.getDates(timetable).size() == 0) {
+		if (article == null || timetable == null || TimeTableMarkup.getDates(timetable).isEmpty()) {
 			article = buildPersonalTimeTable(userProfile);
 			timetable = Sections.successor(article.getRootSection(), TimeTableMarkup.class);
 		}
@@ -84,7 +84,7 @@ public class TimeTableUtilities {
 	 * Get the timetable template.
 	 */
 	public static List<Integer> getTimeTableTemplate() {
-		List<Integer> numOfDays = new ArrayList<Integer>();
+		List<Integer> numOfDays = new ArrayList<>();
 		Article article = Environment.getInstance().getArticle(Environment.DEFAULT_WEB,
 				getTimeTableTemplatePagename());
 		int numOfUnits = MenuUtilities.getRootUnits().size();

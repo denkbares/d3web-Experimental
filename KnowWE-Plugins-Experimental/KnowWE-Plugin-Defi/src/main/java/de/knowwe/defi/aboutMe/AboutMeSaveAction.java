@@ -61,33 +61,26 @@ public class AboutMeSaveAction extends AbstractAction {
 
 		StringBuilder params = new StringBuilder();
 
-		params.append("@" + AboutMe.HTML_AGE + ": " + getAnnotationValue(context, AboutMe.HTML_AGE));
+		params.append("@" + AboutMe.HTML_AGE + ": ").append(getAnnotationValue(context, AboutMe.HTML_AGE));
 		params.append("\n");
-		params.append("@" + AboutMe.HTML_CITY + ": "
-				+ getAnnotationValue(context, AboutMe.HTML_CITY));
+		params.append("@" + AboutMe.HTML_CITY + ": ").append(getAnnotationValue(context, AboutMe.HTML_CITY));
 		params.append("\n");
-		params.append("@" + AboutMe.HTML_PRODUCER + ": "
-				+ getAnnotationValue(context, AboutMe.HTML_PRODUCER));
+		params.append("@" + AboutMe.HTML_PRODUCER + ": ").append(getAnnotationValue(context, AboutMe.HTML_PRODUCER));
 		params.append("\n");
-		params.append("@" + AboutMe.HTML_TYPE + ": "
-				+ getAnnotationValue(context, AboutMe.HTML_TYPE));
+		params.append("@" + AboutMe.HTML_TYPE + ": ").append(getAnnotationValue(context, AboutMe.HTML_TYPE));
 		params.append("\n");
-		params.append("@" + AboutMe.HTML_REASON + ": "
-				+ getAnnotationValue(context, AboutMe.HTML_REASON));
+		params.append("@" + AboutMe.HTML_REASON + ": ").append(getAnnotationValue(context, AboutMe.HTML_REASON));
 		params.append("\n");
-		params.append("@" + AboutMe.HTML_HOBBIES + ": "
-				+ getAnnotationValue(context, AboutMe.HTML_HOBBIES));
+		params.append("@" + AboutMe.HTML_HOBBIES + ": ").append(getAnnotationValue(context, AboutMe.HTML_HOBBIES));
 		params.append("\n");
-		params.append("@" + AboutMe.HTML_ABOUT + ": "
-				+ getAnnotationValue(context, AboutMe.HTML_ABOUT));
+		params.append("@" + AboutMe.HTML_ABOUT + ": ").append(getAnnotationValue(context, AboutMe.HTML_ABOUT));
 		params.append("\n");
-		params.append("@" + AboutMe.HTML_AVATAR + ": "
-				+ getAnnotationValue(context, AboutMe.HTML_AVATAR));
+		params.append("@" + AboutMe.HTML_AVATAR + ": ").append(getAnnotationValue(context, AboutMe.HTML_AVATAR));
 		params.append("\n");
 
-		HashMap<String, String> nodesMap = new HashMap<String, String>();
+		HashMap<String, String> nodesMap = new HashMap<>();
 		nodesMap.put(child.getID(), "%%aboutme\n"
-				+ params.toString()
+				+ params
 				+ "%\n");
 		ReplaceSectionUtils.replaceSections(context, nodesMap);
 

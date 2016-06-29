@@ -33,9 +33,9 @@ public class ScoreTableCellSubtreeHandler implements D3webHandler<ScoreCell> {
 	public Collection<Message> create(D3webCompiler compiler,
 									  Section<ScoreCell> section) {
 
-		List<Message> messages = new ArrayList<Message>();
+		List<Message> messages = new ArrayList<>();
 
-		if (section.getText().trim().length() == 0) {
+		if (section.getText().trim().isEmpty()) {
 			return messages;
 		}
 

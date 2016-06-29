@@ -42,7 +42,7 @@ public class AllPathsStrategy extends AllPathsShallowStrategy {
 
 	@Override
 	public List<Path> getInitialStartPaths() {
-		LinkedList<Path> paths = new LinkedList<Path>();
+		LinkedList<Path> paths = new LinkedList<>();
 
 		for (Node node : DiaFluxUtils.getAutostartNodes(kb)) {
 			paths.add(new Path(node));

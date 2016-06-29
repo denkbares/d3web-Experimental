@@ -71,7 +71,7 @@ public class MissingPropertyTest extends KBObjectsTest {
 
 		Property<Object> property = Property.getUntypedProperty(args[1]);
 
-		for (TerminologyObject object : new ArrayList<TerminologyObject>(objects)) {
+		for (TerminologyObject object : new ArrayList<>(objects)) {
 			if (object.getInfoStore().contains(property)) {
 				objects.remove(object);
 			}
@@ -82,7 +82,7 @@ public class MissingPropertyTest extends KBObjectsTest {
 
 	@Override
 	protected List<TerminologyObject> getBaseObjects(KnowledgeBase kb, String[] args) {
-		return new ArrayList<TerminologyObject>(kb.getManager().getObjects(findClass(args[0])));
+		return new ArrayList<>(kb.getManager().getObjects(findClass(args[0])));
 	}
 
 	@SuppressWarnings("unchecked")

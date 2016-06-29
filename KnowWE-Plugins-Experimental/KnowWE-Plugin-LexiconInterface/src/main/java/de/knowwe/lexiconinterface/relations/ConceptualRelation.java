@@ -24,6 +24,7 @@ package de.knowwe.lexiconinterface.relations;
  * Enumeration of all conceptual relations.
  *
  */
+@SuppressWarnings("UnnecessaryEnumModifier")
 public enum ConceptualRelation {
     has_hypernym(true),
     has_hyponym(true),
@@ -41,7 +42,7 @@ public enum ConceptualRelation {
     causes(false);
     private boolean transitive;
 
-    private ConceptualRelation(boolean transitive) {
+    ConceptualRelation(boolean transitive) {
         this.transitive = transitive;
     }
 

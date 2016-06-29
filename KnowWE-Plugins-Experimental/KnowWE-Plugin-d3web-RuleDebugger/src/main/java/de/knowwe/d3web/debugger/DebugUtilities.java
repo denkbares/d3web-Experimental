@@ -57,7 +57,7 @@ public class DebugUtilities {
 	 * Get all questions from the given knowledgebase.
 	 */
 	public static List<TerminologyObject> getAllTOsFromKB(KnowledgeBase kb) {
-		List<TerminologyObject> tos = new LinkedList<TerminologyObject>();
+		List<TerminologyObject> tos = new LinkedList<>();
 		for (TerminologyObject to : kb.getRootQASet().getChildren()) {
 			tos.addAll(getChildTOs(to));
 		}
@@ -69,7 +69,7 @@ public class DebugUtilities {
 	 * Walk recursively through the questions.
 	 */
 	private static List<TerminologyObject> getChildTOs(TerminologyObject to) {
-		List<TerminologyObject> tos = new LinkedList<TerminologyObject>();
+		List<TerminologyObject> tos = new LinkedList<>();
 
 		if (!(to instanceof QContainer)) tos.add(to);
 		for (TerminologyObject too : to.getChildren()) {
@@ -84,7 +84,7 @@ public class DebugUtilities {
 	 * Get all TerminologyObjects which are influential for the given TO.
 	 */
 	public static List<TerminologyObject> getInfluentialTOs(TerminologyObject root, KnowledgeBase kb) {
-		List<TerminologyObject> tos = new LinkedList<TerminologyObject>();
+		List<TerminologyObject> tos = new LinkedList<>();
 		List<Rule> rule = getRulesFromKB(kb);
 		for (Rule r : rule) {
 			if (r.getAction().getBackwardObjects().contains(root)) {
@@ -101,7 +101,7 @@ public class DebugUtilities {
 	 * Get all rules from the given knowledgebase.
 	 */
 	public static List<Rule> getRulesFromKB(KnowledgeBase kb) {
-		List<Rule> rules = new LinkedList<Rule>();
+		List<Rule> rules = new LinkedList<>();
 		for (KnowledgeSlice ks : kb.getAllKnowledgeSlices()) {
 			if (ks instanceof RuleSet) {
 				for (Rule r : ((RuleSet) ks).getRules()) {
@@ -117,7 +117,7 @@ public class DebugUtilities {
 	 * Get all solutions from the given knowledgebase.
 	 */
 	public static List<? extends TerminologyObject> getSolutionsFromKB(KnowledgeBase kb) {
-		List<Solution> solutions = new LinkedList<Solution>();
+		List<Solution> solutions = new LinkedList<>();
 		Solution root = kb.getRootSolution();
 		for (TerminologyObject s : root.getChildren()) {
 			solutions.add((Solution) s);
@@ -131,7 +131,7 @@ public class DebugUtilities {
 	 * Get recursively the rootsolution's children.
 	 */
 	private static List<Solution> getChildSolutions(Solution root) {
-		List<Solution> solutions = new LinkedList<Solution>();
+		List<Solution> solutions = new LinkedList<>();
 
 		for (TerminologyObject s : root.getChildren()) {
 			solutions.add((Solution) s);
@@ -145,7 +145,7 @@ public class DebugUtilities {
 	 * Search in the given knowledgebase for rules containing to in their action
 	 */
 	public static List<Rule> getRulesWithTO(TerminologyObject to, KnowledgeBase kb) {
-		List<Rule> rules = new LinkedList<Rule>();
+		List<Rule> rules = new LinkedList<>();
 		for (Rule r : getRulesFromKB(kb)) {
 			if (!rules.contains(r) && r.getAction().getBackwardObjects().contains(to)) rules.add(r);
 		}

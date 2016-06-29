@@ -46,8 +46,8 @@ public class PathIndex {
 	public PathIndex(Map<Path, Integer> paths, KnowledgeBase kb) {
 		this.coveredPaths = paths;
 		this.kb = kb;
-		this.coveredPathsPerElement = new HashMap<DiaFluxElement, Collection<Path>>(300);
-		this.allPathsPerElement = new HashMap<DiaFluxElement, Collection<Path>>(300);
+		this.coveredPathsPerElement = new HashMap<>(300);
+		this.allPathsPerElement = new HashMap<>(300);
 		// this.pathCoveragePerelement = new HashMap<DiaFluxElement,
 		// Double>(300);
 		prepare();
@@ -75,7 +75,7 @@ public class PathIndex {
 			for (DiaFluxElement element : path) {
 				Collection<Path> collection = pathMap.get(element);
 				if (collection == null) {
-					collection = new HashSet<Path>();
+					collection = new HashSet<>();
 					pathMap.put(element, collection);
 				}
 				collection.add(path);

@@ -56,7 +56,7 @@ public class DiaFluxCoverageTrace implements SessionObject {
 
 		@Override
 		public void propagating(Session session, PSMethod psMethod, Collection<PropagationEntry> entries) {
-		};
+		}
 
 		@Override
 		public void postPropagationStarted(Session session, Collection<PropagationEntry> entries) {
@@ -91,9 +91,9 @@ public class DiaFluxCoverageTrace implements SessionObject {
 	private final Map<Path, Integer> paths;
 
 	public DiaFluxCoverageTrace() {
-		edges = new HashMap<Edge, Integer>();
-		nodes = new HashMap<Node, Integer>();
-		paths = new HashMap<Path, Integer>();
+		edges = new HashMap<>();
+		nodes = new HashMap<>();
+		paths = new HashMap<>();
 	}
 
 	void update(Session session) {

@@ -37,12 +37,12 @@ public class DependencyGraphAction extends AbstractD3webVizAction {
 		DependencyGenerator generator = new DependencyGenerator(kb);
 
 		if (Boolean.valueOf(DefaultMarkupType.getAnnotation(section,
-				D3webDependenciesType.ANNOTATION_SHOW_TYPE)).booleanValue()) {
+				D3webDependenciesType.ANNOTATION_SHOW_TYPE))) {
 			generator.setShowType(true);
 		}
 
 		if (Boolean.valueOf(DefaultMarkupType.getAnnotation(section,
-				D3webDependenciesType.ANNOTATION_SHOW_ALL)).booleanValue()) {
+				D3webDependenciesType.ANNOTATION_SHOW_ALL))) {
 			generator.setShowAll(true);
 		}
 

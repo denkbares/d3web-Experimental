@@ -51,7 +51,7 @@ public class HeaderElement {
 
 			// Add parameters to the header element
 			for (int i = 1; i < tokens.size(); i++) {
-				token = (String) tokens.get(i);
+				token = tokens.get(i);
 
 				int splitIdx = token.indexOf('=');
 
@@ -60,7 +60,7 @@ public class HeaderElement {
 					token = StringUtil.trimDoubleQuotes(token.trim());
 
 					// Ignore empty parameters
-					if (token.length() > 0) {
+					if (!token.isEmpty()) {
 						result.addParameter(token);
 					}
 				}
@@ -94,7 +94,7 @@ public class HeaderElement {
 
 	public HeaderElement(String value) {
 		setValue(value);
-		parameters = new ArrayList<Parameter>();
+		parameters = new ArrayList<>();
 	}
 	
 	/*---------*

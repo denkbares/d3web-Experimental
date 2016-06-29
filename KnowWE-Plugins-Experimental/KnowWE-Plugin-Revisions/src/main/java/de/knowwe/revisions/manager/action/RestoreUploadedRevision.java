@@ -59,7 +59,7 @@ public class RestoreUploadedRevision extends AbstractAction {
 				"%";
 
 		Article a = Environment.getInstance().getArticle(context.getWeb(), context.getTitle());
-		HashMap<String, String> sectionsMap = new HashMap<String, String>();
+		HashMap<String, String> sectionsMap = new HashMap<>();
 		Section<?> s = a.getRootSection();
 		sectionsMap.put(s.getID(), s.getText().concat(preRestoreMarkup));
 
@@ -78,7 +78,7 @@ public class RestoreUploadedRevision extends AbstractAction {
 	 * @return String containing message boxes
 	 */
 	private static String getSectionsToUpdate(HashMap<String, String> sectionsToUpdate, UserActionContext context) {
-		StringBuffer messages = new StringBuffer();
+		StringBuilder messages = new StringBuilder();
 
 		HashMap<String, Integer> changedPages = RevisionManager.getRM(context).getUploadedRevision().compareWithCurrentState();
 		ArticleManager aman = RevisionManager.getRM(context).getUploadedRevision().getArticleManager();
@@ -93,7 +93,7 @@ public class RestoreUploadedRevision extends AbstractAction {
 				// page has changes
 				Article currentArticle = Environment.getInstance().getArticleManager(
 						context.getWeb()).getArticle(title);
-				messages.append("<p class=\"box ok\">Article '" + title + "' ");
+				messages.append("<p class=\"box ok\">Article '").append(title).append("' ");
 				if (version != -2) {
 					// page was other version, so restore the old content
 					Article oldVersionOfCurrentArticle = aman.getArticle(title);

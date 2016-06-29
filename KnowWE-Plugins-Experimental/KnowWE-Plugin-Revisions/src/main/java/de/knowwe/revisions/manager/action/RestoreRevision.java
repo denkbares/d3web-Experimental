@@ -63,7 +63,7 @@ public class RestoreRevision extends AbstractAction {
 					"%";
 
 			Article a = Environment.getInstance().getArticle(context.getWeb(), context.getTitle());
-			HashMap<String, String> sectionsMap = new HashMap<String, String>();
+			HashMap<String, String> sectionsMap = new HashMap<>();
 			Section<?> s = a.getRootSection();
 			sectionsMap.put(s.getID(), s.getText().concat(preRestoreMarkup));
 
@@ -85,7 +85,7 @@ public class RestoreRevision extends AbstractAction {
 	 * @return String containing message boxes
 	 */
 	private static String getSectionsToUpdate(HashMap<String, String> sectionsToUpdate, Date date, UserActionContext context) {
-		StringBuffer messages = new StringBuffer();
+		StringBuilder messages = new StringBuilder();
 
 		HashMap<String, Integer> changedPages = RevisionManager.getRM(context).compareWithCurrentState(
 				date);
@@ -103,13 +103,13 @@ public class RestoreRevision extends AbstractAction {
 				Article currentArticle = Environment.getInstance().getArticleManager(
 						context.getWeb()).getArticle(title);
 				if (currentArticle != null) {
-					messages.append("<p class=\"box ok\">Article '" + title + "' ");
+					messages.append("<p class=\"box ok\">Article '").append(title).append("' ");
 					if (version != -2) {
 						// page was other version, so restore the old content
 						Article oldVersionOfCurrentArticle = aman.getArticle(title);
 						Section<?> s = oldVersionOfCurrentArticle.getRootSection();
 						sectionsToUpdate.put(currentArticle.getRootSection().getID(), s.getText());
-						messages.append("restored to version " + version);
+						messages.append("restored to version ").append(version);
 					}
 					else {
 						// page did not exist, so delete the content, but keep

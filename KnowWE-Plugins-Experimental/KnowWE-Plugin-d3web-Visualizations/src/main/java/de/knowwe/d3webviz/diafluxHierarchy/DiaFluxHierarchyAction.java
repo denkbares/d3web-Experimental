@@ -47,7 +47,7 @@ public class DiaFluxHierarchyAction extends AbstractD3webVizAction {
 	protected String createOutput(KnowledgeBase kb, Section<?> section, UserActionContext context) {
 
 		Map<Flow, Collection<ComposedNode>> structure = DiaFluxUtils.createFlowStructure(kb);
-		Map<Flow, String> result = new HashMap<Flow, String>();
+		Map<Flow, String> result = new HashMap<>();
 
 		while (!structure.isEmpty()) {
 
@@ -67,7 +67,7 @@ public class DiaFluxHierarchyAction extends AbstractD3webVizAction {
 			// remove leaf from tree
 			for (Flow temp : structure.keySet()) {
 				Collection<ComposedNode> calledFlows = structure.get(temp);
-				for (ComposedNode composedNode : new ArrayList<ComposedNode>(calledFlows)) {
+				for (ComposedNode composedNode : new ArrayList<>(calledFlows)) {
 					if (DiaFluxUtils.getCalledFlow(composedNode) == flow) {
 						calledFlows.remove(composedNode);
 					}
@@ -91,10 +91,10 @@ public class DiaFluxHierarchyAction extends AbstractD3webVizAction {
 		StringBuilder bob = new StringBuilder();
 		bob.append("{");
 		bob.append("\"name\":");
-		bob.append("\"" + flow.getName() + "\"");
+		bob.append("\"").append(flow.getName()).append("\"");
 		bob.append(",");
 
-		Collection<String> childs = new ArrayList<String>();
+		Collection<String> childs = new ArrayList<>();
 		for (Iterator<ComposedNode> iterator = flow.getNodesOfClass(ComposedNode.class).iterator(); iterator.hasNext();) {
 			ComposedNode node = iterator.next();
 			Flow calledFlow = DiaFluxUtils.getCalledFlow(node);
@@ -108,7 +108,7 @@ public class DiaFluxHierarchyAction extends AbstractD3webVizAction {
 		}
 
 		if (childs.isEmpty()) {
-			bob.append("\"size\":" + (flow.getNodes().size() + flow.getEdges().size()));
+			bob.append("\"size\":").append(flow.getNodes().size() + flow.getEdges().size());
 
 		}
 		else {

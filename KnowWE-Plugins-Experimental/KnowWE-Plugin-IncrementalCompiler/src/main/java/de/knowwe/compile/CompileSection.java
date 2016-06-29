@@ -47,7 +47,7 @@ public class CompileSection<T extends Type> {
 	private Section<T> section = null;
 
 	public static <T extends Type> CompileSection<T> create(Section<T> s) {
-		return new CompileSection<T>(s);
+		return new CompileSection<>(s);
 	}
 
 	public CompileSection(Section<T> s) {

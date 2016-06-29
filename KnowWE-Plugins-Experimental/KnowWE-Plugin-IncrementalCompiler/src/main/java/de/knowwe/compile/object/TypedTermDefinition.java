@@ -7,6 +7,6 @@ import de.knowwe.core.kdom.parsing.Section;
 
 public interface TypedTermDefinition {
 
-	public Map<String, ? extends Object> getTypedTermInformation(Section<? extends SimpleDefinition> s);
+	Map<String, ? extends Object> getTypedTermInformation(Section<? extends SimpleDefinition> s);
 
 }

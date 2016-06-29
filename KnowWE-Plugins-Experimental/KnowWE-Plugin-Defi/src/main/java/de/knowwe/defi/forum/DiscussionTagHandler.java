@@ -85,13 +85,13 @@ public class DiscussionTagHandler extends AbstractTagHandler {
 	@Override
 	public void render(Section<?> section, UserContext userContext, Map<String, String> parameters, RenderResult result) {
 		StringBuilder disc = new StringBuilder();
-		List<Section<? extends Forum>> units = new LinkedList<Section<? extends Forum>>();
-		List<Section<? extends Forum>> chats = new LinkedList<Section<? extends Forum>>();
-		List<Section<? extends Forum>> others = new LinkedList<Section<? extends Forum>>();
-		List<Section<? extends Forum>> errors = new LinkedList<Section<? extends Forum>>();
+		List<Section<? extends Forum>> units = new LinkedList<>();
+		List<Section<? extends Forum>> chats = new LinkedList<>();
+		List<Section<? extends Forum>> others = new LinkedList<>();
+		List<Section<? extends Forum>> errors = new LinkedList<>();
 
 		// Hole Lektionennamen aus dem Left Menu
-		List<String> rootUnitNames = new LinkedList<String>();
+		List<String> rootUnitNames = new LinkedList<>();
 		for (Section<DashTreeElement> rootUnit : MenuUtilities.getRootUnits()) {
 			rootUnitNames.add(MenuUtilities.getUnitPagename(rootUnit));
 		}
@@ -135,18 +135,19 @@ public class DiscussionTagHandler extends AbstractTagHandler {
 			String unitName = MenuUtilities.getUnitPagename(rootUnit);
 
 			if (!MenuUtilities.isUnitOpen(rootUnit, user)) {
-				tmp.append("<tr class='inactive'><td colspan='2'>" + unitName + "</td></tr>");
+				tmp.append("<tr class='inactive'><td colspan='2'>").append(unitName).append("</td></tr>");
 			}
 			else {
-				tmp.append("<tr><td>" + unitName + buildFormButton(unitName) + "<ul>");
+				tmp.append("<tr><td>").append(unitName).append(buildFormButton(unitName)).append("<ul>");
 				for (Section<? extends Forum> forum : units) {
 					int newEntries = DiscussionUtils.getNumberOfNewEntriesInForum(forum, user);
 					Map<String, String> mapFor = AbstractXMLType.getAttributes(forum);
 					if (unitName.equals(mapFor.get("unit"))) {
-						tmp.append("<li><a href='Wiki.jsp?page="
-								+ Strings.encodeURL(forum.getTitle())
-								+ "'>"
-								+ mapFor.get("topic") + "</a>");
+						tmp.append("<li><a href='Wiki.jsp?page=")
+								.append(Strings.encodeURL(forum.getTitle()))
+								.append("'>")
+								.append(mapFor.get("topic"))
+								.append("</a>");
 						tmp.append(getNewEntriesSpan(newEntries));
 						noForums = false;
 						if (newEntries != 0) newEntry = true;
@@ -155,7 +156,7 @@ public class DiscussionTagHandler extends AbstractTagHandler {
 				if (noForums) tmp.append("<li>" + NO_FORUMS + "</li>");
 				else noForums = true;
 				tmp.append("</ul>");
-				tmp.append("<br />" + buildForm(unitName));
+				tmp.append("<br />").append(buildForm(unitName));
 				if (newEntry) tmp.append("</td><td class='new'></td></tr>");
 				else tmp.append("</td><td class='old'></td></tr>");
 			}
@@ -216,22 +217,27 @@ public class DiscussionTagHandler extends AbstractTagHandler {
 		StringBuilder tmp = new StringBuilder();
 		tmp.append("<tr><td><div class='userchat'>");
 		// Avatar
-		tmp.append("<img src=\"KnowWEExtension/images/avatars/"
-				+ getAvatar(user)
-				+ "\" height=\"80px\" width=\"80px\" alt=\"avatar\" />");
+		tmp.append("<img src=\"KnowWEExtension/images/avatars/")
+				.append(getAvatar(user))
+				.append("\" height=\"80px\" width=\"80px\" alt=\"avatar\" />");
 
 		// Username + status
-		tmp.append("<span class='userchat'><p>" + user + "</p><a href='"
-				+ JSPWikiConnector.LINK_PREFIX
-				+ user + "'>"
-				+ "Zum Profil</a><br />- " + getStatus(online, user)
-				+ " -</span>");
+		tmp.append("<span class='userchat'><p>")
+				.append(user)
+				.append("</p><a href='")
+				.append(JSPWikiConnector.LINK_PREFIX)
+				.append(user)
+				.append("'>")
+				.append("Zum Profil</a><br />- ")
+				.append(getStatus(online, user))
+				.append(" -</span>");
 
 		// "Persönliche Nachricht"-Button
-		tmp.append("<input type='button' value='"
-				+ PERSONAL_MESSAGE_BUTTON
-				+ "' onclick='newChat(\"" + names[0] + "\", \"" + names[1]
-				+ "\");return false' />");
+		tmp.append("<input type='button' value='" + PERSONAL_MESSAGE_BUTTON + "' onclick='newChat(\"")
+				.append(names[0])
+				.append("\", \"")
+				.append(names[1])
+				.append("\");return false' />");
 		tmp.append("</div>");
 
 		if (newEntry) tmp.append("</td><td class='new'></td></tr>");
@@ -252,14 +258,17 @@ public class DiscussionTagHandler extends AbstractTagHandler {
 		tmp.append("<ul>");
 		for (Section<? extends Forum> forum : others) {
 			Map<String, String> mapFor = AbstractXMLType.getAttributes(forum);
-			tmp.append("<li><a href='Wiki.jsp?page=" + Strings.encodeURL(forum.getTitle()) + "'>"
-					+ mapFor.get("topic") + "</a>");
+			tmp.append("<li><a href='Wiki.jsp?page=")
+					.append(Strings.encodeURL(forum.getTitle()))
+					.append("'>")
+					.append(mapFor.get("topic"))
+					.append("</a>");
 			int newEntries = DiscussionUtils.getNumberOfNewEntriesInForum(forum, user);
 			if (newEntries != 0) newEntry = true;
 			tmp.append(getNewEntriesSpan(newEntries));
 			tmp.append("</li>");
 		}
-		if (others.size() == 0) tmp.append("<li>" + NO_FORUMS + "</li>");
+		if (others.isEmpty()) tmp.append("<li>" + NO_FORUMS + "</li>");
 		tmp.append("</ul>");
 		tmp.append(buildForm("Sonstiges"));
 
@@ -279,10 +288,13 @@ public class DiscussionTagHandler extends AbstractTagHandler {
 		tmp.append("<tr><td><ul>");
 		for (Section<? extends Forum> forum : errors) {
 
-			tmp.append("<li><a href='Wiki.jsp?page=" + Strings.encodeURL(forum.getTitle()) + "'>"
-					+ forum.getTitle() + "</a></li>");
+			tmp.append("<li><a href='Wiki.jsp?page=")
+					.append(Strings.encodeURL(forum.getTitle()))
+					.append("'>")
+					.append(forum.getTitle())
+					.append("</a></li>");
 		}
-		if (errors.size() == 0) tmp.append("<li>" + NO_FORUMS + "</li>");
+		if (errors.isEmpty()) tmp.append("<li>" + NO_FORUMS + "</li>");
 		tmp.append("</ul></td><td></td></tr>");
 
 		return tmp.toString();
@@ -293,10 +305,9 @@ public class DiscussionTagHandler extends AbstractTagHandler {
 	 */
 	private String buildFormButton(String unitName) {
 		StringBuilder tmp = new StringBuilder();
-		tmp.append(" <input type='button' value='"
-				+ OPEN_FORM_BUTTON
-				+ "' onclick='forumForm(\"" + unitName
-				+ "\");return false' />");
+		tmp.append(" <input type='button' value='" + OPEN_FORM_BUTTON + "' onclick='forumForm(\"")
+				.append(unitName)
+				.append("\");return false' />");
 		return tmp.toString();
 	}
 
@@ -305,21 +316,28 @@ public class DiscussionTagHandler extends AbstractTagHandler {
 	 */
 	private String buildForm(String unitName) {
 		StringBuilder tmp = new StringBuilder();
-		tmp.append("<form style='display:none' name='" + unitName + "'>");
+		tmp.append("<form style='display:none' name='").append(unitName).append("'>");
 		tmp.append("<h4>" + FORM_LABEL + "</h4>");
 		tmp.append("<p class='topic_label'>" + TOPIC_LABEL + "<br />");
-		tmp.append("<input type='text' style='width:" + TOPIC_PANEL_WIDTH + "' name='" + unitName
-				+ "_topic' /></p>");
+		tmp.append("<input type='text' style='width:" + TOPIC_PANEL_WIDTH + "' name='")
+				.append(unitName)
+				.append("_topic' /></p>");
 		tmp.append("<p>" + TEXTAREA_LABEL + "<p>");
-		tmp.append("<textarea name='" + unitName
-				+ "_text' style='width:" + TEXTAREA_WIDTH + ";height:" + TEXTAREA_HEIGHT
-				+ "'></textarea>");
-		tmp.append("<input type='button' value='" + SEND_BUTTON + "' onclick='sendforumForm(\""
-				+ unitName + "\");return false' />");
-		tmp.append("<input type='button' onclick='forumForm(\""
-				+ unitName
-				+ "\");return false' value='" + CLOSE_FORM_BUTTON
-				+ "' />");
+		tmp.append("<textarea name='")
+				.append(unitName)
+				.append("_text' style='width:")
+				.append(TEXTAREA_WIDTH)
+				.append(";height:")
+				.append(TEXTAREA_HEIGHT)
+				.append("'></textarea>");
+		tmp.append("<input type='button' value='" + SEND_BUTTON + "' onclick='sendforumForm(\"")
+				.append(unitName)
+				.append("\");return false' />");
+		tmp.append("<input type='button' onclick='forumForm(\"")
+				.append(unitName)
+				.append("\");return false' value='")
+				.append(CLOSE_FORM_BUTTON)
+				.append("' />");
 		tmp.append("</form>");
 
 		return tmp.toString();
@@ -332,8 +350,11 @@ public class DiscussionTagHandler extends AbstractTagHandler {
 		StringBuilder tmp = new StringBuilder();
 		if (newEntries == -1) tmp.append("&nbsp;<span class='newEntry'>(ungelesenes Thema)</span>");
 		else if (newEntries == 1) tmp.append("&nbsp;<span class='newEntry'>(1 neuer Beitrag)</span>");
-		else if (newEntries > 0) tmp.append("&nbsp;<span class='newEntry'>("
-				+ newEntries + " neue Beiträge)</span>");
+		else if (newEntries > 0) {
+			tmp.append("&nbsp;<span class='newEntry'>(")
+					.append(newEntries)
+					.append(" neue Beiträge)</span>");
+		}
 		return tmp.toString();
 	}
 
@@ -351,7 +372,7 @@ public class DiscussionTagHandler extends AbstractTagHandler {
 	 * Get all admins.
 	 */
 	private List<String> getAdmins() {
-		List<String> admins = new LinkedList<String>();
+		List<String> admins = new LinkedList<>();
 		WikiEngine eng = WikiEngine.getInstance(Environment.getInstance().getContext(), null);
 		UserDatabase udb = eng.getUserManager().getUserDatabase();
 		GroupManager gm = eng.getGroupManager();

@@ -30,7 +30,7 @@ import java.util.List;
  */
 public class GLDistrict extends GLBuilding {
 
-	private final List<GLBuilding> childs = new LinkedList<GLBuilding>();
+	private final List<GLBuilding> childs = new LinkedList<>();
 
 	public GLDistrict(double length, double width, double height) {
 		super(length, width, height);

@@ -50,7 +50,7 @@ public class InconsistentQuestionTest extends AbstractAnomalyTest {
 		NORMAL,
 		INSTANT,
 		REPEATED
-	};
+	}
 
 	// /**
 	// *
@@ -129,7 +129,7 @@ public class InconsistentQuestionTest extends AbstractAnomalyTest {
 	 * @return
 	 */
 	private List<String> getAskedValues(ActionNextQASet action) {
-		List<String> result = new LinkedList<String>();
+		List<String> result = new LinkedList<>();
 
 		for (QASet set : action.getQASets()) {
 			if (set instanceof QContainer) {
@@ -148,9 +148,9 @@ public class InconsistentQuestionTest extends AbstractAnomalyTest {
 
 	@Override
 	protected String test(KnowledgeBase kb) {
-		StringBuffer error = new StringBuffer();
+		StringBuilder error = new StringBuilder();
 
-		Hashtable<String, IndicationType> knownQuestions = new Hashtable<String, IndicationType>();
+		Hashtable<String, IndicationType> knownQuestions = new Hashtable<>();
 
 		if (null != kb) {
 			FlowSet flowSet = DiaFluxUtils.getFlowSet(kb);
@@ -182,8 +182,7 @@ public class InconsistentQuestionTest extends AbstractAnomalyTest {
 										AnomalyManager anomalyManager = AnomalyManager.getAnomalyManager();
 										anomalyManager.addAnomaly(node.getFlow(), node,
 													"Inconsistent Question");
-										error.append("Inconsistent Question for Var. : " + var
-													+ "<br>");
+										error.append("Inconsistent Question for Var. : ").append(var).append("<br>");
 									}
 								}
 							}

@@ -40,6 +40,7 @@ public class Rdf2GoDashTreeQuestionRelationScript extends Rdf2GoDashTreeTermRela
 		return QuestionTreeQuestionRelationScript.getQuestionChildrenDashtreeElements(termDefiningSection);
 	}
 
+	@Override
 	protected URI getRootURI(Rdf2GoCore core) {
 		return core.createlocalURI("Q000");
 	}

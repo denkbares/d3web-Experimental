@@ -45,7 +45,7 @@ public class MCDomain implements Domain {
 
 	public MCDomain(QuestionMC question, Collection<Choice> choices) {
 		questionMC = question;
-		this.choices = new HashSet<Choice>();
+		this.choices = new HashSet<>();
 		this.choices.addAll(choices);
 	}
 
@@ -53,7 +53,7 @@ public class MCDomain implements Domain {
 	@Override
 	public MCDomain add(Domain d) {
 		MCDomain domain = (MCDomain) d;
-		Collection<Choice> result = new HashSet<Choice>();
+		Collection<Choice> result = new HashSet<>();
 		result.addAll(domain.getChoices());
 		result.addAll(this.getChoices());
 
@@ -62,7 +62,7 @@ public class MCDomain implements Domain {
 
 	@Override
 	public MCDomain negate() {
-		Collection<Choice> result = new HashSet<Choice>(getQuestion().getAllAlternatives());
+		Collection<Choice> result = new HashSet<>(getQuestion().getAllAlternatives());
 		result.removeAll(getChoices());
 		return new MCDomain(getQuestion(), result);
 	}
@@ -86,7 +86,7 @@ public class MCDomain implements Domain {
 	@Override
 	public MCDomain intersect(Domain d) {
 		MCDomain domain = (MCDomain) d;
-		Collection<Choice> result = new LinkedList<Choice>(this.getChoices());
+		Collection<Choice> result = new LinkedList<>(this.getChoices());
 		result.retainAll(domain.getChoices());
 		return new MCDomain(getQuestion(), result);
 	}

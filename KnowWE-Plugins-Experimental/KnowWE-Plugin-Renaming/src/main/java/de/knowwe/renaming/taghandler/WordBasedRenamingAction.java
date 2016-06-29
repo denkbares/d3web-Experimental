@@ -135,11 +135,7 @@ public class WordBasedRenamingAction extends AbstractAction {
 
 		String additionalText = "";
 
-		Iterator<Article> iter =
-				Environment.getInstance().getArticleManager(web).getArticles().iterator();
-		while (iter.hasNext()) {
-			Article article = iter.next();
-
+		for (Article article : Environment.getInstance().getArticleManager(web).getArticles()) {
 			if (article.getTitle().equals(articleTitle)) {
 				Section<?> section = Sections.get(sectionID);
 				String context = WordBasedRenameFinding.getAdditionalContext(
@@ -180,48 +176,52 @@ public class WordBasedRenamingAction extends AbstractAction {
 			Map<Article, Collection<WordBasedRenameFinding>> findings,
 			String query, String replacement) {
 
-		StringBuffer mask = new StringBuffer();
+		StringBuilder mask = new StringBuilder();
 
-		mask.append("<form method='post' action=''><fieldset><legend>"
-				+ rb.getString("KnowWE.renamingtool.searchresult")
-				+ " '" + query + "'</legend>");
+		mask.append("<form method='post' action=''><fieldset><legend>")
+				.append(rb.getString("KnowWE.renamingtool.searchresult"))
+				.append(" '")
+				.append(query)
+				.append("'</legend>");
 		mask.append("<table id='sortable1'><colgroup><col class='match' /><col class='section' />");
 		mask.append("<col class='replace' /><col class='preview' /></colgroup>");
-		mask.append("<thead><tr><th scope='col'>"
-				+ rb.getString("KnowWE.renamingtool.clmn.match")
-				+ "</th><th scope='col'>"
-				+ rb.getString("KnowWE.renamingtool.clmn.section")
-				+ "</th>");
-		mask.append("<th scope='col'>"
-				+ rb.getString("KnowWE.renamingtool.clmn.replace")
-				+ "</th><th scope='col'>"
-				+ rb.getString("KnowWE.renamingtool.clmn.preview")
-				+ "</th></tr></thead>"
-
-				+ "<thead>"
-				+ "<tr><td></td><td></td><td>"
-				+ "<input class='check-select check' value='' type='button'  title='Select all checkboxes' rel='{section: undefined}'/>"
-				+ "<input class='check-deselect check' value='' type='button' title='Deselect all checkboxes' rel='{section: undefined}'/>"
-				+ "</td><td></td></tr>"
-				+ "</thead>"
-				);
+		mask.append("<thead><tr><th scope='col'>")
+				.append(rb.getString("KnowWE.renamingtool.clmn.match"))
+				.append("</th><th scope='col'>")
+				.append(rb.getString("KnowWE.renamingtool.clmn.section"))
+				.append("</th>");
+		mask.append("<th scope='col'>")
+				.append(rb.getString("KnowWE.renamingtool.clmn.replace"))
+				.append("</th><th scope='col'>")
+				.append(rb.getString("KnowWE.renamingtool.clmn.preview"))
+				.append("</th></tr></thead>")
+				.append("<thead>")
+				.append("<tr><td></td><td></td><td>")
+				.append("<input class='check-select check' value='' type='button'  title='Select all checkboxes' rel='{section: undefined}'/>")
+				.append("<input class='check-deselect check' value='' type='button' title='Deselect all checkboxes' rel='{section: undefined}'/>")
+				.append("</td><td></td></tr>")
+				.append("</thead>");
 
 		for (Entry<Article, Collection<WordBasedRenameFinding>> entry : findings.entrySet()) {
 
 			Article article = entry.getKey();
 			Collection<WordBasedRenameFinding> findingsInArticle = entry.getValue();
-			if (findingsInArticle.size() > 0) {
+			if (!findingsInArticle.isEmpty()) {
 				mask.append("<thead>");
 				mask.append("<tr><td>");
-				mask.append("<strong>"
-						+ rb.getString("KnowWE.renamingtool.article")
-						+ ": " + article.getTitle() + "</strong>");
+				mask.append("<strong>")
+						.append(rb.getString("KnowWE.renamingtool.article"))
+						.append(": ")
+						.append(article.getTitle())
+						.append("</strong>");
 				mask.append("</td><td></td><td>");
 
-				mask.append("<input class='check-select check' value='' type='button'  title='Select all checkboxes' rel='{section: \""
-						+ article.getTitle() + "\"}'/>");
-				mask.append("<input class='check-deselect check' value='' type='button' title='Deselect all checkboxes' rel='{section: \""
-						+ article.getTitle() + "\"}'/>");
+				mask.append("<input class='check-select check' value='' type='button'  title='Select all checkboxes' rel='{section: \"")
+						.append(article.getTitle())
+						.append("\"}'/>");
+				mask.append("<input class='check-deselect check' value='' type='button' title='Deselect all checkboxes' rel='{section: \"")
+						.append(article.getTitle())
+						.append("\"}'/>");
 				/*
 				 * mask.append(
 				 * "<input id='check-select' class='check' onclick='selectPerSection(this, \""
@@ -254,36 +254,31 @@ public class WordBasedRenamingAction extends AbstractAction {
 				// TODO indexOf only searches the 1. children
 				// and does not consider the section to be
 				// deeper in the tree!!!
-				mask.append("<td>"
-						+ createAdditionalMatchingTextSpan(article,
-								WordBasedRenameFinding.getStart(),
-								WordBasedRenameFinding.getSec().getID(),
-								0,
-								'p', true));
-				mask.append(" " + text + " ");
+				mask.append("<td>").append(createAdditionalMatchingTextSpan(article,
+						WordBasedRenameFinding.getStart(),
+						WordBasedRenameFinding.getSec().getID(),
+						0,
+						'p', true));
+				mask.append(" ").append(text).append(" ");
 				mask.append(createAdditionalMatchingTextSpan(article,
 						WordBasedRenameFinding.getStart(),
 						WordBasedRenameFinding.getSec().getID(),
 						0,
 						'a', true));
 				mask.append("</td>");
-				mask.append("<td><i>"
-						+ WordBasedRenameFinding.getSec().get().getName()
-						+ "</i></td>");
-				mask.append("<td><input type='checkbox' id='" + checkBoxID
-						+ "'></td>");
-				mask.append("<td>" + replacePreview(text, query, replacement)
-						+ "</td>");
+				mask.append("<td><i>").append(WordBasedRenameFinding.getSec().get().getName()).append("</i></td>");
+				mask.append("<td><input type='checkbox' id='").append(checkBoxID).append("'></td>");
+				mask.append("<td>").append(replacePreview(text, query, replacement)).append("</td>");
 				mask.append("</tr>");
 			}
 			mask.append("</tbody>");
 		}
 		mask.append("<tfoot>");
 		mask.append("<tr><td></td><td></td>");
-		mask.append("<td><input id='renaming-replace' value='"
-				+ rb.getString("KnowWE.renamingtool.bttn.replace")
-				+ "' type='button' class='button'"
-				+ " title='Begriff in ausgewählten Stellen ersetzen'/></td>");
+		mask.append("<td><input id='renaming-replace' value='")
+				.append(rb.getString("KnowWE.renamingtool.bttn.replace"))
+				.append("' type='button' class='button'")
+				.append(" title='Begriff in ausgewählten Stellen ersetzen'/></td>");
 		/*
 		 * mask.append("<td><input onclick='replaceAll();' value='" +
 		 * rb.getString("KnowWE.renamingtool.bttn.replace") +
@@ -312,11 +307,11 @@ public class WordBasedRenamingAction extends AbstractAction {
 			String web, String query, int previousMatchLength, String[] sections) {
 		Set<String> sectionSet = null;
 		if (sections != null) {
-			sectionSet = new HashSet<String>(Arrays.asList(sections));
+			sectionSet = new HashSet<>(Arrays.asList(sections));
 		}
 
 		Map<Article, Collection<WordBasedRenameFinding>> map =
-				new HashMap<Article, Collection<WordBasedRenameFinding>>();
+				new HashMap<>();
 		Iterator<Article> iter =
 				Environment.getInstance().getArticleManager(web).getArticles().iterator();
 
@@ -335,7 +330,7 @@ public class WordBasedRenamingAction extends AbstractAction {
 
 		while (iter.hasNext()) {
 			Article article = iter.next();
-			map.put(article, new HashSet<WordBasedRenameFinding>());
+			map.put(article, new HashSet<>());
 			String text = article.getRootSection().getText();
 
 			Matcher m = p.matcher(text);
@@ -408,15 +403,19 @@ public class WordBasedRenamingAction extends AbstractAction {
 				+ "direction: '" + direction + "'}";
 
 		if (span) {
-			html.append("<span id='" + direction + sectionIndex
-					+ "' class='short' style='display: inline;'>");
+			html.append("<span id='")
+					.append(direction)
+					.append(sectionIndex)
+					.append("' class='short' style='display: inline;'>");
 		}
 
 		// html.append("<a href='javascript:getAdditionalMatchText(\"" + atmUrl
 		// + "\")'>");
-		html.append("<img width=\"12\" height=\"12\" border=\"0\" src=\"" + img
-				+ "\" alt=\"more\" rel=\"" + atmUrl
-				+ "\" class=\"show-additional-text-renaming\"/>");
+		html.append("<img width=\"12\" height=\"12\" border=\"0\" src=\"")
+				.append(img)
+				.append("\" alt=\"more\" rel=\"")
+				.append(atmUrl)
+				.append("\" class=\"show-additional-text-renaming\"/>");
 		// html.append("</a>");
 
 		if (span) {
@@ -453,9 +452,11 @@ public class WordBasedRenamingAction extends AbstractAction {
 				Matcher m = p.matcher(token);
 
 				while (m.find()) {
-					result.append(token.substring(0, m.start()) + "<strong>"
-							+ token.substring(m.start(), m.end()) + "</strong>"
-							+ token.substring(m.end(), token.length()));
+					result.append(token.substring(0, m.start()))
+							.append("<strong>")
+							.append(token.substring(m.start(), m.end()))
+							.append("</strong>")
+							.append(token.substring(m.end(), token.length()));
 				}
 			}
 			else {

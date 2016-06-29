@@ -107,7 +107,7 @@ public class MenuItemRenderer implements Renderer {
 			if (getPageName(rootContent).equals(currentPage)) {
 				hidden = false;
 			}
-			List<Section<DynamicMenuItem>> found = new ArrayList<Section<DynamicMenuItem>>();
+			List<Section<DynamicMenuItem>> found = new ArrayList<>();
 			Sections.successors(root.getParent(), DynamicMenuItem.class, found);
 			for (Section<DynamicMenuItem> section : found) {
 				if (pagename.equals(currentPage) || isSubpageOf(currentPage, section)) {
@@ -150,7 +150,7 @@ public class MenuItemRenderer implements Renderer {
 	private boolean isSubpageOf(String currentPage, Section<?> section) {
 		Section<DashTreeElement> dtElement = Sections.ancestor(section,
 				DashTreeElement.class);
-		List<Section<DashTreeElementContent>> found = new ArrayList<Section<DashTreeElementContent>>();
+		List<Section<DashTreeElementContent>> found = new ArrayList<>();
 		Sections.successors(dtElement.getParent(),
 				DashTreeElementContent.class, found);
 
@@ -165,7 +165,7 @@ public class MenuItemRenderer implements Renderer {
 
 	private boolean isFree(Section<?> sec, String user) {
 		Section<? extends Type> dashtree = sec.getParent().getParent().getParent();
-		List<Section<DynamicMenuItem>> found = new ArrayList<Section<DynamicMenuItem>>();
+		List<Section<DynamicMenuItem>> found = new ArrayList<>();
 		Sections.successors(dashtree, DynamicMenuItem.class, 3, found);
 
 		int unitNumber = -1;

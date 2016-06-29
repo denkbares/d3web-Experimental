@@ -44,18 +44,18 @@ public class SubmitTableContentAction extends AbstractAction {
 	public static final String TABLE_ID = "tableid";
 
 	private String createNewMarkupString(String tableid, List<Map<Integer, String>> inputData) {
-		StringBuffer newContent = new StringBuffer();
+		StringBuilder newContent = new StringBuilder();
 		String date = (new SimpleDateFormat("dd.MM.yyy, HH:mm")).format(new Date());
 		newContent.append("%%Tabellendaten\n");
-		newContent.append(createMarkupContent(inputData) + "\n");
-		newContent.append("@date:" + date + "\n");
-		newContent.append("@tableid:" + tableid + "\n");
+		newContent.append(createMarkupContent(inputData)).append("\n");
+		newContent.append("@date:").append(date).append("\n");
+		newContent.append("@tableid:").append(tableid).append("\n");
 		newContent.append("%\n");
 		return newContent.toString();
 	}
 
 	private String createMarkupContent(List<Map<Integer, String>> inputData) {
-		StringBuffer newContent = new StringBuffer();
+		StringBuilder newContent = new StringBuilder();
 		int versionCounter = 0;
 		for (Map<Integer, String> map : inputData) {
 			newContent.append(renderMarkupForOneVersion(versionCounter, map));
@@ -66,11 +66,11 @@ public class SubmitTableContentAction extends AbstractAction {
 	}
 
 	public static String renderMarkupForOneVersion(int versionCounter, Map<Integer, String> map) {
-		StringBuffer buffy = new StringBuffer();
-		buffy.append("VERSION" + versionCounter + "\n");
+		StringBuilder buffy = new StringBuilder();
+		buffy.append("VERSION").append(versionCounter).append("\n");
 		for (Integer i : map.keySet()) {
 			String text = map.get(i);
-			buffy.append("INPUT" + i + ":" + text + "\n");
+			buffy.append("INPUT").append(i).append(":").append(text).append("\n");
 		}
 		buffy.append("\n");
 		return buffy.toString();
@@ -108,8 +108,8 @@ public class SubmitTableContentAction extends AbstractAction {
 			String newContent = createNewMarkupString(tableid, inputDataAll);
 			newContent = "[{ALLOW view admin}]\n\n" + newContent;
 			Environment.getInstance().getWikiConnector().createArticle(
-					articleNameForData, "Defi-system", newContent.toString());
-			Article article = Article.createArticle(newContent.toString(),
+					articleNameForData, "Defi-system", newContent);
+			Article article = Article.createArticle(newContent,
 					articleNameForData, defaultWeb, true);
 
 			KnowWEUtils.getArticleManager(
@@ -121,7 +121,7 @@ public class SubmitTableContentAction extends AbstractAction {
 		else {
 			Section<TableEntryContentType> contentSection = findContentSectionForTableID(
 					tableid, dataArticle);
-			Map<String, String> nodesMap = new HashMap<String, String>();
+			Map<String, String> nodesMap = new HashMap<>();
 			if (contentSection == null) {
 				// append entire block to page
 				nodesMap.put(dataArticle.getRootSection().getID(),
@@ -150,9 +150,9 @@ public class SubmitTableContentAction extends AbstractAction {
 	private List<Map<Integer, String>> buildInputData(String data, int versions) {
 		String[] inputs = data.split(";;");
 		int inputsByVersion = inputs.length / versions;
-		List<Map<Integer, String>> inputDataAll = new ArrayList<Map<Integer, String>>();
+		List<Map<Integer, String>> inputDataAll = new ArrayList<>();
 		for (int i = 0; i < versions; i++) {
-			Map<Integer, String> inputDataOneVersion = new HashMap<Integer, String>();
+			Map<Integer, String> inputDataOneVersion = new HashMap<>();
 			for (int k = 0; k < inputsByVersion; k++) {
 				String string = inputs[i * inputsByVersion + k];
 				String number = string.substring(5, string.indexOf(':'));
@@ -166,7 +166,7 @@ public class SubmitTableContentAction extends AbstractAction {
 	}
 
 	public static Section<TableEntryContentType> findContentSectionForTableID(String tableid, Article article) {
-		List<Section<TableEntryType>> tables = new ArrayList<Section<TableEntryType>>();
+		List<Section<TableEntryType>> tables = new ArrayList<>();
 		Sections.successors(article.getRootSection(),
 				TableEntryType.class, tables);
 		Section<TableEntryContentType> contentSection = null;

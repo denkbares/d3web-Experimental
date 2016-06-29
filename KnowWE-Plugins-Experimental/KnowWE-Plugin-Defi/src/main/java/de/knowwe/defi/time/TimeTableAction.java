@@ -58,7 +58,7 @@ public class TimeTableAction extends AbstractAction {
 		}
 		// timetable already exists
 		else {
-			Map<String, String> nodesMap = new HashMap<String, String>();
+			Map<String, String> nodesMap = new HashMap<>();
 			Section<RootType> rootSection = Environment.getInstance().getArticle(
 					Environment.DEFAULT_WEB, pageName).getRootSection();
 			Section<TimeTableTemplateMarkup> templateSec = Sections.successor(

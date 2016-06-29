@@ -28,7 +28,7 @@ public class AnnotationLoadKnowledgeBaseHandler implements D3webHandler<Knowledg
 
 	private static final String TMP_LOADED_KB_PATH = "/tmp/loadedKB";
 	public static final String ANNOTATION_LOAD = "load";
-	private final Collection<Message> messages = new LinkedList<Message>();
+	private final Collection<Message> messages = new LinkedList<>();
 
 	@Override
 	public Collection<Message> create(D3webCompiler compiler, Section<KnowledgeBaseType> section) {

@@ -42,9 +42,11 @@ public class UsernameTagHandler extends AbstractTagHandler {
 	@Override
 	public void render(Section<?> section, UserContext userContext, Map<String, String> parameters, RenderResult result) {
 		StringBuilder username = new StringBuilder();
-		username.append("<a name='usernametag' href='Wiki.jsp?page=" + userContext.getUserName()
-				+ "'>"
-				+ userContext.getUserName() + "</a>");
+		username.append("<a name='usernametag' href='Wiki.jsp?page=")
+				.append(userContext.getUserName())
+				.append("'>")
+				.append(userContext.getUserName())
+				.append("</a>");
 
 		result.appendHtml(username.toString());
 	}

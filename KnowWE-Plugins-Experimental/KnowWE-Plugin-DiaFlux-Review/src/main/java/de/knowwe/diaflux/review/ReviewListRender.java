@@ -52,7 +52,7 @@ public class ReviewListRender implements Renderer {
 		Collection<Review> reviews;
 		try {
 			Collection<WikiAttachment> attachments = Environment.getInstance().getWikiConnector().getAttachments();
-			Collection<WikiAttachment> reviewAtts = new LinkedList<WikiAttachment>();
+			Collection<WikiAttachment> reviewAtts = new LinkedList<>();
 			for (WikiAttachment att : attachments) {
 				if (att.getFileName().endsWith(LoadReviewAction.REVIEW_EXTENSION)) reviewAtts.add(att);
 
@@ -141,7 +141,7 @@ public class ReviewListRender implements Renderer {
 	}
 
 	private Collection<Review> loadReviews(Collection<WikiAttachment> reviewAtts) throws IOException {
-		Collection<Review> result = new LinkedList<Review>();
+		Collection<Review> result = new LinkedList<>();
 
 		for (WikiAttachment wikiAttachment : reviewAtts) {
 			result.addAll(Review.read(wikiAttachment.getInputStream()));

@@ -95,7 +95,7 @@ class TripleMarkupSimpleCompileScript extends
 	@Override
 	public void insertIntoRepository(Section<TripleMarkupSimple> section) {
 
-		List<Section<SimpleReference>> found = new ArrayList<Section<SimpleReference>>();
+		List<Section<SimpleReference>> found = new ArrayList<>();
 		URI subURI = null;
 		URI predURI = null;
 		URI objURI = null;

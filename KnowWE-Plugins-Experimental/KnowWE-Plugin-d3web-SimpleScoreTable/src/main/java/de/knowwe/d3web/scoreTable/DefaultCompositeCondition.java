@@ -36,7 +36,7 @@ public class DefaultCompositeCondition extends CompositeCondition {
 
 	public DefaultCompositeCondition() {
 
-		List<Type> termConds = new ArrayList<Type>();
+		List<Type> termConds = new ArrayList<>();
 		termConds.add(new SolutionStateCond());
 		termConds.add(new UserRatingConditionType());
 		termConds.add(new CondKnownUnknown());

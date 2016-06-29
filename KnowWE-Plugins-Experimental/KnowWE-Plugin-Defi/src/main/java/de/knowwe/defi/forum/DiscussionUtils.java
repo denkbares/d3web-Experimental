@@ -51,11 +51,10 @@ public class DiscussionUtils {
 	 * Get all forums.
 	 */
 	public static List<Section<? extends Forum>> getAllForums() {
-		List<Section<? extends Forum>> forums = new LinkedList<Section<? extends Forum>>();
-		Iterator<Article> it = KnowWEUtils.getArticleManager(Environment.DEFAULT_WEB).getArticles().iterator();
+		List<Section<? extends Forum>> forums = new LinkedList<>();
 
-		while (it.hasNext()) {
-			for (Section<? extends Type> sec : Sections.successors(it.next().getRootSection())) {
+		for (Article article : KnowWEUtils.getArticleManager(Environment.DEFAULT_WEB).getArticles()) {
+			for (Section<? extends Type> sec : Sections.successors(article.getRootSection())) {
 				Section<? extends Forum> forum = Sections.successor(sec, Forum.class);
 				if (forum != null && !forums.contains(forum)) forums.add(forum);
 			}
@@ -70,7 +69,7 @@ public class DiscussionUtils {
 	 */
 	public static int getNumberOfNewEntriesInForum(Section<? extends Forum> forum, String user) {
 		List<Section<ForumBox>> boxes = Sections.successors(forum, ForumBox.class);
-		HashMap<String, String> logPages = new HashMap<String, String>();
+		HashMap<String, String> logPages = new HashMap<>();
 
 		for (DefiPageLogLine logLine : DefiPageEventLogger.getLogLines()) {
 			String lineUser = logLine.getUser();
@@ -153,7 +152,7 @@ public class DiscussionUtils {
 	 */
 	public static Date stringToDate(String dateString) {
 		Date date = null;
-		LinkedList<SimpleDateFormat> formats = new LinkedList<SimpleDateFormat>();
+		LinkedList<SimpleDateFormat> formats = new LinkedList<>();
 		formats.add(new SimpleDateFormat("dd-MM-yyyy HH:mm:ss"));
 		formats.add(new SimpleDateFormat("dd.MM.yyyy HH:mm:ss"));
 		formats.add(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"));

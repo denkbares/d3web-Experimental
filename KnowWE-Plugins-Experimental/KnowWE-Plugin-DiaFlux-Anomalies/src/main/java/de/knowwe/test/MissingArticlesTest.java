@@ -74,7 +74,7 @@ public class MissingArticlesTest extends AbstractTest<ArticleManager> {
 			ignoreAttachments = true;
 		}
 
-		Collection<Section<LinkType>> missingLinks = new HashSet<Section<LinkType>>();
+		Collection<Section<LinkType>> missingLinks = new HashSet<>();
 
 		for (Article article : manager.getArticles()) {
 			List<Section<LinkType>> links =
@@ -116,8 +116,8 @@ public class MissingArticlesTest extends AbstractTest<ArticleManager> {
 
 		if (missingLinks.isEmpty()) return Message.SUCCESS;
 
-		List<String> erroneousArticles = new LinkedList<String>();
-		List<String> missingArticles = new LinkedList<String>();
+		List<String> erroneousArticles = new LinkedList<>();
+		List<String> missingArticles = new LinkedList<>();
 		Collection<Pattern> ignorePatterns = TestingUtils.compileIgnores(ignores);
 
 		for (Section<LinkType> link : missingLinks) {
@@ -135,7 +135,7 @@ public class MissingArticlesTest extends AbstractTest<ArticleManager> {
 		Collections.sort(missingArticles);
 
 		StringBuilder bob = new StringBuilder();
-		bob.append("The following " + missingArticles.size() + " articles are missing :\n");
+		bob.append("The following ").append(missingArticles.size()).append(" articles are missing :\n");
 		for (String link : missingArticles) {
 			bob.append(link);
 			bob.append("\n");

@@ -37,19 +37,15 @@ public class OntologySummaryRenderer extends DefaultMarkupRenderer {
 			TupleQueryResult classResultTable = core.sparqlSelect(classQuery);
 			TupleQueryResult propertyResultTable = core.sparqlSelect(propertyQuery);
 
-			List<String> classes = new ArrayList<String>();
-			List<String> properties = new ArrayList<String>();
+			List<String> classes = new ArrayList<>();
+			List<String> properties = new ArrayList<>();
 
-			Iterator<BindingSet> classResultTableIterator = classResultTable.iterator();
-			while(classResultTableIterator.hasNext()) {
-				BindingSet row = classResultTableIterator.next();
+			for (BindingSet row : classResultTable) {
 				Value x = row.getValue("x");
 				classes.add(x.stringValue());
 			}
 
-			Iterator<BindingSet> propertyResultTableIterator = propertyResultTable.iterator();
-			while(propertyResultTableIterator.hasNext()) {
-				BindingSet row = propertyResultTableIterator.next();
+			for (BindingSet row : propertyResultTable) {
 				Value x = row.getValue("x");
 				properties.add(x.stringValue());
 			}

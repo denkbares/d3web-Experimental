@@ -33,10 +33,11 @@ public final class Metrics {
 
 		return new Metric<I, Double>() {
 
+			@Override
 			public Double getValue(I object) {
-				double d = metric.getValue(object).doubleValue()
-						/ base.getValue(object).doubleValue();
-				return new Double(d);
+				double d = metric.getValue(object)
+						/ base.getValue(object);
+				return d;
 			}
 
 		};
@@ -46,8 +47,9 @@ public final class Metrics {
 
 		return new Metric<I, Double>() {
 
+			@Override
 			public Double getValue(I object) {
-				return metric.getValue(object).doubleValue() * factor;
+				return metric.getValue(object) * factor;
 			}
 
 		};

@@ -64,7 +64,7 @@ public class CommentRenderer implements Renderer {
 
 		Map<String, String> commentTypes = CommentModule.getCommentTypes();
 
-		StringBuffer toHTML = new StringBuffer();
+		StringBuilder toHTML = new StringBuilder();
 
 		try { // check whether WikiEngine is properly started yet
 
@@ -100,7 +100,7 @@ public class CommentRenderer implements Renderer {
 				// save id:
 				String leaveText = sec.getArticle().getRootSection().collectTextsFromLeaves();
 
-				if (title.length() > 0) {
+				if (!title.isEmpty()) {
 					pageName = clean(title);
 				}
 				else pageName = commentTag + newID;
@@ -133,10 +133,10 @@ public class CommentRenderer implements Renderer {
 
 					Section<?> forumSec = instance.getArticle(sec.getWeb(), pageName).getRootSection();
 
-					List<Section<XMLTail>> found = new ArrayList<Section<XMLTail>>();
+					List<Section<XMLTail>> found = new ArrayList<>();
 					Sections.successors(forumSec, XMLTail.class, found);
 
-					if (found.size() != 0) {
+					if (!found.isEmpty()) {
 						Section<?> changeSec = found.get(found.size() - 1);
 						Sections.child(changeSec, PlainText.class).setText(save);
 					}
@@ -157,7 +157,7 @@ public class CommentRenderer implements Renderer {
 
 				if (newID >= ids.get(commentTag)) ids.put(commentTag, (newID + 1));
 
-				if (title.length() > 0) {
+				if (!title.isEmpty()) {
 					pageName = clean(title);
 				}
 				else pageName = commentTag + newID;

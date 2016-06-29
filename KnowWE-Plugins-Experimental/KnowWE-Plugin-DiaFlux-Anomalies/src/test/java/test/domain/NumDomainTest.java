@@ -22,6 +22,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -55,14 +56,14 @@ public class NumDomainTest {
 	public void testConstructorValue() throws Exception {
 		NumDomain domain = domain("1");
 
-		Assert.assertEquals(Arrays.asList(parse("[1, 1]")), domain.getIntervals());
+		Assert.assertEquals(Collections.singletonList(parse("[1, 1]")), domain.getIntervals());
 	}
 
 	@Test
 	public void testConstructorInterval() throws Exception {
 		NumDomain domain = domain("[1, 2]");
 
-		Assert.assertEquals(Arrays.asList(parse("[1, 2]")), domain.getIntervals());
+		Assert.assertEquals(Collections.singletonList(parse("[1, 2]")), domain.getIntervals());
 	}
 
 	@Test
@@ -72,21 +73,21 @@ public class NumDomainTest {
 
 	@Test
 	public void testAddSameValue() {
-		assertThat(domain("5").add(domain("5")).getIntervals(), is(Arrays.asList(parse("[5, 5]"))));
+		assertThat(domain("5").add(domain("5")).getIntervals(), is(Collections.singletonList(parse("[5, 5]"))));
 	}
 
 	@Test
 	public void testAddIntersectingIntervals() {
 		NumDomain domain = domain("(3, 7]").add(domain("[5, 9]"));
 
-		assertThat(domain.getIntervals(), is(Arrays.asList(parse("(3, 9]"))));
+		assertThat(domain.getIntervals(), is(Collections.singletonList(parse("(3, 9]"))));
 	}
 
 	@Test
 	public void testAddContainedValueToInterval() {
 		NumDomain domain = domain("[3, 7]").add(domain("5"));
 
-		assertThat(domain.getIntervals(), is(Arrays.asList(parse("[3, 7]"))));
+		assertThat(domain.getIntervals(), is(Collections.singletonList(parse("[3, 7]"))));
 	}
 
 	@Test
@@ -231,7 +232,7 @@ public class NumDomainTest {
 	}
 
 	public static NumDomain domain(QuestionNum q, String... strings) {
-		List<NumericalInterval> intervals = new LinkedList<NumericalInterval>();
+		List<NumericalInterval> intervals = new LinkedList<>();
 		for (String string : strings) {
 			intervals.add(parse(string));
 		}

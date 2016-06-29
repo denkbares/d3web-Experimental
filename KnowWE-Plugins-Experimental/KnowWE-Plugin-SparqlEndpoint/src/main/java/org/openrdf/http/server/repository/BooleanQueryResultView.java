@@ -49,10 +49,12 @@ public class BooleanQueryResultView extends QueryResultView {
 	private BooleanQueryResultView() {
 	}
 
+	@Override
 	public String getContentType() {
 		return null;
 	}
 
+	@Override
 	@SuppressWarnings("rawtypes")
 	public void render(Map model, HttpServletRequest request, HttpServletResponse response)
 			throws IOException {
@@ -66,8 +68,7 @@ public class BooleanQueryResultView extends QueryResultView {
 		boolean headersOnly = (Boolean) model.get(HEADERS_ONLY);
 
 		if (!headersOnly) {
-			OutputStream out = response.getOutputStream();
-			try {
+			try (OutputStream out = response.getOutputStream()) {
 				BooleanQueryResultWriter qrWriter = brWriterFactory.getWriter(out);
 				boolean value = (Boolean) model.get(QUERY_RESULT_KEY);
 				qrWriter.handleBoolean(value);
@@ -79,9 +80,6 @@ public class BooleanQueryResultView extends QueryResultView {
 				else {
 					throw new IOException(e);
 				}
-			}
-			finally {
-				out.close();
 			}
 		}
 		//logEndOfRequest(request);

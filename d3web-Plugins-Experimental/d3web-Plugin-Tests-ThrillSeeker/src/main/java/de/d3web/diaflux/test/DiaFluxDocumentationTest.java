@@ -46,7 +46,7 @@ public class DiaFluxDocumentationTest extends DiaFluxTest {
 	@Override
 	protected Collection<Flow> doTest(KnowledgeBase testObject, List<Flow> flows) {
 
-		Collection<Flow> result = new LinkedList<Flow>();
+		Collection<Flow> result = new LinkedList<>();
 
 		for (Flow flow : flows) {
 			if (!flow.getInfoStore().contains(MMInfo.DESCRIPTION)) {

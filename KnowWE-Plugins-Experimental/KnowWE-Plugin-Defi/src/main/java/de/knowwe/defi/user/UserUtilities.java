@@ -119,7 +119,7 @@ public class UserUtilities {
 	}
 
 	public static List<String> getVisitedPages(String user) {
-		List<String> visitedPages = new ArrayList<String>();
+		List<String> visitedPages = new ArrayList<>();
 		// visited pages
 		for (DefiPageLogLine logLine : DefiPageEventLogger.getLogLines()) {
 			if (user.equals(logLine.getUser())) {
@@ -131,7 +131,7 @@ public class UserUtilities {
 
 	public static List<DefiCommentLogLine> getComments(String user) {
 		List<DefiCommentLogLine> logLines = DefiCommentEventLogger.getLogLines();
-		List<DefiCommentLogLine> userComments = new LinkedList<DefiCommentLogLine>();
+		List<DefiCommentLogLine> userComments = new LinkedList<>();
 		for (DefiCommentLogLine logLine : logLines) {
 			if (logLine.getUser().equals(user)) userComments.add(logLine);
 
@@ -144,7 +144,7 @@ public class UserUtilities {
 	 * Check if user rated welcome page.
 	 */
 	public static boolean isAdmin(String user) {
-		List<String> admins = new LinkedList<String>();
+		List<String> admins = new LinkedList<>();
 		WikiEngine eng = WikiEngine.getInstance(Environment.getInstance().getContext(), null);
 		UserDatabase udb = eng.getUserManager().getUserDatabase();
 		GroupManager gm = eng.getGroupManager();

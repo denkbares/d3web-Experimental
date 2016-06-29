@@ -38,8 +38,8 @@ public class AnomalyManager {
 		private final Map<Node, String> nodes;
 
 		public AnomaliesList() {
-			edges = new HashMap<Edge, String>();
-			nodes = new HashMap<Node, String>();
+			edges = new HashMap<>();
+			nodes = new HashMap<>();
 		}
 
 		public void addAnomaly(Edge edge, String string) {
@@ -65,7 +65,7 @@ public class AnomalyManager {
 	private static Map<Flow, AnomaliesList> anomalies;
 
 	private AnomalyManager() {
-		anomalies = new HashMap<Flow, AnomaliesList>();
+		anomalies = new HashMap<>();
 	}
 
 	/**

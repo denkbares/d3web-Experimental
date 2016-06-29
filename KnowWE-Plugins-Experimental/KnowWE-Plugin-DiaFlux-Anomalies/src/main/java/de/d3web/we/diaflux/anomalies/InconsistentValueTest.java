@@ -128,9 +128,9 @@ public class InconsistentValueTest extends AbstractAnomalyTest {
 				result += visit(cNode, status, unusedValues);
 			}
 		}
-		List<String> unused = new LinkedList<String>();
+		List<String> unused = new LinkedList<>();
 		status.put(node, Status.PROCESSING);
-		List<String> askedList = new LinkedList<String>();
+		List<String> askedList = new LinkedList<>();
 		if (node.getClass().equals(ActionNode.class)) {
 			PSAction action = ((ActionNode) node).getAction();
 			if (action instanceof ActionNextQASet) {
@@ -174,7 +174,7 @@ public class InconsistentValueTest extends AbstractAnomalyTest {
 	 * @return
 	 */
 	private List<String> getAskedValues(ActionNextQASet action) {
-		List<String> result = new LinkedList<String>();
+		List<String> result = new LinkedList<>();
 
 		for (QASet set : action.getQASets()) {
 			if (set instanceof QContainer) {
@@ -198,7 +198,7 @@ public class InconsistentValueTest extends AbstractAnomalyTest {
 	 * @return
 	 */
 	private List<String> getUsedValues(Edge edge) {
-		List<String> result = new LinkedList<String>();
+		List<String> result = new LinkedList<>();
 		for (TerminologyObject ob : edge.getCondition().getTerminalObjects()) {
 			result.add(ob.getName());
 		}
@@ -213,7 +213,7 @@ public class InconsistentValueTest extends AbstractAnomalyTest {
 	 * @return
 	 */
 	private List<ComposedNode> getComposedfromExit(EndNode node) {
-		List<ComposedNode> result = new LinkedList<ComposedNode>();
+		List<ComposedNode> result = new LinkedList<>();
 		String subFlow = node.getFlow().getName();
 		KnowledgeBase kb = node.getFlow().getKnowledgeBase();
 		FlowSet flowSet = DiaFluxUtils.getFlowSet(kb);
@@ -232,10 +232,10 @@ public class InconsistentValueTest extends AbstractAnomalyTest {
 
 	@Override
 	protected String test(KnowledgeBase kb) {
-		HashMap<Node, Status> status = new HashMap<Node, Status>();
-		List<Node> allNodes = new LinkedList<Node>();
-		List<String> unusedValues = new LinkedList<String>();
-		StringBuffer error = new StringBuffer();
+		HashMap<Node, Status> status = new HashMap<>();
+		List<Node> allNodes = new LinkedList<>();
+		List<String> unusedValues = new LinkedList<>();
+		StringBuilder error = new StringBuilder();
 		if (null != kb) {
 			FlowSet flowSet = DiaFluxUtils.getFlowSet(kb);
 			for (Flow flow : flowSet) {

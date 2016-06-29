@@ -48,7 +48,7 @@ public class RuleExtractor implements DependencyExtractor {
 	public Collection<Dependency> getDependencies(KnowledgeBase kb) {
 
 		try {
-			Set<Dependency> result = new HashSet<Dependency>();
+			Set<Dependency> result = new HashSet<>();
 
 			result.addAll(getDependencies(kb.getAllKnowledgeSlicesFor(PSMethodRulebased.getBackwardKind(psm))));
 			result.addAll(getDependencies(kb.getAllKnowledgeSlicesFor(PSMethodRulebased.getForwardKind(psm))));
@@ -68,7 +68,7 @@ public class RuleExtractor implements DependencyExtractor {
 	 * @return
 	 */
 	private Set<Dependency> getDependencies(Collection<RuleSet> slices) {
-		Set<Dependency> result = new HashSet<Dependency>();
+		Set<Dependency> result = new HashSet<>();
 		
 		for (RuleSet rules : slices) {
 

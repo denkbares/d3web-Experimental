@@ -19,6 +19,7 @@
 package de.knowwe.d3webviz.diafluxCity;
 
 import java.util.Arrays;
+import java.util.Collections;
 
 import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.diaFlux.flow.Node;
@@ -43,7 +44,7 @@ public class DiaFluxCityAction extends AbstractD3webVizAction {
 	}
 
 	private static MetricsSet<Node> createMetrics() {
-		MetricsSet<Node> metrics = new MetricsSet<Node>(Arrays.asList("Wait"), true);
+		MetricsSet<Node> metrics = new MetricsSet<>(Collections.singletonList("Wait"), true);
 
 		metrics.setLengthMetric(new IncomingEdgesMetric());
 		metrics.setHeightMetric(new IncomingEdgesMetric());

@@ -54,13 +54,17 @@ public class FeedbackSaveAction extends AbstractAction {
 		xml.append("<feedback>\n");
 		for (int i = 0; i < entries.length; i++) {
 			parts = entries[i].split("=#=");
-			xml.append("\t<question id='q" + (i + 1) + "'>\n");
-			xml.append("\t\t<topic>"
-					+ parts[0].replace("<br><i>(Bitte alle zutreffenden Antworten markieren!)</i>",
-							"") + "</topic>\n");
+			xml.append("\t<question id='q").append(i + 1).append("'>\n");
+			xml.append("\t\t<topic>")
+					.append(parts[0].replace("<br><i>(Bitte alle zutreffenden Antworten markieren!)</i>",
+							""))
+					.append("</topic>\n");
 			for (int j = 1; j < parts.length; j++) {
-				xml.append("\t\t<answer id='" + parts[j].split("---")[0] + "'>"
-						+ parts[j].split("---")[1] + "</answer>\n");
+				xml.append("\t\t<answer id='")
+						.append(parts[j].split("---")[0])
+						.append("'>")
+						.append(parts[j].split("---")[1])
+						.append("</answer>\n");
 			}
 			xml.append("\t</question>\n");
 		}

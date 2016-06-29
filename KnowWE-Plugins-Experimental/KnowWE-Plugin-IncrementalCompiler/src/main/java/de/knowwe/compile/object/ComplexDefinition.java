@@ -43,7 +43,7 @@ public interface ComplexDefinition extends Type {
 	 * @param section
 	 * @return
 	 */
-	public Collection<Section<SimpleReference>> getAllReferences(
+	Collection<Section<SimpleReference>> getAllReferences(
 			Section<? extends ComplexDefinition> section);
 
 }

@@ -269,7 +269,7 @@ public class IncrementalCompilerTest {
 			Class<T> sectionType) throws IOException {
 		Section<T> oldSection = findSectionWithText(oldText, sectionType);
 		if (oldSection != null) {
-			Map<String, String> nodesMap = new HashMap<String, String>();
+			Map<String, String> nodesMap = new HashMap<>();
 			nodesMap.put(oldSection.getID(), newText);
 			UserActionContext context = TestUtils.createTestActionContext("", "");
 			Sections.replace(context, nodesMap).sendErrors(context);
@@ -283,7 +283,7 @@ public class IncrementalCompilerTest {
 	private <T extends Type> Section<T> findSectionWithText(String text, Class<T>
 			sectionType) {
 		Section<?> root = getArticle().getRootSection();
-		List<Section<T>> typedSections = new LinkedList<Section<T>>();
+		List<Section<T>> typedSections = new LinkedList<>();
 		Sections.successors(root, sectionType, typedSections);
 		for (Section<T> section : typedSections) {
 			if (section.getText().equals(text)) {

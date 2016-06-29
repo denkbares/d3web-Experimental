@@ -44,7 +44,7 @@ public class DistinctFlowchartsTest extends DiaFluxTest {
 	@Override
 	protected Collection<Flow> doTest(KnowledgeBase testObject, List<Flow> flows) {
 
-		Collection<Flow> erroneousFlows = new HashSet<Flow>();
+		Collection<Flow> erroneousFlows = new HashSet<>();
 
 		next: for (Flow flow : flows) {
 			for (StartNode startNode : flow.getStartNodes()) {

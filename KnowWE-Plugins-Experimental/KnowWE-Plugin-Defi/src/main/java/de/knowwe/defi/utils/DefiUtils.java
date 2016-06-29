@@ -73,19 +73,19 @@ public class DefiUtils {
 	}
 
 	public static String readFile(File file) throws IOException {
-		StringBuffer buffy = new StringBuffer();
+		StringBuilder buffy = new StringBuilder();
 		BufferedReader in = new BufferedReader(new InputStreamReader(new FileInputStream(file),
 				"UTF8"));
 		String str;
 		while ((str = in.readLine()) != null) {
-			buffy.append(str + "\n");
+			buffy.append(str).append("\n");
 		}
 		in.close();
 		return buffy.toString();
 	}
 
 	public static List<String> getAllDefiArticleNames() {
-		List<String> articles = new LinkedList<String>();
+		List<String> articles = new LinkedList<>();
 
 		articles.addAll(Environment.getInstance().getWikiConnector().getAllArticles(
 				Environment.DEFAULT_WEB).keySet());

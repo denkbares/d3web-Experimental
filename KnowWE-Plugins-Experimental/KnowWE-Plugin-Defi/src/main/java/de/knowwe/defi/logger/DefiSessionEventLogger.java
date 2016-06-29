@@ -28,6 +28,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -53,7 +54,7 @@ public class DefiSessionEventLogger {
 	 * Write a new login entry into defis session log.
 	 */
 	public static void logLogin(DefiSessionLogLine line) {
-		writeToSessionLog(Arrays.asList(line.toString()), true);
+		writeToSessionLog(Collections.singletonList(line.toString()), true);
 	}
 
 	/**
@@ -105,7 +106,7 @@ public class DefiSessionEventLogger {
 	}
 
 	private static void updateLastLogLineForUser(DefiSessionLogLine last) {
-		List<String> userlog = new LinkedList<String>();
+		List<String> userlog = new LinkedList<>();
 		boolean added = false;
 
 		for (DefiSessionLogLine logLine : getLogLines()) {
@@ -134,7 +135,7 @@ public class DefiSessionEventLogger {
 	}
 
 	public static List<DefiSessionLogLine> getLogLines() {
-		LinkedList<DefiSessionLogLine> loglines = new LinkedList<DefiSessionLogLine>();
+		LinkedList<DefiSessionLogLine> loglines = new LinkedList<>();
 		BufferedReader br = null;
 		String line;
 		try {

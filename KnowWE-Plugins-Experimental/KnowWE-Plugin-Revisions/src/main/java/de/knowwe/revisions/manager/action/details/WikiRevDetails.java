@@ -36,6 +36,7 @@ import de.knowwe.revisions.manager.RevisionManager;
  */
 public class WikiRevDetails extends AbstractWikiRevDetails {
 
+	@Override
 	protected String perform(UserActionContext context) {
 		Map<String, String> params = context.getParameters();
 

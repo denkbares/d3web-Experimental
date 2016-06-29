@@ -18,6 +18,7 @@
  */
 package de.knowwe.defi.readon;
 
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -53,15 +54,13 @@ public class ReadOnTagHandler extends AbstractTagHandler {
 
 		// Füge Lektionenseiten hinzu
 		List<Section<DashTreeElement>> units = MenuUtilities.getAllUnits();
-		List<String> unitTitles = new LinkedList<String>();
+		List<String> unitTitles = new LinkedList<>();
 		for (Section<DashTreeElement> unit : units) {
 			unitTitles.add(MenuUtilities.getUnitPagename(unit));
 		}
 
 		// Füge zusätzliche Seiten hinzu
-		for (String s : ADDITIONAL_PAGES) {
-			unitTitles.add(s);
-		}
+		Collections.addAll(unitTitles, ADDITIONAL_PAGES);
 
 		// Durchsuche den Log nach letzter besuchter Seite
 		for (DefiPageLogLine logLine : DefiPageEventLogger.getLogLines()) {
@@ -72,8 +71,9 @@ public class ReadOnTagHandler extends AbstractTagHandler {
 
 		// Gebe letzte besuchte Seite aus oder - für keine Seite
 		if (title.equals("")) readon.append("<p>-</p>");
-		else readon.append("<p><a href='Wiki.jsp?page=" + title + "'>" + title
-				+ "</a></p>");
+		else {
+			readon.append("<p><a href='Wiki.jsp?page=").append(title).append("'>").append(title).append("</a></p>");
+		}
 
 		result.appendHtml(readon.toString());
 	}

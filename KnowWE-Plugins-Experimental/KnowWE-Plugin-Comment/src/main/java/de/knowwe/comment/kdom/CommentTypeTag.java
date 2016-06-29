@@ -30,11 +30,11 @@ public class CommentTypeTag extends AbstractType {
 	public CommentTypeTag() {
 		Map<String, String> commentTypes = CommentModule.getCommentTypes();
 
-		StringBuffer regexString = new StringBuffer();
+		StringBuilder regexString = new StringBuilder();
 
 		regexString.append("(");
 		for (String elem : commentTypes.keySet()) {
-			regexString.append(elem + "|");
+			regexString.append(elem).append("|");
 		}
 		regexString.replace(regexString.length() - 1, regexString.length(), ")");
 

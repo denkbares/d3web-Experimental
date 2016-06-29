@@ -38,7 +38,7 @@ public class IncrementalCompilerLinkToTermDefinitionProvider implements de.knoww
 		Collection<Section<? extends SimpleDefinition>> termDefinitions = IncrementalCompiler.getInstance().getTerminology().getTermDefinitions(
 				name);
 		String targetArticle = name.toExternalForm();
-		if (termDefinitions.size() > 0) {
+		if (!termDefinitions.isEmpty()) {
 			targetArticle = termDefinitions.iterator().next().getTitle();
 		}
 

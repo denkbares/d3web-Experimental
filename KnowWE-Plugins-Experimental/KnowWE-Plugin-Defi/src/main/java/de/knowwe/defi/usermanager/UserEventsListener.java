@@ -35,8 +35,7 @@ public class UserEventsListener implements EventListener {
 
 	@Override
 	public Collection<Class<? extends Event>> getEvents() {
-		ArrayList<Class<? extends Event>> events = new ArrayList<Class<? extends
-				Event>>(1);
+		ArrayList<Class<? extends Event>> events = new ArrayList<>(1);
 		events.add(UserRegisteredEvent.class);
 		return events;
 	}

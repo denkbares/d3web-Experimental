@@ -80,7 +80,7 @@ public class MySQLConnector {
     }
 
     public List<String> getSynonyms(String word){
-        List<Integer> synsetids = new ArrayList<Integer>();
+        List<Integer> synsetids = new ArrayList<>();
        // int synsetid = 0;
         ArrayList<String> synonyms = new ArrayList<>();
         try {

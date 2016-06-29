@@ -55,8 +55,11 @@ public class PersonalTimeTableTagHandler extends AbstractTagHandler {
 		StringBuilder timetable = new StringBuilder();
 		timetable.append("<ul>");
 		for (int i = 0; i < dates.size(); i++) {
-			timetable.append("<li>" + MenuUtilities.getUnitPagename(rootUnits.get(i))
-					+ " wird freigeschaltet am " + sdf.format(dates.get(i)) + ".</li>");
+			timetable.append("<li>")
+					.append(MenuUtilities.getUnitPagename(rootUnits.get(i)))
+					.append(" wird freigeschaltet am ")
+					.append(sdf.format(dates.get(i)))
+					.append(".</li>");
 		}
 		timetable.append("</ul>");
 

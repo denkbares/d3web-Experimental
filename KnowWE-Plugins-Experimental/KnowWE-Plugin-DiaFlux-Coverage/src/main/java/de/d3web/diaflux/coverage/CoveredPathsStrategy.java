@@ -58,8 +58,8 @@ class CoveredPathsStrategy extends CoveredPathsStrategyShallow {
 	 */
 	Collection<Deque<ComposedNode>> createCallStacks(Node activeNode) {
 
-		Collection<Deque<ComposedNode>> stacks = new LinkedList<Deque<ComposedNode>>();
-		fillCallStack(new LinkedList<ComposedNode>(), activeNode, stacks);
+		Collection<Deque<ComposedNode>> stacks = new LinkedList<>();
+		fillCallStack(new LinkedList<>(), activeNode, stacks);
 
 		return stacks;
 
@@ -74,12 +74,12 @@ class CoveredPathsStrategy extends CoveredPathsStrategyShallow {
 
 		if (caseObject == null) return Collections.emptyList();
 
-		List<Path> startingPaths = new LinkedList<Path>();
+		List<Path> startingPaths = new LinkedList<>();
 		List<FlowRun> runs = caseObject.getRuns();
 
 		// Collection<SnapshotNode> enteredSnapshots =
 		// caseObject.getActivatedSnapshots(session);
-		Collection<SnapshotNode> startSnapshots = new LinkedList<SnapshotNode>();
+		Collection<SnapshotNode> startSnapshots = new LinkedList<>();
 		for (FlowRun flowRun : runs) {
 			for (Node startingNode : flowRun.getStartNodes()) {
 				if (startingNode instanceof SnapshotNode) {
@@ -109,7 +109,7 @@ class CoveredPathsStrategy extends CoveredPathsStrategyShallow {
 	 */
 	public void fillCallStack(Deque<ComposedNode> stack, Node activeNode, Collection<Deque<ComposedNode>> stacks) {
 		DiaFluxCaseObject caseObject = DiaFluxUtils.getDiaFluxCaseObject(session);
-		Collection<StartNode> activeStartNodes = new HashSet<StartNode>();
+		Collection<StartNode> activeStartNodes = new HashSet<>();
 		Flow calledFlow = activeNode.getFlow();
 
 		// active start nodes in the current flow
@@ -129,7 +129,7 @@ class CoveredPathsStrategy extends CoveredPathsStrategyShallow {
 			stacks.add(stack);
 			return;
 		}
-		Collection<ComposedNode> callingActiveCompNodes = new HashSet<ComposedNode>();
+		Collection<ComposedNode> callingActiveCompNodes = new HashSet<>();
 		for (StartNode node : activeStartNodes) {
 			// all composed nodes calling this startnode...
 			Collection<ComposedNode> callingNodes =
@@ -148,7 +148,7 @@ class CoveredPathsStrategy extends CoveredPathsStrategyShallow {
 		}
 
 		for (ComposedNode composedNode : callingActiveCompNodes) {
-			Deque<ComposedNode> newStack = new LinkedList<ComposedNode>(stack);
+			Deque<ComposedNode> newStack = new LinkedList<>(stack);
 			newStack.push(composedNode);
 			fillCallStack(newStack, composedNode, stacks);
 

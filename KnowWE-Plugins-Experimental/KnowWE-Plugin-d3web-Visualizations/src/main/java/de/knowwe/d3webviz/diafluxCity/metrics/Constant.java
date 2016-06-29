@@ -33,8 +33,9 @@ public class Constant<T> implements Metric<T, Double> {
 		this.constant = constant;
 	}
 
+	@Override
 	public Double getValue(T object) {
 		return constant;
-	};
+	}
 
 }

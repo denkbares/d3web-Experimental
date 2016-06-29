@@ -145,12 +145,17 @@ public class ReadButtonTaghandler extends AbstractTagHandler {
 
 			// render button
 			boolean enabled = checkedValue == -1 && conditionsFulfilled;
-			builder.append("<div class='readbutton' id='rb_" + id + "'><table>");
+			builder.append("<div class='readbutton' id='rb_").append(id).append("'><table>");
 			builder.append(addRadiobuttons(number, values, checkedValue, "rb_" + id, enabled));
 			builder.append(addLabels(number, parameters));
 			builder.append("</table>");
-			if (checkedValue == -1) builder.append("<input type='button' value='OK' onClick=\"sendReadbutton('"
-					+ id + "', " + threshold + ");return false\" />");
+			if (checkedValue == -1) {
+				builder.append("<input type='button' value='OK' onClick=\"sendReadbutton('")
+						.append(id)
+						.append("', ")
+						.append(threshold)
+						.append(");return false\" />");
+			}
 			else {
 				if (checkedValue <= threshold && closed.equals("Nein")) builder.append(addLink(
 						parameters,
@@ -174,11 +179,14 @@ public class ReadButtonTaghandler extends AbstractTagHandler {
 			if (enabled) radiobuttons.append("<tr class='enabled'>");
 			else radiobuttons.append("<tr class='disabled'>");
 			for (int i = 1; i <= number; i++) {
-				radiobuttons.append("<td style='width:" + width + "%'><input type='radio' value='"
-						+ values[i - 1] + "' ");
+				radiobuttons.append("<td style='width:")
+						.append(width)
+						.append("%'><input type='radio' value='")
+						.append(values[i - 1])
+						.append("' ");
 				if (!enabled) radiobuttons.append("disabled ");
 				if (checkedValue == i) radiobuttons.append("checked ");
-				radiobuttons.append("name='" + name + "' />" + values[i - 1] + "</td>");
+				radiobuttons.append("name='").append(name).append("' />").append(values[i - 1]).append("</td>");
 			}
 			radiobuttons.append("</tr>");
 
@@ -193,8 +201,11 @@ public class ReadButtonTaghandler extends AbstractTagHandler {
 
 			labels.append("<tr>");
 			for (int i = 1; i <= number; i++) {
-				if (parameters.containsKey(LABEL + i)) labels.append("<td>" + parameters.get(LABEL + i)
-						+ "</td>");
+				if (parameters.containsKey(LABEL + i)) {
+					labels.append("<td>")
+							.append(parameters.get(LABEL + i))
+							.append("</td>");
+				}
 				else labels.append("<td></td>");
 			}
 			labels.append("</tr>");
@@ -222,12 +233,25 @@ public class ReadButtonTaghandler extends AbstractTagHandler {
 			if (parameters.containsKey(LINKTEXT)) linkText = parameters.get(LINKTEXT);
 			else linkText = link;
 			linkBuilder.append("<div class='linkBorder'><p>Möchten Sie das Thema mit dem Berater besprechen?</p>");
-			linkBuilder.append("<p class='discuss'><a href='' onclick=\"readbuttonDiscuss('" + id
-					+ "');newChat('" + berater + "', '"
-					+ username + "');return false\">" + BUTTON_DISCUSS + "</a>");
-			linkBuilder.append(" - <a href='#' onclick=\"readbuttonCloseLink('" + id + "');return false\">"
-					+ BUTTON_DONT_DISCUSS + "</a></p>");
-			linkBuilder.append("<a href='" + link + "' target='_blank'>" + linkText + "</a></div>");
+			linkBuilder.append("<p class='discuss'><a href='' onclick=\"readbuttonDiscuss('")
+					.append(id)
+					.append("');newChat('")
+					.append(berater)
+					.append("', '")
+					.append(username)
+					.append("');return false\">")
+					.append(BUTTON_DISCUSS)
+					.append("</a>");
+			linkBuilder.append(" - <a href='#' onclick=\"readbuttonCloseLink('")
+					.append(id)
+					.append("');return false\">")
+					.append(BUTTON_DONT_DISCUSS)
+					.append("</a></p>");
+			linkBuilder.append("<a href='")
+					.append(link)
+					.append("' target='_blank'>")
+					.append(linkText)
+					.append("</a></div>");
 
 			return linkBuilder.toString();
 		}

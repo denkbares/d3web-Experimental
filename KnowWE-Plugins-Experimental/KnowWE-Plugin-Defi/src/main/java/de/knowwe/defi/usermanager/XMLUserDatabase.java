@@ -120,7 +120,8 @@ public class XMLUserDatabase extends AbstractUserDatabase {
      * {@link org.apache.wiki.auth.NoSuchPrincipalException}.
      * @param loginName the login name of the user profile that shall be deleted
      */
-    public synchronized void deleteByLoginName( String loginName ) throws NoSuchPrincipalException, WikiSecurityException
+    @Override
+    public synchronized void deleteByLoginName(String loginName) throws NoSuchPrincipalException, WikiSecurityException
     {
         if ( c_dom == null )
         {
@@ -152,7 +153,8 @@ public class XMLUserDatabase extends AbstractUserDatabase {
      * @return the user profile
      * @see org.apache.wiki.auth.user.UserDatabase#findByEmail(String)
      */
-    public UserProfile findByEmail( String index ) throws NoSuchPrincipalException
+    @Override
+    public UserProfile findByEmail(String index) throws NoSuchPrincipalException
     {
         UserProfile profile = findByAttribute( EMAIL, index );
         if ( profile != null )
@@ -171,7 +173,8 @@ public class XMLUserDatabase extends AbstractUserDatabase {
      * @return the user profile
      * @see org.apache.wiki.auth.user.UserDatabase#findByFullName(String)
      */
-    public UserProfile findByFullName( String index ) throws NoSuchPrincipalException
+    @Override
+    public UserProfile findByFullName(String index) throws NoSuchPrincipalException
     {
         UserProfile profile = findByAttribute( FULL_NAME, index );
         if ( profile != null )
@@ -190,7 +193,8 @@ public class XMLUserDatabase extends AbstractUserDatabase {
      * @return the user profile
      * @see org.apache.wiki.auth.user.UserDatabase#findByLoginName(String)
      */
-    public UserProfile findByLoginName( String index ) throws NoSuchPrincipalException
+    @Override
+    public UserProfile findByLoginName(String index) throws NoSuchPrincipalException
     {
         UserProfile profile = findByAttribute( LOGIN_NAME, index );
         if ( profile != null )
@@ -203,7 +207,8 @@ public class XMLUserDatabase extends AbstractUserDatabase {
     /**
      * {@inheritDoc}
      */
-    public UserProfile findByUid( String uid ) throws NoSuchPrincipalException
+    @Override
+    public UserProfile findByUid(String uid) throws NoSuchPrincipalException
     {
         UserProfile profile = findByAttribute( UID, uid );
         if ( profile != null )
@@ -222,7 +227,8 @@ public class XMLUserDatabase extends AbstractUserDatabase {
      * @return the user profile
      * @see org.apache.wiki.auth.user.UserDatabase#findByWikiName(String)
      */
-    public UserProfile findByWikiName( String index ) throws NoSuchPrincipalException
+    @Override
+    public UserProfile findByWikiName(String index) throws NoSuchPrincipalException
     {
         UserProfile profile = findByAttribute( WIKI_NAME, index );
         if ( profile != null )
@@ -240,13 +246,14 @@ public class XMLUserDatabase extends AbstractUserDatabase {
      * @return the WikiNames
      * @throws org.apache.wiki.auth.WikiSecurityException In case things fail.
      */
+    @Override
     public Principal[] getWikiNames() throws WikiSecurityException
     {
         if ( c_dom == null )
         {
             throw new IllegalStateException( "FATAL: database does not exist" );
         }
-        SortedSet<Principal> principals = new TreeSet<Principal>();
+        SortedSet<Principal> principals = new TreeSet<>();
         NodeList users = c_dom.getElementsByTagName( USER_TAG );
         for( int i = 0; i < users.getLength(); i++ )
         {
@@ -273,7 +280,8 @@ public class XMLUserDatabase extends AbstractUserDatabase {
      *      java.util.Properties)
      * @throws org.apache.wiki.api.exceptions.NoRequiredPropertyException if the user database cannot be located, parsed, or opened
      */
-    public void initialize( WikiEngine engine, Properties props ) throws NoRequiredPropertyException
+    @Override
+    public void initialize(WikiEngine engine, Properties props) throws NoRequiredPropertyException
     {
         File defaultFile = null;
         if( engine.getRootPath() == null )
@@ -459,6 +467,7 @@ public class XMLUserDatabase extends AbstractUserDatabase {
     /**
      * @see org.apache.wiki.auth.user.UserDatabase#rename(String, String)
      */
+    @Override
     public synchronized void rename(String loginName, String newName) throws NoSuchPrincipalException, DuplicateUserException, WikiSecurityException
     {
         if ( c_dom == null )
@@ -514,7 +523,8 @@ public class XMLUserDatabase extends AbstractUserDatabase {
      * @param profile the user profile to save
      * @throws org.apache.wiki.auth.WikiSecurityException if the profile cannot be saved
      */
-    public synchronized void save( UserProfile profile ) throws WikiSecurityException
+    @Override
+    public synchronized void save(UserProfile profile) throws WikiSecurityException
     {
         if ( c_dom == null )
         {
@@ -582,7 +592,7 @@ public class XMLUserDatabase extends AbstractUserDatabase {
         }
         
         // Save the attributes as as Base64 string
-        if ( profile.getAttributes().size() > 0 )
+        if (!profile.getAttributes().isEmpty())
         {
             try
             {
@@ -652,7 +662,7 @@ public class XMLUserDatabase extends AbstractUserDatabase {
                 
                 // Parse basic attributes
                 profile.setUid( user.getAttribute( UID ) );
-                if ( profile.getUid() == null || profile.getUid().length() == 0 )
+                if (profile.getUid() == null || profile.getUid().isEmpty())
                 {
                     profile.setUid( generateUid( this ) );
                 }
@@ -669,7 +679,7 @@ public class XMLUserDatabase extends AbstractUserDatabase {
                 
                 // Is the profile locked?
                 String lockExpiry = user.getAttribute( LOCK_EXPIRY );
-                if ( lockExpiry == null || lockExpiry.length() == 0 )
+                if (lockExpiry == null || lockExpiry.isEmpty())
                 {
                     profile.setLockExpiry( null );
                 }
@@ -774,7 +784,7 @@ public class XMLUserDatabase extends AbstractUserDatabase {
             
             // Sanitize UID (and generate a new one if one does not exist)
             String uid = user.getAttribute( UID ).trim();
-            if ( uid == null || uid.length() == 0 || "-1".equals( uid ) )
+            if (uid == null || uid.isEmpty() || "-1".equals(uid))
             {
                 uid = String.valueOf( generateUid( this ) );
                 user.setAttribute( UID, uid );

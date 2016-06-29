@@ -29,6 +29,7 @@ import de.knowwe.rdf2go.Rdf2GoCore;
  */
 public class Rdf2GoDashTreeQuestionnaireRelationScript extends Rdf2GoDashTreeTermRelationScript {
 
+	@Override
 	protected URI getRootURI(Rdf2GoCore core) {
 		return core.createlocalURI("Q000");
 	}

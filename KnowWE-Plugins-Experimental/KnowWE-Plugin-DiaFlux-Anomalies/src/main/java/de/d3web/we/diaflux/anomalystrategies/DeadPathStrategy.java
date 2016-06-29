@@ -49,13 +49,15 @@ public class DeadPathStrategy implements DFSStrategy {
 	public DeadPathStrategy(KnowledgeBase kb) {
 		this.kb = kb;
 		this.delegate = new AllPathsStrategy(false, kb);
-		this.anomalies = new HashMap<Path, String>();
-		this.evals = new HashMap<Path, EvalResult>();
+		this.anomalies = new HashMap<>();
+		this.evals = new HashMap<>();
 	}
 
+	@Override
 	public void found(Path path) {
 	}
 
+	@Override
 	public List<Path> getInitialStartPaths() {
 		List<Path> paths = delegate.getInitialStartPaths();
 		// for (Path path : paths) {
@@ -64,10 +66,12 @@ public class DeadPathStrategy implements DFSStrategy {
 		return paths;
 	}
 
+	@Override
 	public boolean followEdge(Edge edge, Path path) {
 		return delegate.followEdge(edge, path);
 	}
 
+	@Override
 	public boolean offer(DiaFluxElement el, Path path) {
 		EvalResult resultBefore = calculateEvalResult(path);
 
@@ -118,11 +122,13 @@ public class DeadPathStrategy implements DFSStrategy {
 		delegate.finished(path);
 	}
 
+	@Override
 	public Path createStartPath(Path path) {
 		// do not continue, after an anomaly is found
 		return null;
 	}
 
+	@Override
 	public boolean enterSubflow(ComposedNode node, Path path) {
 		return delegate.enterSubflow(node, path);
 	}

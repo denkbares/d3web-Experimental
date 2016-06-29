@@ -84,7 +84,7 @@ public class RenamingToolTest extends TestCase {
 		/*
 		 * make the requests
 		 */
-		Map<String, String> map = new HashMap<String, String>();
+		Map<String, String> map = new HashMap<>();
 		map.put(Attributes.TARGET, "ccc");
 		map.put(Attributes.CONTEXT_PREVIOUS, "");
 		map.put(Attributes.CONTEXT_AFTER, "");
@@ -95,7 +95,7 @@ public class RenamingToolTest extends TestCase {
 		 * Test_Article1
 		 */
 		Article article = _env.getArticle("default_web", "Test_Article1");
-		ArrayList<WordBasedRenameFinding> r = new ArrayList<WordBasedRenameFinding>(
+		ArrayList<WordBasedRenameFinding> r = new ArrayList<>(
 				findings.get(article));
 		WordBasedRenameFinding finding = r.get(0);
 		int start = 12;

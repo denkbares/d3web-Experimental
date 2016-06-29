@@ -40,7 +40,7 @@ public class RevisionManager {
 
 	// TODO: get rid of revisions no longer needed
 
-	private static HashMap<HttpSession, RevisionManager> instances = new HashMap<HttpSession, RevisionManager>();
+	private static HashMap<HttpSession, RevisionManager> instances = new HashMap<>();
 
 	private HashMap<Date, DatedRevision> revisions;
 	private UploadedRevision uploadedRevision;
@@ -50,7 +50,7 @@ public class RevisionManager {
 	 * @param articleManagers
 	 */
 	public RevisionManager(String web) {
-		revisions = new HashMap<Date, DatedRevision>();
+		revisions = new HashMap<>();
 		this.web = web;
 	}
 

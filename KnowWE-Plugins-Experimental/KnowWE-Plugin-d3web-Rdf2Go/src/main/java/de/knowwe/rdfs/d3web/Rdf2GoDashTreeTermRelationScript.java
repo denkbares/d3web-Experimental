@@ -60,7 +60,7 @@ public abstract class Rdf2GoDashTreeTermRelationScript extends DashTreeTermRelat
 		Rdf2GoCore core = compiler.getRdf2GoCore();
 		URI parentURI = core.createlocalURI(Rdf2GoUtils.getCleanedExternalForm(parentIdentifier));
 		URI hasChildURI = core.createlocalURI("hasChild");
-		List<Statement> statements = new ArrayList<Statement>();
+		List<Statement> statements = new ArrayList<>();
 		boolean hasParent = Rdf2GoD3webUtils.hasParentDashTreeElement(compiler, parentIdentifier);
 		if (!hasParent) {
 			URI rootURI = getRootURI(core);

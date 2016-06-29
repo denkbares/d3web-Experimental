@@ -71,19 +71,20 @@ public class UserManagerTagHandler extends AbstractTagHandler {
 			for (String user : users) {
 				if (user.equals(userContext.getUserName())) continue;
 				builder.append("<tr>");
-				builder.append("<td><a href='" + JSPWikiConnector.LINK_PREFIX + user + "'>" + user
-						+ "</a></td>\n");
+				builder.append("<td><a href='" + JSPWikiConnector.LINK_PREFIX)
+						.append(user)
+						.append("'>")
+						.append(user)
+						.append("</a></td>\n");
 				// edit-button
-				builder.append("<td><span onclick='showEditUser(" + i
-						+ ")'>[Bearbeiten]</span></td>\n");
+				builder.append("<td><span onclick='showEditUser(").append(i).append(")'>[Bearbeiten]</span></td>\n");
 				// delete-button
-				builder.append("<td><span onclick='deleteUser(\"" + user
-						+ "\")'>[Löschen]</span></td>\n");
+				builder.append("<td><span onclick='deleteUser(\"").append(user).append("\")'>[Löschen]</span></td>\n");
 				builder.append("</tr><tr>\n");
 				builder.append("<td colspan='3'><div style='display:none'>\n");
 				// change userdata form
 				builder.append("<form><table>");
-				builder.append("<tr><th colspan='2'>" + user + "</th></tr>");
+				builder.append("<tr><th colspan='2'>").append(user).append("</th></tr>");
 				builder.append("<tr><td>Neues Passwort:</td><td><input type='password' name='password' size='20' value='' /></td></tr>");
 				builder.append("<tr><td>Passwort wiederholen:</td><td><input type='password' name='password2' size='20' value='' /></td></tr>");
 				// - radiobuttons
@@ -96,23 +97,26 @@ public class UserManagerTagHandler extends AbstractTagHandler {
 				builder.append("<tr><td colspan='2' style='font-size:80%'>*(Die Passwortfelder leer lassen, um nur die Adminrechte zu ändern)</td></tr>");
 				// - -------------
 				builder.append("</table>");
-				builder.append("<input type='button' onclick='editUser(" + i + ", \"" + user
-						+ "\")' value='Änderungen speichern' />");
-				builder.append("<input type='button' onclick='showEditUser(" + i
-						+ ")' value='Abbrechen' />");
+				builder.append("<input type='button' onclick='editUser(")
+						.append(i)
+						.append(", \"")
+						.append(user)
+						.append("\")' value='Änderungen speichern' />");
+				builder.append("<input type='button' onclick='showEditUser(")
+						.append(i)
+						.append(")' value='Abbrechen' />");
 				builder.append("</form></div></td></tr>\n");
 				// ------------------------------
 				i++;
 			}
 			// new user
 			builder.append("<tr><td colspan='3'>");
-			builder.append("<span onClick='showEditUser(" + i + ")'>[Neuer Benutzer]</span>");
+			builder.append("<span onClick='showEditUser(").append(i).append(")'>[Neuer Benutzer]</span>");
 			builder.append("</td></tr>\n");
 			builder.append("<tr><td colspan='3'><div style='display:none;margin-bottom:15px'>");
 			builder.append(getNewUserForm());
 			builder.append("<input type='button' onclick='registerUser()' value='Erstellen' />");
-			builder.append("<input type='button' onclick='showEditUser(" + i
-					+ ")' value='Abbrechen' />");
+			builder.append("<input type='button' onclick='showEditUser(").append(i).append(")' value='Abbrechen' />");
 			builder.append("</div></td></tr>");
 
 			builder.append("</table></div>");

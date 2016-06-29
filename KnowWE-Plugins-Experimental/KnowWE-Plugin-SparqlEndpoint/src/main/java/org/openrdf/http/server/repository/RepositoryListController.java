@@ -77,7 +77,7 @@ public class RepositoryListController extends AbstractController {
 	@Override
 	protected ModelAndView handleRequestInternal(HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
-		Map<String, Object> model = new HashMap<String, Object>();
+		Map<String, Object> model = new HashMap<>();
 
 		if (METHOD_GET.equals(request.getMethod())) {
 			Repository systemRepository = repositoryManager.getSystemRepository();
@@ -91,8 +91,8 @@ public class RepositoryListController extends AbstractController {
 					// the
 					// query result directly to the client.
 
-					List<String> bindingNames = new ArrayList<String>();
-					List<BindingSet> bindingSets = new ArrayList<BindingSet>();
+					List<String> bindingNames = new ArrayList<>();
+					List<BindingSet> bindingSets = new ArrayList<>();
 
 					TupleQueryResult queryResult = con.prepareTupleQuery(QueryLanguage.SERQL,
 							REPOSITORY_LIST_QUERY).evaluate();

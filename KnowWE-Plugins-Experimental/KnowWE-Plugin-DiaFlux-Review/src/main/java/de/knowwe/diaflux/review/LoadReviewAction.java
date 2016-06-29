@@ -65,12 +65,11 @@ public class LoadReviewAction extends AbstractAction {
 		}
 		else {
 			InputStream in = attachment.getInputStream();
-			Reader reader = new BufferedReader(new InputStreamReader(in, "UTF-8"));
 
 			OutputStream outs = context.getOutputStream();
 
 			int bit;
-			try {
+			try (Reader reader = new BufferedReader(new InputStreamReader(in, "UTF-8"))) {
 				while ((bit = reader.read()) >= 0) {
 					outs.write(bit);
 				}
@@ -79,9 +78,6 @@ public class LoadReviewAction extends AbstractAction {
 			catch (IOException ioe) {
 				ioe.printStackTrace(System.out);
 				context.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, String.valueOf(ioe));
-			}
-			finally {
-				reader.close();
 			}
 
 		}

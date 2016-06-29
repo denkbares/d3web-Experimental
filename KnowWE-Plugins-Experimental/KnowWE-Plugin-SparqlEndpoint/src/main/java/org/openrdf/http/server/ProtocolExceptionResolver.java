@@ -40,6 +40,7 @@ public class ProtocolExceptionResolver implements HandlerExceptionResolver {
 
 	private Logger logger = LoggerFactory.getLogger(this.getClass());
 
+	@Override
 	public ModelAndView resolveException(HttpServletRequest request, HttpServletResponse response,
 										 Object handler, Exception exception) {
 		logger.debug("ProtocolExceptionResolver.resolveException() called");
@@ -62,8 +63,8 @@ public class ProtocolExceptionResolver implements HandlerExceptionResolver {
 			logger.error("Error while handling request", exception);
 		}
 
-		Map<String, Object> model = new HashMap<String, Object>();
-		model.put(SimpleResponseView.SC_KEY, Integer.valueOf(statusCode));
+		Map<String, Object> model = new HashMap<>();
+		model.put(SimpleResponseView.SC_KEY, statusCode);
 		model.put(SimpleResponseView.CONTENT_KEY, errMsg);
 
 		return new ModelAndView(SimpleResponseView.getInstance(), model);

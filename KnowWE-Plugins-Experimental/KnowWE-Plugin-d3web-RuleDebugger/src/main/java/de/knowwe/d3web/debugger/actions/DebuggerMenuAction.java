@@ -68,7 +68,7 @@ public class DebuggerMenuAction extends AbstractAction {
 	 */
 	@SuppressWarnings("unchecked")
 	public String getMenuRendering(String kbID, String qid, Session session) {
-		StringBuffer buffer = new StringBuffer();
+		StringBuilder buffer = new StringBuilder();
 		String rate = "";
 		try {
 			KnowledgeBase kb = session.getKnowledgeBase();
@@ -88,7 +88,9 @@ public class DebuggerMenuAction extends AbstractAction {
 			if (qid.equals(SOLUTIONS_KEY)) tos = (List<TerminologyObject>) DebugUtilities.getSolutionsFromKB(kb);
 			else tos = DebugUtilities.getInfluentialTOs(to, kb);
 			// no elements to render
-			if (tos.size() == 0) buffer.append("<p style='margin-left:10px;'>Keine relevanten Elemente gefunden.</p>");
+			if (tos.isEmpty()) {
+				buffer.append("<p style='margin-left:10px;'>Keine relevanten Elemente gefunden.</p>");
+			}
 			else {
 				// render menu
 				if (!qid.equals(SOLUTIONS_KEY)) buffer.append("<p>Relevante Elemente:</p><ul>");
@@ -116,9 +118,7 @@ public class DebuggerMenuAction extends AbstractAction {
 						else buffer.append("border-color: " + DebugUtilities.COLOR_UNCLEAR + "'");
 					}
 					else buffer.append("\n<li class='debuggerMenu'");
-					buffer.append(" kbid='" + kb.getId() + "'>"
-							+ tobj.getName()
-							+ "</li>");
+					buffer.append(" kbid='").append(kb.getId()).append("'>").append(tobj.getName()).append("</li>");
 				}
 				buffer.append("</ul>");
 			}

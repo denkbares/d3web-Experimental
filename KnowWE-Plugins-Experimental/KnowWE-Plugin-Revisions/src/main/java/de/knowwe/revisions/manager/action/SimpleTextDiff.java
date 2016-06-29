@@ -87,12 +87,12 @@ public class SimpleTextDiff extends AbstractAction {
 		int limit = 100;
 		for (String line : result) {
 			if (line.length() <= limit) {
-				builder.append(line + linebreak);
+				builder.append(line).append(linebreak);
 			}
 			else {
 				String cuttedline = line;
 				while (cuttedline.length() > limit) {
-					builder.append(cuttedline.substring(0, limit - 1) + linebreak);
+					builder.append(cuttedline.substring(0, limit - 1)).append(linebreak);
 					cuttedline = cuttedline.substring(limit, cuttedline.length() - 1);
 				}
 			}

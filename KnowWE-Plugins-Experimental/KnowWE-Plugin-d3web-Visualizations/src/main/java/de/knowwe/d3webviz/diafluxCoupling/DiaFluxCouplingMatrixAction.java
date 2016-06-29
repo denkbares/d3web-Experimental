@@ -56,7 +56,7 @@ public class DiaFluxCouplingMatrixAction extends AbstractD3webVizAction {
 	protected String createOutput(KnowledgeBase kb, Section<?> section, UserActionContext context) {
 		if (!DiaFluxUtils.hasFlows(kb)) return "{}";
 
-		Map<Flow, Collection<TerminologyObject>> objects = new HashMap<Flow, Collection<TerminologyObject>>();
+		Map<Flow, Collection<TerminologyObject>> objects = new HashMap<>();
 
 		FlowSet flowSet = DiaFluxUtils.getFlowSet(kb);
 
@@ -66,7 +66,7 @@ public class DiaFluxCouplingMatrixAction extends AbstractD3webVizAction {
 
 		StringBuilder bob = new StringBuilder();
 		bob.append("{");
-		List<Flow> flowIndex = new ArrayList<Flow>(objects.keySet());
+		List<Flow> flowIndex = new ArrayList<>(objects.keySet());
 		createNodes(flowIndex, bob);
 		bob.append(",");
 		createLinks(flowIndex, objects, bob);
@@ -101,7 +101,7 @@ public class DiaFluxCouplingMatrixAction extends AbstractD3webVizAction {
 				bob.append(j);
 				bob.append(",");
 				bob.append("\"value\":");
-				if (first.size() == 0) {
+				if (first.isEmpty()) {
 					bob.append(0);
 				}
 				else {
@@ -112,7 +112,7 @@ public class DiaFluxCouplingMatrixAction extends AbstractD3webVizAction {
 				bob.append("\"objects\":");
 				bob.append("[");
 				for (int k = 0; k < intersection.size(); k++) {
-					bob.append("\"" + intersection.get(k) + "\"");
+					bob.append("\"").append(intersection.get(k)).append("\"");
 
 					if (k < intersection.size() - 1) bob.append(",");
 
@@ -143,7 +143,7 @@ public class DiaFluxCouplingMatrixAction extends AbstractD3webVizAction {
 	 * @return
 	 */
 	private static List<TerminologyObject> getIntersection(Collection<TerminologyObject> first, Collection<TerminologyObject> second) {
-		List<TerminologyObject> temp = new ArrayList<TerminologyObject>(first);
+		List<TerminologyObject> temp = new ArrayList<>(first);
 		temp.retainAll(second);
 
 		return temp;
@@ -158,7 +158,7 @@ public class DiaFluxCouplingMatrixAction extends AbstractD3webVizAction {
 			Flow flow = flowIndex.get(i);
 			bob.append("{");
 			bob.append("\"name\":");
-			bob.append("\"" + flow.getName() + "\",");
+			bob.append("\"").append(flow.getName()).append("\",");
 			bob.append("\"group\":");
 			bob.append(0);
 			bob.append("}");
@@ -173,7 +173,7 @@ public class DiaFluxCouplingMatrixAction extends AbstractD3webVizAction {
 	}
 
 	private static Collection<TerminologyObject> getObjects(Flow flow, KnowledgeBase kb) {
-		Collection<TerminologyObject> result = new HashSet<TerminologyObject>();
+		Collection<TerminologyObject> result = new HashSet<>();
 
 		for (Node node : flow.getNodes()) {
 			result.addAll(node.getHookedObjects());
@@ -206,7 +206,7 @@ public class DiaFluxCouplingMatrixAction extends AbstractD3webVizAction {
 	 * @return s the found relations. If either of the
 	 */
 	public static Collection<Relation> getRelations(Flow first, Flow second) {
-		Collection<Relation> relations = new HashSet<Relation>();
+		Collection<Relation> relations = new HashSet<>();
 
 		if (isCalledRecursive(first, second)) relations.add(Relation.child);
 
@@ -224,9 +224,9 @@ public class DiaFluxCouplingMatrixAction extends AbstractD3webVizAction {
 	 * @return
 	 */
 	public static Collection<Collection<ComposedNode>> getCallHierarchies(Flow flow) {
-		Collection<Collection<ComposedNode>> result = new HashSet<Collection<ComposedNode>>();
+		Collection<Collection<ComposedNode>> result = new HashSet<>();
 
-		Collection<ComposedNode> currentHierarchy = new LinkedList<ComposedNode>();
+		Collection<ComposedNode> currentHierarchy = new LinkedList<>();
 		getCallHierarchies(flow, currentHierarchy, result);
 
 		return result;
@@ -253,7 +253,7 @@ public class DiaFluxCouplingMatrixAction extends AbstractD3webVizAction {
 					continue;
 				}
 
-				ArrayList<ComposedNode> copy = new ArrayList<ComposedNode>(currentHierarchy);
+				ArrayList<ComposedNode> copy = new ArrayList<>(currentHierarchy);
 				copy.add(compNode);
 				getCallHierarchies(compNode.getFlow(), copy, result);
 			}

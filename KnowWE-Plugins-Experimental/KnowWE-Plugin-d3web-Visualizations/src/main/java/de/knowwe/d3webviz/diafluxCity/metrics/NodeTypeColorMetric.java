@@ -37,6 +37,7 @@ import de.d3web.indication.ActionNextQASet;
  */
 public class NodeTypeColorMetric implements Metric<Node, Color> {
 
+	@Override
 	public Color getValue(Node object) {
 
 		if (object instanceof ActionNode) {

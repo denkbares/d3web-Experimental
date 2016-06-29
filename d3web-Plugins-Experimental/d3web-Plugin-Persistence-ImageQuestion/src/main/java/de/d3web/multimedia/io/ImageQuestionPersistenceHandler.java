@@ -58,7 +58,7 @@ public class ImageQuestionPersistenceHandler implements KnowledgeReader, Knowled
 		List<Element> childNodes = XMLUtil.getElementList(doc.getChildNodes());
 
 		// Check for right DocumentStructure
-		if (!(childNodes.size() == 0) && !(childNodes.size() > 1)) {
+		if (!(childNodes.isEmpty()) && !(childNodes.size() > 1)) {
 			if (childNodes.get(0).getNodeName().equals("Questions")) {
 
 				List<Element> questions = XMLUtil.getElementList(childNodes
@@ -173,11 +173,11 @@ public class ImageQuestionPersistenceHandler implements KnowledgeReader, Knowled
 	 * @return
 	 */
 	private static List<List<String>> readAnswerRegions(Element element) {
-		ArrayList<List<String>> ret = new ArrayList<List<String>>();
+		ArrayList<List<String>> ret = new ArrayList<>();
 		List<Element> list = XMLUtil.getElementList(element.getChildNodes());
 		for (int i = 0; i < list.size(); i++) {
 			Element aR = list.get(i);
-			ArrayList<String> regionsInfo = new ArrayList<String>();
+			ArrayList<String> regionsInfo = new ArrayList<>();
 			regionsInfo.add(aR.getAttribute("answerID"));
 			regionsInfo.add(aR.getAttribute("xStart"));
 			regionsInfo.add(aR.getAttribute("xEnd"));

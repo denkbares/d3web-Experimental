@@ -136,7 +136,7 @@ public class CompareBaselinesAction extends AbstractAction {
 		HttpSession session = context.getSession();
 		Map<String, BaselineDiff> diffs = (Map<String, BaselineDiff>) session.getAttribute(BASELINE_DIFFS);
 		if (diffs == null) {
-			diffs = new HashMap<String, BaselineDiff>();
+			diffs = new HashMap<>();
 			session.setAttribute(BASELINE_DIFFS, diffs);
 		}
 		diffs.put(context.getParameter(Attributes.SECTION_ID), diff);
@@ -156,7 +156,7 @@ public class CompareBaselinesAction extends AbstractAction {
 	}
 
 	private static void printRemovedArticles(BaselineDiff diff, StringBuilder bob) {
-		List<String> removedArticles = new LinkedList<String>(diff.getRemovedArticles());
+		List<String> removedArticles = new LinkedList<>(diff.getRemovedArticles());
 		if (removedArticles.isEmpty()) return;
 		Collections.sort(removedArticles);
 		bob.append("<div class=\"baselineRemoved\">");
@@ -241,7 +241,7 @@ public class CompareBaselinesAction extends AbstractAction {
 	private static void appendDetailsRow(ArticleVersion info1, ArticleVersion info2, StringBuilder bob, boolean includeFirst) {
 
 		bob.append("<tr class=\"detailsRow\">");
-		bob.append("<td colspan=\"" + CHANGED_HEADER.length + "\">");
+		bob.append("<td colspan=\"").append(CHANGED_HEADER.length).append("\">");
 		bob.append("<span>Detailed history:</span>");
 		bob.append("<ul class=\"changeList\">");
 		Map<Integer, ChangeInfo> changes = getAllChanges(info1.getTitle(), info1.getVersion(),
@@ -251,7 +251,7 @@ public class CompareBaselinesAction extends AbstractAction {
 			ChangeInfo change = changes.get(v);
 			bob.append(v);
 			bob.append(". ");
-			bob.append(createDiffLink(info1.getTitle(), v.intValue() - 1, v.intValue(),
+			bob.append(createDiffLink(info1.getTitle(), v - 1, v,
 					format(change.getDate())));
 			bob.append(" ");
 			bob.append(change.getAuthor());
@@ -274,14 +274,14 @@ public class CompareBaselinesAction extends AbstractAction {
 	}
 
 	public static Map<Integer, ChangeInfo> getAllChanges(String title, int v1, int v2, boolean includeFirst) {
-		Map<Integer, ChangeInfo> result = new LinkedHashMap<Integer, ChangeInfo>();
+		Map<Integer, ChangeInfo> result = new LinkedHashMap<>();
 		WikiConnector connector = Environment.getInstance().getWikiConnector();
 		int last = includeFirst ? v1 - 1 : v1;
 		for (int i = v2; i > last; i--) {
 			String note = connector.getChangeNote(title, i);
 			Date date = connector.getLastModifiedDate(title, i);
 			String author = connector.getAuthor(title, i);
-			result.put(Integer.valueOf(i), new ChangeInfo(author, date, note));
+			result.put(i, new ChangeInfo(author, date, note));
 		}
 
 		return result;
@@ -384,10 +384,9 @@ public class CompareBaselinesAction extends AbstractAction {
 	 * @throws IOException
 	 */
 	public static Baseline loadBaseline(WikiAttachment attachment) throws IOException {
-		InputStream stream = attachment.getInputStream();
 
 		Baseline baseline;
-		try {
+		try (InputStream stream = attachment.getInputStream()) {
 			Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(stream);
 			NamedNodeMap attributes = doc.getElementsByTagName("baseline").item(0).getAttributes();
 			String name = attributes.getNamedItem("name").getNodeValue();
@@ -410,9 +409,6 @@ public class CompareBaselinesAction extends AbstractAction {
 		}
 		catch (Exception e) {
 			throw new IOException(e);
-		}
-		finally {
-			stream.close();
 		}
 	}
 

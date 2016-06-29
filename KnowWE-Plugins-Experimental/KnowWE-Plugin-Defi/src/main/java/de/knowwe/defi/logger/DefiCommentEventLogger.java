@@ -79,7 +79,7 @@ public class DefiCommentEventLogger {
 	}
 
 	public static List<DefiCommentLogLine> getLogLines() {
-		LinkedList<DefiCommentLogLine> loglines = new LinkedList<DefiCommentLogLine>();
+		LinkedList<DefiCommentLogLine> loglines = new LinkedList<>();
 		BufferedReader br = null;
 		String line;
 		try {

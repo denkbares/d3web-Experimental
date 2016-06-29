@@ -49,7 +49,7 @@ public class OrNumEvaluatorTest extends NumEvaluatorsTestBase {
 
 	@Test
 	public void testcanEvaluate() throws Exception {
-		assertThat(eval.canEvaluate(new CondOr(new LinkedList<Condition>())), is(true));
+		assertThat(eval.canEvaluate(new CondOr(new LinkedList<>())), is(true));
 		assertThat(eval.canEvaluate(new CondNumGreaterEqual(q, 5.)), is(false));
 
 	}

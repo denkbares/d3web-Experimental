@@ -63,7 +63,7 @@ public class ReferenceSurroundingRenderer implements SurroundingRenderer {
 			}
 		}
 
-		List<Message> messageList = new ArrayList<Message>();
+		List<Message> messageList = new ArrayList<>();
 		messageList.addAll(messages);
 		Collections.sort(messageList, new Comparator<Message>() {
 

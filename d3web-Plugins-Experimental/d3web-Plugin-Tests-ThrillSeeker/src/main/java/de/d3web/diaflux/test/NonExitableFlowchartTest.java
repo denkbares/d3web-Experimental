@@ -50,7 +50,7 @@ public class NonExitableFlowchartTest extends DiaFluxTest {
 	 */
 	@Override
 	protected Collection<Flow> doTest(KnowledgeBase testObject, List<Flow> flows) {
-		Collection<Flow> erroneousFlows = new HashSet<Flow>();
+		Collection<Flow> erroneousFlows = new HashSet<>();
 
 		for (Flow flow : flows) {
 			Collection<ComposedNode> compNodes = flow.getNodesOfClass(ComposedNode.class);

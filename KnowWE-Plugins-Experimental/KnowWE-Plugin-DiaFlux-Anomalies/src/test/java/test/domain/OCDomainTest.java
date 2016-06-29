@@ -189,7 +189,7 @@ public class OCDomainTest {
 	}
 
 	public static Collection<Choice> parse(QuestionChoice q, String s) {
-		Collection<Choice> result = new HashSet<Choice>();
+		Collection<Choice> result = new HashSet<>();
 
 		if (s.isEmpty()) return result;
 		else {

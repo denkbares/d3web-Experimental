@@ -93,7 +93,7 @@ public class Review {
 
 	public static Collection<Review> read(InputStream stream) throws IOException {
 		Document document = XMLUtil.streamToDocument(stream);
-		Collection<Review> result = new LinkedList<Review>();
+		Collection<Review> result = new LinkedList<>();
 
 		String flowName = document.getElementsByTagName("review").item(0).getAttributes().getNamedItem(
 				"flowName").getNodeValue();

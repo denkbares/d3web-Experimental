@@ -87,7 +87,7 @@ public class CreateMonitorKnowledgeHandler implements D3webHandler<MonitorMarkup
 			e.printStackTrace();
 		}
 
-		return new ArrayList<Message>(0);
+		return new ArrayList<>(0);
 	}
 
 }

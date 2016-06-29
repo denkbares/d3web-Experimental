@@ -49,7 +49,7 @@ public class InformalNodeTest extends DiaFluxTest {
 
 	@Override
 	protected Collection<Flow> doTest(KnowledgeBase testObject, List<Flow> flows) {
-		Collection<Flow> result = new HashSet<Flow>();
+		Collection<Flow> result = new HashSet<>();
 
 		next:
 		for (Flow flow : flows) {

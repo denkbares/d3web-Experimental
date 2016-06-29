@@ -32,7 +32,7 @@ public class DebuggerRerenderAction extends AbstractAction {
 
 	@Override
 	public void execute(UserActionContext context) throws IOException {
-		StringBuffer buffer = new StringBuffer();
+		StringBuilder buffer = new StringBuilder();
 		DebuggerRuleboxAction dra = new DebuggerRuleboxAction();
 		DebuggerMainAction dma = new DebuggerMainAction();
 		String menu, trace;
@@ -44,16 +44,14 @@ public class DebuggerRerenderAction extends AbstractAction {
 		else trace = context.getParameter("trace");
 
 		// trace
-		buffer.append("<div id='debuggerTrace' class='debuggerTrace'>" + trace + "</div>");
+		buffer.append("<div id='debuggerTrace' class='debuggerTrace'>").append(trace).append("</div>");
 		// menu
-		buffer.append("<div id='debuggerMenu'>" + menu + "</div>");
+		buffer.append("<div id='debuggerMenu'>").append(menu).append("</div>");
 		buffer.append("<div style='clear:both'></div>");
 		// main
-		buffer.append("<div id= 'debuggerMain' class='debuggerMain'>" + dma.renderMain(context)
-				+ "</div>");
+		buffer.append("<div id= 'debuggerMain' class='debuggerMain'>").append(dma.renderMain(context)).append("</div>");
 		// rule
-		buffer.append("<div id='debuggerRule' class='debuggerRule'>" + dra.renderRule(context)
-				+ "</div>");
+		buffer.append("<div id='debuggerRule' class='debuggerRule'>").append(dra.renderRule(context)).append("</div>");
 
 		if (buffer != null && context.getWriter() != null) {
 			context.setContentType("text/html; charset=UTF-8");

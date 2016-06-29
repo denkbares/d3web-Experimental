@@ -54,7 +54,7 @@ public class UnderivedQuestionTest extends KBObjectsTest {
 
 		Map<TerminologyObject, Collection<Dependency>> forward = DependencyFinder.getForwardDependencies(kb);
 
-		List<TerminologyObject> result = new LinkedList<TerminologyObject>();
+		List<TerminologyObject> result = new LinkedList<>();
 
 		for (TerminologyObject object : objects) {
 			if (!forward.containsKey(object)) {
@@ -69,7 +69,7 @@ public class UnderivedQuestionTest extends KBObjectsTest {
 
 	@Override
 	protected List<TerminologyObject> getBaseObjects(KnowledgeBase kb, String[] args) {
-		return new ArrayList<TerminologyObject>(kb.getManager().getQuestions());
+		return new ArrayList<>(kb.getManager().getQuestions());
 	}
 
 

@@ -56,7 +56,7 @@ public class ShowTableTagHandler extends AbstractTagHandler {
 			}
 			Section<TableEntryType> entryContentTable = TableUtils.findTableEntry(
 					tableid, user.getUserName());
-			List<Section<VersionEntry>> versions = new ArrayList<Section<VersionEntry>>();
+			List<Section<VersionEntry>> versions = new ArrayList<>();
 			if (entryContentTable != null) {
 				Sections.successors(entryContentTable, VersionEntry.class,
 						versions);

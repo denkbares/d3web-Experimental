@@ -39,13 +39,13 @@ public class GetPersonalTimeTableAction extends AbstractAction {
 	@Override
 	public void execute(UserActionContext context) throws IOException {
 		String user = context.getParameter("user");
-		List<Date> dates = new ArrayList<Date>();
+		List<Date> dates = new ArrayList<>();
 		StringBuilder datesStr = new StringBuilder();
 		SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
 
 		dates.addAll(TimeTableUtilities.getPersonalTimeTable(user));
 		for (Date date : dates) {
-			datesStr.append(sdf.format(date) + "#");
+			datesStr.append(sdf.format(date)).append("#");
 		}
 
 		for (int i = dates.size(); i < MenuUtilities.getRootUnits().size(); i++) {

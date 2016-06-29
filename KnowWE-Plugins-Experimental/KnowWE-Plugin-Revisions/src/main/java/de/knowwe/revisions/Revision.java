@@ -29,7 +29,7 @@ import de.knowwe.core.ArticleManager;
  */
 public interface Revision {
 
-	public ArticleManager getArticleManager();
+	ArticleManager getArticleManager();
 
-	public HashMap<String, Integer> compareWithCurrentState();
+	HashMap<String, Integer> compareWithCurrentState();
 }

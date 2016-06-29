@@ -77,7 +77,7 @@ public class DateType extends AbstractType {
 				return Collections.emptyList();
 			}
 			else {
-				LinkedList<Message> list = new LinkedList<Message>();
+				LinkedList<Message> list = new LinkedList<>();
 				list.add(Messages.syntaxError("Invalid date: '" + section.getText() + "'"));
 
 				return list;
