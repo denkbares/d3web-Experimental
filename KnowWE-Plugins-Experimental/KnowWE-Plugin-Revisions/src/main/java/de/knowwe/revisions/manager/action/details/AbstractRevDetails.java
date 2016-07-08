@@ -53,10 +53,6 @@ public abstract class AbstractRevDetails extends AbstractAction {
 	/**
 	 * Wrap a html table around the tableContent
 	 * 
-	 * @created 23.04.2013
-	 * @param tableContent
-	 * @param context
-	 * @param actionsExist
 	 * @return a StringBuffer containing an html table with tableContent as
 	 *         content
 	 */
