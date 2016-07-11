@@ -18,15 +18,14 @@
  */
 package de.knowwe.defi.event;
 
-import de.knowwe.core.event.Event;
-
+import com.denkbares.events.Event;
 
 /**
  * 
  * @author dupke
  * @created 21.08.2013
  */
-public class DefiFeedbackSavedEvent extends Event {
+public class DefiFeedbackSavedEvent implements Event {
 
 	private final String EVENT_USER;
 

@@ -20,15 +20,14 @@ package de.knowwe.defi.usermanager;
 
 import org.apache.wiki.auth.user.UserProfile;
 
-import de.knowwe.core.event.Event;
-
+import com.denkbares.events.Event;
 
 /**
  * 
  * @author dupke
  * @created 09.02.2013
  */
-public class UserRegisteredEvent extends Event {
+public class UserRegisteredEvent implements Event {
 
 	private final UserProfile user;
 

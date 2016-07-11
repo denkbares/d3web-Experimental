@@ -21,8 +21,8 @@ package de.knowwe.defi.event;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import de.knowwe.core.event.Event;
-import de.knowwe.core.event.EventListener;
+import com.denkbares.events.Event;
+import com.denkbares.events.EventListener;
 import de.knowwe.defi.logger.DefiLoggerUtils;
 import de.knowwe.defi.logger.DefiPageEventLogger;
 import de.knowwe.defi.logger.DefiPageLogLine;

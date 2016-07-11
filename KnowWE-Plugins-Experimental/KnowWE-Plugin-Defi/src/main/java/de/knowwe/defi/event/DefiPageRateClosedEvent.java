@@ -18,14 +18,14 @@
  */
 package de.knowwe.defi.event;
 
-import de.knowwe.core.event.Event;
+import com.denkbares.events.Event;
 
 /**
  * 
  * @author dupke
  * @created 19.11.2013
  */
-public class DefiPageRateClosedEvent extends Event {
+public class DefiPageRateClosedEvent implements Event {
 
 	private final String EVENT_ID;
 	private final String EVENT_USER;

@@ -1,4 +1,4 @@
-<%@page import="de.knowwe.core.event.EventManager"%>
+<%@page import="com.denkbares.events.EventManager" %>
 <%@page import="de.knowwe.defi.event.DefiPageEvent"%>
 <%@page import="org.apache.wiki.*" %>
 <%@page import="de.knowwe.jspwiki.*" %>
@@ -29,8 +29,8 @@
 	
 	// Create action context
 	UserActionContext context = new ActionContext(parameters.get("action"), AbstractActionServlet.getActionFollowUpPath(request), parameters, request, response, wiki.getServletContext(), manager);
-	
-	String requestUser = (String)parameters.get("user");
+
+	String requestUser = parameters.get("user");
 	boolean requestUserCorrect = (requestUser.equals(context.getUserName()));
 	
 	// send page event

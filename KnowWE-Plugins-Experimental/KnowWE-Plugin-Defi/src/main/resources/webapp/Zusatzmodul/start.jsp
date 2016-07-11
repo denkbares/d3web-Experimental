@@ -1,5 +1,5 @@
 <%@page import="de.knowwe.defi.event.DefiPageEvent"%>
-<%@page import="de.knowwe.core.event.EventManager"%>
+<%@page import="com.denkbares.events.EventManager" %>
 <%@page import="org.apache.wiki.WikiContext"%>
 <%@page import="org.apache.wiki.WikiEngine"%>
 <%

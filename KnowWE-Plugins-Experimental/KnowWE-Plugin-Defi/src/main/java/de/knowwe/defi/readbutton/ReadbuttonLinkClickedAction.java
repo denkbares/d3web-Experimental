@@ -22,7 +22,7 @@ import java.io.IOException;
 
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
-import de.knowwe.core.event.EventManager;
+import com.denkbares.events.EventManager;
 import de.knowwe.defi.event.DefiPageRateClosedEvent;
 
 /**

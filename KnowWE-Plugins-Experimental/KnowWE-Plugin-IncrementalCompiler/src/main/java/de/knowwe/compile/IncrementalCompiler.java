@@ -42,8 +42,8 @@ import de.knowwe.compile.utils.CompileUtils;
 import de.knowwe.core.compile.DefaultGlobalCompiler;
 import de.knowwe.core.compile.Priority;
 import de.knowwe.core.compile.terminology.TerminologyExtension;
-import de.knowwe.core.event.Event;
-import de.knowwe.core.event.EventListener;
+import com.denkbares.events.Event;
+import com.denkbares.events.EventListener;
 import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.Article;
 import de.knowwe.core.kdom.RootType;
@@ -336,7 +336,7 @@ public class IncrementalCompiler implements EventListener {
 		for (Section<KnowledgeUnit> unit : allKnowledgeUnits) {
 			KnowledgeUnitCompileScript<?> compileScript = unit.get().getCompileScript();
 			if (compileScript == null) {
-				Log.warning("KnowledgeUnit without CompileScript: " + unit.toString());
+				Log.warning("KnowledgeUnit without CompileScript: " + unit);
 				continue;
 			}
 			Collection<Section<? extends Term>> externalReferencesOfKnowledgeUnit = compileScript.getExternalReferencesOfKnowledgeUnit(
@@ -510,7 +510,7 @@ public class IncrementalCompiler implements EventListener {
 				if ((!terminology.isValid(termIdentifier2))) {
 					// System.out.println("dependency error");
 					messages.add(Messages.error(errorMsg +
-							termIdentifier2.toString()));
+							termIdentifier2));
 					return messages;
 				}
 
@@ -521,7 +521,7 @@ public class IncrementalCompiler implements EventListener {
 					messages.add(Messages.error(
 							errorMsg + ((ComplexDefinitionWithTypeConstraints) complexDef.get())
 									.getProblemMessageForConstraintViolation(complexDef,
-											ref) + " :" + termIdentifier2.toString()));
+											ref) + " :" + termIdentifier2));
 					return messages;
 				}
 			}

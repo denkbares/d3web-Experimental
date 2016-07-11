@@ -18,7 +18,7 @@
  */
 package de.d3web.we.event;
 
-import de.knowwe.core.event.Event;
+import com.denkbares.events.Event;
 
 /**
  * The NewCommentEvent is fired when a user adds a new comment. You can listen
@@ -28,7 +28,7 @@ import de.knowwe.core.event.Event;
  * @author smark
  * @created 08.03.2011
  */
-public class NewCommentEvent extends Event {
+public class NewCommentEvent implements Event {
 
 	private final String comment;
 	private final String topic;

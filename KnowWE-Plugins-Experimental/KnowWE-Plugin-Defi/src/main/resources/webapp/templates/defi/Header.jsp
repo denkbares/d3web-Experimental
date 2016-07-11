@@ -12,7 +12,7 @@
 <%@page import="java.util.HashMap"%>
 <%@ page import="org.apache.wiki.*"%>
 <%@page import="de.knowwe.jspwiki.JSPWikiUserContext"%>
-<%@page import="de.knowwe.core.event.EventManager"%>
+<%@page import="com.denkbares.events.EventManager" %>
 <%@page import="de.knowwe.core.kdom.parsing.Section"%>
 <%@page import="de.knowwe.core.kdom.parsing.Sections"%>
 <%@page import="de.knowwe.core.kdom.Article"%>
