@@ -5,8 +5,8 @@ import java.util.Collection;
 import org.openrdf.model.URI;
 
 import de.d3web.core.knowledge.terminology.NamedObject;
-import de.d3web.strings.Identifier;
-import de.d3web.strings.Strings;
+import com.denkbares.strings.Identifier;
+import com.denkbares.strings.Strings;
 import de.d3web.we.object.D3webTermReference;
 import de.knowwe.core.kdom.objects.Term;
 import de.knowwe.core.kdom.objects.TermDefinition;

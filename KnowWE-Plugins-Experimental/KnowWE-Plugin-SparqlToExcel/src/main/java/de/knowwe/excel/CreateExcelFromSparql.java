@@ -36,7 +36,7 @@ import org.openrdf.model.Value;
 import org.openrdf.query.BindingSet;
 
 import com.denkbares.semanticcore.CachedTupleQueryResult;
-import de.d3web.strings.Strings;
+import com.denkbares.strings.Strings;
 import de.knowwe.core.kdom.rendering.RenderResult;
 import de.knowwe.core.user.UserContext;
 import de.knowwe.ontology.sparql.RenderMode;

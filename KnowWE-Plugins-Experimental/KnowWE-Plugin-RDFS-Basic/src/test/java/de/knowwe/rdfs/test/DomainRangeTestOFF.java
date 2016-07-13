@@ -25,7 +25,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import utils.TestArticleManager;
 
-import de.d3web.plugin.test.InitPluginManager;
+import com.denkbares.plugin.test.InitPluginManager;
 import de.knowwe.core.kdom.Article;
 import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.rdfs.test.util.Query;

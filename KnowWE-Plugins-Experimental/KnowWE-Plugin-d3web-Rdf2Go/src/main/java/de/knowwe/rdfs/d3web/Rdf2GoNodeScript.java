@@ -27,7 +27,7 @@ import org.openrdf.model.URI;
 import org.openrdf.model.vocabulary.RDF;
 
 import de.d3web.diaFlux.flow.Node;
-import de.d3web.strings.Identifier;
+import com.denkbares.strings.Identifier;
 import de.d3web.we.kdom.action.ContraIndicationAction;
 import de.d3web.we.kdom.action.InstantIndication;
 import de.d3web.we.kdom.action.QASetIndicationAction;

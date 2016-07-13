@@ -28,7 +28,7 @@ import jxl.write.WriteException;
 import jxl.write.biff.RowsExceededException;
 
 import com.denkbares.semanticcore.CachedTupleQueryResult;
-import de.d3web.utils.Log;
+import com.denkbares.utils.Log;
 import de.knowwe.core.Attributes;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;

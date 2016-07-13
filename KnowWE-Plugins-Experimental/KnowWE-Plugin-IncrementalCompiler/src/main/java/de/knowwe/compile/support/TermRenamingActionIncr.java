@@ -28,8 +28,8 @@ import java.util.Set;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import de.d3web.strings.Identifier;
-import de.d3web.strings.Strings;
+import com.denkbares.strings.Identifier;
+import com.denkbares.strings.Strings;
 import de.knowwe.compile.IncrementalCompiler;
 import de.knowwe.compile.ReferenceManager;
 import de.knowwe.core.ArticleManager;

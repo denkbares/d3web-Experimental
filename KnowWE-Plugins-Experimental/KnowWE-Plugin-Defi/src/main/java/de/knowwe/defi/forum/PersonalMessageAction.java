@@ -24,7 +24,7 @@ import java.util.GregorianCalendar;
 
 import javax.servlet.http.HttpServletResponse;
 
-import de.d3web.strings.Strings;
+import com.denkbares.strings.Strings;
 import de.knowwe.core.ArticleManager;
 import de.knowwe.core.Environment;
 import de.knowwe.core.action.AbstractAction;

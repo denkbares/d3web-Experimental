@@ -27,10 +27,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import de.d3web.plugin.Extension;
-import de.d3web.plugin.PluginManager;
-import de.d3web.strings.Identifier;
-import de.d3web.utils.Log;
+import com.denkbares.plugin.Extension;
+import com.denkbares.plugin.PluginManager;
+import com.denkbares.strings.Identifier;
+import com.denkbares.utils.Log;
 import de.knowwe.compile.object.ComplexDefinition;
 import de.knowwe.compile.object.ComplexDefinitionWithTypeConstraints;
 import de.knowwe.compile.object.IncrementalTermDefinition;

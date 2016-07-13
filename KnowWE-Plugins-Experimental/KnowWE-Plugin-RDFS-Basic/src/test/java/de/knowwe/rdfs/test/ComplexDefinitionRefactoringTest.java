@@ -12,7 +12,7 @@ import org.junit.Test;
 import utils.TestArticleManager;
 import utils.TestUtils;
 
-import de.d3web.plugin.test.InitPluginManager;
+import com.denkbares.plugin.test.InitPluginManager;
 import de.d3web.strings.Identifier;
 import de.d3web.utils.Log;
 import de.knowwe.compile.IncrementalCompiler;

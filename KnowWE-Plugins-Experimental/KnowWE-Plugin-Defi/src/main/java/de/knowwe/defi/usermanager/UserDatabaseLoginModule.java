@@ -34,7 +34,7 @@ import org.apache.wiki.auth.login.UserDatabaseCallback;
 import org.apache.wiki.auth.user.UserDatabase;
 import org.apache.wiki.auth.user.UserProfile;
 
-import de.d3web.utils.Log;
+import com.denkbares.utils.Log;
 
 /**
  * <p>

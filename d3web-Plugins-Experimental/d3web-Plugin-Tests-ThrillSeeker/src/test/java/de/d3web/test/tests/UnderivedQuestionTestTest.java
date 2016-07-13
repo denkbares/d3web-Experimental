@@ -32,7 +32,7 @@ import de.d3web.core.knowledge.terminology.Question;
 import de.d3web.core.knowledge.terminology.QuestionNum;
 import de.d3web.core.manage.RuleFactory;
 import de.d3web.core.session.values.NumValue;
-import de.d3web.plugin.test.InitPluginManager;
+import com.denkbares.plugin.test.InitPluginManager;
 import de.d3web.test.UnderivedQuestionTest;
 import de.d3web.testing.Message;
 import de.d3web.testing.Message.Type;

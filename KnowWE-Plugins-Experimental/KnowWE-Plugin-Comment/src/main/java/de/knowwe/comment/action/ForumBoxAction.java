@@ -27,8 +27,8 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 
-import de.d3web.strings.Strings;
-import de.d3web.utils.Log;
+import com.denkbares.strings.Strings;
+import com.denkbares.utils.Log;
 import de.d3web.we.event.NewCommentEvent;
 import de.knowwe.comment.forum.Forum;
 import de.knowwe.comment.forum.ForumRenderer;

@@ -26,7 +26,7 @@ import java.util.ResourceBundle;
 
 import javax.mail.MessagingException;
 
-import de.d3web.strings.Strings;
+import com.denkbares.strings.Strings;
 import de.d3web.we.event.NewCommentEvent;
 import de.knowwe.comment.forum.Forum;
 import de.knowwe.comment.forum.ForumBox;

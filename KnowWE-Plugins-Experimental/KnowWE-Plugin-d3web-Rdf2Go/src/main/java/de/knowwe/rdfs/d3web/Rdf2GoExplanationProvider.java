@@ -45,7 +45,7 @@ import de.d3web.core.session.values.MultipleChoiceValue;
 import de.d3web.core.session.values.NumValue;
 import de.d3web.core.session.values.TextValue;
 import de.d3web.scoring.HeuristicRating;
-import de.d3web.strings.Strings;
+import com.denkbares.strings.Strings;
 import de.knowwe.rdf2go.Rdf2GoCore;
 import de.knowwe.rdf2go.sparql.utils.SparqlQuery;
 import de.knowwe.rdf2go.utils.Rdf2GoUtils;
@@ -200,7 +200,7 @@ public class Rdf2GoExplanationProvider {
 			if (terminologyObject != null ? !terminologyObject.equals(fact.terminologyObject) : fact.terminologyObject != null) {
 				return false;
 			}
-			return !(value != null ? !value.equals(fact.value) : fact.value != null);
+			return value != null ? value.equals(fact.value) : fact.value == null;
 		}
 
 		@Override

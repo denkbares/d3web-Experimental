@@ -42,7 +42,7 @@ import de.d3web.diaFlux.flow.NOOPAction;
 import de.d3web.diaFlux.flow.Node;
 import de.d3web.diaFlux.flow.SnapshotNode;
 import de.d3web.diaFlux.flow.StartNode;
-import de.d3web.plugin.test.InitPluginManager;
+import com.denkbares.plugin.test.InitPluginManager;
 import de.d3web.testing.Message;
 import de.d3web.testing.Message.Type;
 import de.d3web.we.diaflux.anomalies.DeadPath;

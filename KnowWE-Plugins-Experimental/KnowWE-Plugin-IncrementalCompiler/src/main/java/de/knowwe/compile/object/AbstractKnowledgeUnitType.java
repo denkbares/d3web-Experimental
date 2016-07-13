@@ -20,8 +20,8 @@
 
 package de.knowwe.compile.object;
 
-import de.d3web.plugin.Extension;
-import de.d3web.plugin.PluginManager;
+import com.denkbares.plugin.Extension;
+import com.denkbares.plugin.PluginManager;
 import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.plugin.Plugins;
 
