@@ -30,7 +30,7 @@ import connector.DummyConnector;
 import junit.framework.TestCase;
 import utils.TestUtils;
 
-import de.d3web.plugin.test.InitPluginManager;
+import com.denkbares.plugin.test.InitPluginManager;
 import de.knowwe.core.Attributes;
 import de.knowwe.core.Environment;
 import de.knowwe.core.compile.Compilers;

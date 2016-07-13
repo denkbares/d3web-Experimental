@@ -5,7 +5,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 
-import de.d3web.utils.Log;
+import com.denkbares.utils.Log;
 import de.knowwe.compile.object.IncrementalTermDefinition;
 import de.knowwe.compile.object.KnowledgeUnit;
 import de.knowwe.compile.object.KnowledgeUnitCompileScript;
@@ -111,7 +111,7 @@ public class EqualStringHazardFilter {
 					castedOtherSection);
 		}
 		else {
-			Log.warning("KnowledgeUnit without CompileScript: " + castedOtherSection.toString());
+			Log.warning("KnowledgeUnit without CompileScript: " + castedOtherSection);
 		}
 
 		Collection<String> termNamesOther = resolveTermNames(referencesOfOtherSection);

@@ -13,7 +13,7 @@ import org.apache.wiki.auth.WikiSecurityException;
 import org.apache.wiki.auth.user.UserDatabase;
 import org.apache.wiki.auth.user.UserProfile;
 
-import de.d3web.utils.Log;
+import com.denkbares.utils.Log;
 import de.knowwe.core.Environment;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;

@@ -30,7 +30,7 @@ import javax.servlet.ServletContext;
 import org.apache.wiki.WikiEngine;
 import org.apache.wiki.util.MailUtil;
 
-import de.d3web.strings.Strings;
+import com.denkbares.strings.Strings;
 import de.d3web.we.event.NewCommentEvent;
 import de.knowwe.core.ArticleManager;
 import de.knowwe.core.Environment;

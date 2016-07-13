@@ -21,7 +21,7 @@ package de.knowwe.compile.support;
 import java.util.Collection;
 import java.util.Set;
 
-import de.d3web.strings.Identifier;
+import com.denkbares.strings.Identifier;
 import de.knowwe.compile.IncrementalCompiler;
 import de.knowwe.compile.ReferenceManager;
 import de.knowwe.core.kdom.objects.SimpleDefinition;

@@ -8,7 +8,7 @@ import org.openrdf.model.Value;
 import org.openrdf.query.BindingSet;
 
 import com.denkbares.semanticcore.TupleQueryResult;
-import de.d3web.utils.Log;
+import com.denkbares.utils.Log;
 import de.knowwe.core.compile.Compilers;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.rendering.RenderResult;

@@ -22,7 +22,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import de.d3web.strings.Strings;
+import com.denkbares.strings.Strings;
 import de.d3web.testing.AbstractTest;
 import de.d3web.testing.Message;
 import de.knowwe.compile.IncrementalCompiler;

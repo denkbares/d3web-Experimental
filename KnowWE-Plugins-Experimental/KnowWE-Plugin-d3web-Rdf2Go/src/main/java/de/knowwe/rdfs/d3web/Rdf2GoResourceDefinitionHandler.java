@@ -20,7 +20,7 @@
 package de.knowwe.rdfs.d3web;
 
 import de.d3web.core.knowledge.Resource;
-import de.d3web.strings.Identifier;
+import com.denkbares.strings.Identifier;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.report.CompilerMessage;
 import de.knowwe.ontology.compile.OntologyCompileScript;

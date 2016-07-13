@@ -28,7 +28,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import de.d3web.strings.Identifier;
+import com.denkbares.strings.Identifier;
 import de.knowwe.compile.ImportManager;
 import de.knowwe.compile.IncrementalCompiler;
 import de.knowwe.compile.object.ComplexDefinition;

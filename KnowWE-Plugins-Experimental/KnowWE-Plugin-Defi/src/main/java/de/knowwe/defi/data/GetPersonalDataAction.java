@@ -28,7 +28,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
-import de.d3web.strings.Strings;
+import com.denkbares.strings.Strings;
 import de.knowwe.core.Environment;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;

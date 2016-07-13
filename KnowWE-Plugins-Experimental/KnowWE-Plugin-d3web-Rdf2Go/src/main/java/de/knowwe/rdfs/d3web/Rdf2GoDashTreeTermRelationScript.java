@@ -30,7 +30,7 @@ import org.openrdf.model.URI;
 import org.openrdf.model.vocabulary.RDFS;
 import org.openrdf.model.vocabulary.XMLSchema;
 
-import de.d3web.strings.Identifier;
+import com.denkbares.strings.Identifier;
 import de.knowwe.core.compile.CompileScript;
 import de.knowwe.core.compile.Compilers;
 import de.knowwe.core.compile.DestroyScript;

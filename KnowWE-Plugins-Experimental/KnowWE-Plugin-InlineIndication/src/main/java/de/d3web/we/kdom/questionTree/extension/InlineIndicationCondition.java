@@ -13,7 +13,7 @@ import de.d3web.core.inference.condition.Condition;
 import de.d3web.core.knowledge.terminology.QASet;
 import de.d3web.core.knowledge.terminology.QContainer;
 import de.d3web.core.manage.RuleFactory;
-import de.d3web.strings.Strings;
+import com.denkbares.strings.Strings;
 import de.d3web.we.kdom.condition.Finding;
 import de.d3web.we.knowledgebase.D3webCompiler;
 import de.d3web.we.object.QASetDefinition;

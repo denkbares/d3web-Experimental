@@ -26,7 +26,7 @@ import org.openrdf.model.Statement;
 import org.openrdf.model.URI;
 import org.openrdf.model.vocabulary.RDF;
 
-import de.d3web.strings.Strings;
+import com.denkbares.strings.Strings;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.kdom.parsing.Sections;
 import de.knowwe.core.report.CompilerMessage;

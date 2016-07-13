@@ -18,7 +18,7 @@ import org.apache.wiki.auth.WikiSecurityException;
 import org.apache.wiki.auth.user.UserDatabase;
 import org.apache.wiki.auth.user.UserProfile;
 
-import de.d3web.utils.Log;
+import com.denkbares.utils.Log;
 import de.knowwe.core.action.UserActionContext;
 import de.knowwe.defi.mailform.MailUtils;
 
@@ -39,12 +39,9 @@ public class DoubleOptInRegisterUserAction extends AbstractRegisterUserAction {
 	@Override
 	protected boolean checkUnsecurePassword(String password) {
 		if (password.length() < 8) return true;
-		if (!(password.matches(".*[A-Z].*") // at least one upper case letter
+		return !(password.matches(".*[A-Z].*") // at least one upper case letter
 				&& password.matches(".*[a-z].*") // at least one lower case letter
-				&& password.matches(".*\\d.*"))) { // at least one digit
-			return true;
-		}
-		return false;
+				&& password.matches(".*\\d.*"));
 	}
 
 	@Override

@@ -30,7 +30,7 @@ import org.apache.wiki.auth.WikiSecurityException;
 import org.apache.wiki.auth.authorize.GroupManager;
 import org.apache.wiki.auth.user.UserDatabase;
 
-import de.d3web.strings.Strings;
+import com.denkbares.strings.Strings;
 import de.knowwe.comment.forum.Forum;
 import de.knowwe.core.Environment;
 import de.knowwe.core.kdom.Article;

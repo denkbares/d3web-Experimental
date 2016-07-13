@@ -32,7 +32,7 @@ import org.openrdf.model.URI;
 import de.d3web.core.knowledge.InfoStore;
 import de.d3web.core.knowledge.terminology.Choice;
 import de.d3web.core.knowledge.terminology.info.Property;
-import de.d3web.strings.Identifier;
+import com.denkbares.strings.Identifier;
 import de.d3web.we.object.NamedObjectReference;
 import de.d3web.we.object.QuestionReference;
 import de.knowwe.core.kdom.parsing.Section;

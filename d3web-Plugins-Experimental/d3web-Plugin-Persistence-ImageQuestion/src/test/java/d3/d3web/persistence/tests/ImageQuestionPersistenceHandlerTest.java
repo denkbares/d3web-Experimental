@@ -33,7 +33,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import de.d3web.core.io.PersistenceManager;
-import de.d3web.core.io.progress.DummyProgressListener;
+import com.denkbares.progress.DummyProgressListener;
 import de.d3web.core.knowledge.KnowledgeBase;
 import de.d3web.core.knowledge.terminology.Question;
 import de.d3web.core.knowledge.terminology.QuestionNum;
@@ -41,7 +41,7 @@ import de.d3web.multimedia.io.ImageQuestionPersistenceHandler;
 import de.d3web.multimedia.io.ImageQuestionStore;
 import de.d3web.persistence.tests.utils.XMLTag;
 import de.d3web.persistence.tests.utils.XMLTagUtils;
-import de.d3web.plugin.test.InitPluginManager;
+import com.denkbares.plugin.test.InitPluginManager;
 
 /**
  * Functionality test for ImageQuestionPersistenceHandler.

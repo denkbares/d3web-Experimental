@@ -55,7 +55,7 @@ import org.w3c.dom.NodeList;
 import org.w3c.dom.Text;
 import org.xml.sax.SAXException;
 
-import de.d3web.utils.Log;
+import com.denkbares.utils.Log;
 
 /**
  * <p>Manages {@link org.apache.wiki.auth.user.DefaultUserProfile} objects using XML files for persistence.
@@ -121,8 +121,7 @@ public class XMLUserDatabase extends AbstractUserDatabase {
      * @param loginName the login name of the user profile that shall be deleted
      */
     @Override
-    public synchronized void deleteByLoginName(String loginName) throws NoSuchPrincipalException, WikiSecurityException
-    {
+	public synchronized void deleteByLoginName(String loginName) throws WikiSecurityException {
         if ( c_dom == null )
         {
             throw new WikiSecurityException( "FATAL: database does not exist" );
@@ -468,8 +467,7 @@ public class XMLUserDatabase extends AbstractUserDatabase {
      * @see org.apache.wiki.auth.user.UserDatabase#rename(String, String)
      */
     @Override
-    public synchronized void rename(String loginName, String newName) throws NoSuchPrincipalException, DuplicateUserException, WikiSecurityException
-    {
+	public synchronized void rename(String loginName, String newName) throws DuplicateUserException, WikiSecurityException {
         if ( c_dom == null )
         {
             Log.severe("Could not rename profile '" + loginName + "'; database does not exist");

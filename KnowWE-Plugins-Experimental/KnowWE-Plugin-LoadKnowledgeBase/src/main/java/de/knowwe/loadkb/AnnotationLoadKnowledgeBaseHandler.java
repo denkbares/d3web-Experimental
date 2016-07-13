@@ -12,7 +12,7 @@ import java.util.UUID;
 
 import de.d3web.core.io.PersistenceManager;
 import de.d3web.core.knowledge.KnowledgeBase;
-import de.d3web.utils.Log;
+import com.denkbares.utils.Log;
 import de.d3web.we.knowledgebase.D3webCompiler;
 import de.d3web.we.knowledgebase.KnowledgeBaseType;
 import de.d3web.we.reviseHandler.D3webHandler;

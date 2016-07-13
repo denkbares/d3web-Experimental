@@ -6,7 +6,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import de.d3web.strings.Identifier;
+import com.denkbares.strings.Identifier;
 import de.knowwe.core.kdom.AbstractType;
 import de.knowwe.core.kdom.parsing.Section;
 import de.knowwe.core.utils.KnowWEUtils;
@@ -19,10 +19,10 @@ import de.knowwe.core.utils.KnowWEUtils;
  */
 public class ImportManager {
 
-	private static Map<Section<? extends AbstractType>, Set<Section<?>>> imports = new HashMap<>();
+	private static final Map<Section<? extends AbstractType>, Set<Section<?>>> imports = new HashMap<>();
 
-	private static Map<Section<? extends AbstractType>, Set<Section<?>>> justImported = new HashMap<>();
-	private static Map<Section<? extends AbstractType>, Set<Section<?>>> justRemoved = new HashMap<>();
+	private static final Map<Section<? extends AbstractType>, Set<Section<?>>> justImported = new HashMap<>();
+	private static final Map<Section<? extends AbstractType>, Set<Section<?>>> justRemoved = new HashMap<>();
 
 	public static void addImport(Section<? extends AbstractType> key, Set<Section<?>> terms) {
 		imports.put(key, terms);
