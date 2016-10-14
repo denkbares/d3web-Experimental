@@ -24,6 +24,7 @@
 	<modules>
 		<module>d3web-Plugins-Experimental</module>
 		<module>KnowWE-Plugins-Experimental</module>
+		<module>DataCities</module>
 	</modules>
 
 	<url>https://www.d3web.de/</url>
