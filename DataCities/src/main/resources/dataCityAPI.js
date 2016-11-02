@@ -28,8 +28,7 @@ City.prototype = {
 
   //adds a district to the Districts-Array of the City
   addDistrict: function (district) {
-    this.containedObjs
-        .push(district);
+    this.containedObjs.push(district);
   },
 
   getDistanceDistricts: function (){
@@ -61,30 +60,101 @@ City.prototype = {
     updateOrbitControls(this.width/2, this.depth/2);
   },
 
-  render: function(sorted){
+  prepareTableRender: function(columns){
+    var current;
+    var columnWidth = [];
+    for(var i = 0; i < columns.length; i++){
+      columnWidth.push(0);
+    }
+    var rowDepth = [];
+    var sumColumns = 0;
+    var sumRows = 0;
+    for(i = 0; i < this.containedObjs.length; i++){
+      current = this.containedObjs[i];
+      rowDepth.push(0);
+      for(var j = 0; j < current.containedObjs.length; j++){
+        if(current.containedObjs[j].depth > rowDepth[i]){
+          rowDepth[i] = current.containedObjs[j].depth;
+        }
+        if(columnWidth.length < j){
+          columnWidth.push(current.containedObjs[j].width);
+        }
+        else if(current.containedObjs[j].width > columnWidth[j]){
+          columnWidth[j] = current.containedObjs[j].width;
+        }
+      }
+      sumRows += rowDepth[i]*2 + this.distanceDistricts;
+    }
+    for(i = 0; i < columnWidth.length; i++){
+      sumColumns += columnWidth[i] + this.distanceBuildings;
+    }
+
+    return {columnWidth: columnWidth, rowDepth: rowDepth, sumRows: sumRows, sumColumns: sumColumns};
+  },
+
+  renderTable: function(columns){
+    var current;
+    var columnWidth, rowDepth, sumColumns, sumRows;
+    current = this.prepareTableRender(columns);
+    columnWidth = current.columnWidth; rowDepth = current.rowDepth; sumColumns = current.sumColumns; sumRows = current.sumRows;
+    var position = {x: 0, y: 0};
+    for(i = 0; i < this.containedObjs.length; i++){
+      current = this.containedObjs[i];
+      current.renderTable(columnWidth);
+      current.adjustSize(sumColumns, rowDepth[i]*2);
+      changePositionPlane(current.geometry, -this.distanceBuildings*0.5, -rowDepth[i]*0.5);
+      current.move(position.x, position.y);
+      position.y += rowDepth[i]*2 + this.distanceDistricts;
+    }
+    this.adjustSize(sumColumns, sumRows);
+    this.adjustSize(this.distanceDistricts, 0.5 * this.distanceDistricts);
+    changePositionPlane(this.geometry, -this.distanceBuildings, -this.distanceBuildings);
+    this.createTableLabels(columns, columnWidth);
+
+  },
+
+  createTableLabels: function (columns, columnWidth){
+    var position = {x: -this.distanceDistricts+this.distanceBuildings*0.5, y: 0, z: -(this.distanceDistricts+10)};
+    for(var i = 0; i < columns.length; i++){
+      createLabel(columns[i],{x: position.x, y: position.y, z: position.z - ((i % 2)*40)});
+      position.x += columnWidth[i] + this.distanceBuildings;
+    }
+    var current;
+    for(i = 0; i < this.containedObjs.length; i++){
+      current = this.containedObjs[i];
+      createLabel(current.label.text, {x: current.position.x -400, y: 0, z: current.position.z + 15}, current.color);
+    }
+  },
+
+  render: function(sorted, isTable, columns){
     this.geometry = createCity(this.label, this.color);
     var insertedObjs = [];
     var position;
     var current;
     var candidates;
-    if(sorted) {
-      this.containedObjs.sort(function (a, b) {
-        return (b.getHeight() - a.getHeight())
-      });
+    if(isTable){
+      this.renderTable(columns);
     }
-    //Go through the districts and insert them in the given order
-    for(var i = 0; i < this.containedObjs.length; i++){
-      current = this.containedObjs[i];
-      current.render(sorted);
-      //Search for possible positions
-      candidates = this.getPositionCandidates(this.containedObjs[i], insertedObjs);
-      //Choose the best position (= smallest distance to (0|0)
-      position = this.getBestCandidate(candidates, current);
-      current.move(position.x , position.z );
-      this.markMap(position, current.width, current.depth);
-      insertedObjs.push(current);
+    else {
+      if (sorted) {
+        this.containedObjs.sort(function (a, b) {
+          return (b.getHeight() - a.getHeight())
+        });
+      }
+      //Go through the districts and insert them in the given order
+      for (var i = 0; i < this.containedObjs.length; i++) {
+        current = this.containedObjs[i];
+        current.render(sorted);
+        //Search for possible positions
+        candidates = this.getPositionCandidates(this.containedObjs[i], insertedObjs);
+        //Choose the best position (= smallest distance to (0|0)
+        position = this.getBestCandidate(candidates, current);
+        current.move(position.x, position.z);
+        this.markMap(position, current.width, current.depth);
+        insertedObjs.push(current);
+      }
+      this.adjustSize(0.5 * this.distanceDistricts, 0.5 * this.distanceDistricts);
     }
-    this.adjustSize(0.5 * this.distanceDistricts, 0.5 * this.distanceDistricts);
   },
 
   markDistanceInMap: function(position, width, depth){
@@ -263,8 +333,7 @@ City.prototype = {
 function District(containingObj, label, color, containsDistricts){
   this.width = 1;
   this.depth = 1;
-  this.positionX = 0;
-  this.positionZ = 0;
+  this.position = {x: 0, y: 0, z: 0};
   this.label = label;
   this.color = color.replace("#", "0x");
   this.geometry;
@@ -361,8 +430,20 @@ District.prototype = {
 
   },
 
+  renderTable: function (columnWidth){
+    this.geometry = createDistrict(this.position, this.label, this.color, this.containsDistricts);
+    var position = {x: 0, y: 0};
+    var current;
+    for(var i = 0; i < this.containedObjs.length; i++){
+      current = this.containedObjs[i];
+      current.render();
+      current.move(position.x, position.y);
+      position.x += columnWidth[i] + this.getDistance();
+    }
+  },
+
   render: function (sorted) {
-    this.geometry = createDistrict(this.positionX, this.positionZ, this.label, this.color, this.containsDistricts);
+    this.geometry = createDistrict(this.position, this.label, this.color, this.containsDistricts);
     var insertedObjs = [];
     var position;
     var current;
@@ -379,7 +460,7 @@ District.prototype = {
       candidates = this.getPositionCandidates(this.containedObjs[i], insertedObjs);
       //Pick out the best one (with the smallest distance to (0|0)
       position = this.getBestCandidate(candidates, current);
-      current.move(position.x + this.positionX, position.z + this.positionZ);
+      current.move(position.x + this.position.x, position.z + this.positionZ);
       this.markMap(position, current.width, current.depth);
       insertedObjs.push(current);
     }
@@ -443,11 +524,11 @@ District.prototype = {
     //Go through the buildings already inserted & check whether there is a possible Position at their edges
     for(var i = 0; i < insertedObjs.length; i++){
       current = insertedObjs[i];
-      x = current.positionX + current.width;
-      z = current.positionZ + current.depth;
+      x = current.position.x + current.width;
+      z = current.position.z + current.depth;
       //For each possible Position at the edge of the current inserted building try putting the new building in
       for(var j = 0; j <= current.width; j++){
-        position = {x: current.positionX + j, z: z  + dis};
+        position = {x: current.position.x + j, z: z  + dis};
         if(this.checkPosition(obj, position.x, position.z)){
           //If the position fits put it into the candidates array and go on (As all the other possible positions would be worse)
           if(!containsPosition(candidates,position)) {
@@ -457,7 +538,7 @@ District.prototype = {
         }
       }
       for(j = 0; j < current.depth; j++){
-        position = {x: x + dis, z: current.positionZ + j};
+        position = {x: x + dis, z: current.position.z + j};
         if(this.checkPosition(obj, position.x, position.z)){
           if(!containsPosition(candidates,position)) {
             candidates.push(position);
@@ -561,8 +642,8 @@ District.prototype = {
 
   move: function(x, z){
     //adjust attributes
-    this.positionX += x;
-    this.positionZ += z;
+    this.position.x += x;
+    this.position.z += z;
     //Move geometry
     changePositionPlane(this.geometry, x, z);
     //Move the containedObjects
@@ -578,8 +659,7 @@ function Building (width, depth, height, district, label, color){
   this.depth = depth;
   this.height = height;
   this.label = label;
-  this.positionX = 0;
-  this.positionZ = 0;
+  this.position = {x: 0, y: 0, z: 0};
   if(this.height instanceof Array) {
     this.geometry = [];
     this.color = [];
@@ -598,22 +678,28 @@ function Building (width, depth, height, district, label, color){
 Building.prototype = {
   //Renders the building
   render: function() {
-    if(this.height instanceof Array) {
-      var heights = this.smoothBigHeights();
-      // var heights = this.height;
-      //  var heights = this.smoothHeightsRatio();
-      var y = 0;
-      for (var i = 0; i < heights.length; i++) {
-        if (i != 0) {
-          y += heights[i - 1];
-        }
-        if(heights[i] > 0) {
-          this.geometry.push(createBuilding(this.width, this.depth, heights[i], 0, 0, y, this.label[i], this.color[i]));
+    if(!(this.height == 0 || this.width == 0 || this.depth == 0)) {
+      if (this.height instanceof Array) {
+        var heights = this.smoothBigHeights();
+        // var heights = this.height;
+        //  var heights = this.smoothHeightsRatio();
+        var y = 0;
+        for (var i = 0; i < heights.length; i++) {
+          if (i != 0) {
+            y += heights[i - 1];
+          }
+          if (heights[i] > 0) {
+            this.geometry.push(createBuilding(this.width, this.depth, heights[i], {
+              x: 0,
+              y: y,
+              z: 0
+            }, this.label[i], this.color[i]));
+          }
         }
       }
-    }
-    else{
-      this.geometry = createBuilding(this.width, this.depth, this.height, 0, 0, 0, this.label, this.color);
+      else {
+        this.geometry = createBuilding(this.width, this.depth, this.height, this.position, this.label, this.color);
+      }
     }
   },
 
@@ -627,7 +713,7 @@ Building.prototype = {
           smoothedHeights.push(ratio);
           smoothedHeights.push(0.4);
           this.color.splice(i + smoothed + 1, 0, "0xF3F3F3");
-          this.label.splice(i+1 + smoothed, 0, "Smoothed");
+          this.label.splice(i+1 + smoothed, 0, {text: "Smoothed"});
           smoothed++;
         }
         else{
@@ -654,16 +740,18 @@ Building.prototype = {
   },
 
   //Moves the building for the given values
-  move: function(x, z){
-    this.positionX += x;
-    this.positionZ += z;
-    if(this.geometry instanceof Array){
-      for(var i = 0; i < this.geometry.length; i++){
-        changePositionBox(this.geometry[i], x, z);
+  move: function(x, z) {
+    if (!(this.height == 0 || this.width == 0 || this.depth == 0)) {
+      this.position.x += x;
+      this.position.z += z;
+      if (this.geometry instanceof Array) {
+        for (var i = 0; i < this.geometry.length; i++) {
+          changePositionBox(this.geometry[i], x, z);
+        }
       }
-    }
-    else {
-      changePositionBox(this.geometry, x, z);
+      else {
+        changePositionBox(this.geometry, x, z);
+      }
     }
   }
 };

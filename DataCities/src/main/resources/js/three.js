@@ -17896,7 +17896,7 @@ THREE.Loader.prototype = {
 
 	constructor: THREE.Loader,
 
-	crossOrigin: undefined,
+	//crossOrigin: undefined,
 
 	extractUrlBase: function ( url ) {
 
@@ -19370,7 +19370,7 @@ THREE.ObjectLoader.prototype = {
 
 	setCrossOrigin: function ( value ) {
 
-		this.crossOrigin = value;
+		//this.crossOrigin = value;
 
 	},
 

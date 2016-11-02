@@ -2,7 +2,7 @@
  * Created by Lea on 12.05.2016.
  */
 
-var scene, renderer, camera, directionalLight, controls, highlightedObj, currentTip;
+var scene, renderer, camera, directionalLight, controls, highlightedObj, textLabels, fontLoader, cityPosiion;
 function init() {
     scene = new THREE.Scene();
  
@@ -24,15 +24,40 @@ function init() {
   controls.enableZoom = true;
   controls.addEventListener('change', light_update);
   controls.minDistance = 20;
-  controls.maxDistance = 1000;
+  controls.maxDistance = 10000;
   controls.maxPolarAngle = Math.PI/2 - 0.1;
   controls.rotateSpeed = 0.17;
   controls.zoomSpeed = 1.4;
 
+textLabels = [];
 
   document.addEventListener('mousedown', onDocumentMouseDown, false);
   document.addEventListener('mouseup', onDocumentMouseUp, false);
   window.addEventListener( 'resize', onWindowResize, false );
+}
+
+function render() {
+  requestAnimationFrame(render);
+  controls.update();
+  labelUpdate();
+  renderer.render(scene, camera);
+}
+
+function light_update() {
+  directionalLight.position = cityPosiion;
+  directionalLight.position.y = 100;
+}
+
+function labelUpdate () {
+  for(var i = 0; i < textLabels.length; i++) {
+    textLabels[i].quaternion.x = camera.quaternion.x;
+  }
+}
+
+function updateOrbitControls(positionX, positionZ) {
+  controls.target.x = positionX;
+  controls.target.z = positionZ;
+
 }
 
 function onWindowResize(){
@@ -56,32 +81,53 @@ function onDocumentMouseDown(event) {
 
   if (intersects.length > 0) {
     var obj = intersects[0].object;
-    if(event.ctrlKey){
+    if (event.ctrlKey) {
       getDistrict(obj);
     }
-    else{
-      getTooltip(obj);
-      highlight(obj);
-
+    else {
+      if (obj.name.isURL) {
+        openURL(obj.name.text);
+      }
+      else if (obj.name) {
+        getTooltip(obj);
+        highlight(obj);
+      }
+      else {
+        removeHighlight();
+        UnTip();
+      }
     }
   }
+}
 
+function onDocumentMouseUp() {
+  UnTip();
+  removeHighlight();
+}
+
+function openURL(url){
+  window.open(url);
+}
+
+function getTooltip (obj) {
+  UnTip();
+  var str = obj.name.text;
+  var tip = Tip(str);
 }
 
 function highlight(obj){
-  if(obj.name.indexOf("City") == -1) {
+  removeHighlight();
     highlightedObj = obj;
-    obj.material.color.r += 0.5;
-    obj.material.color.g += 0.5;
-    obj.material.color.b += 0.5;
-  }
+    obj.material.color.r += 1;
+    obj.material.color.g += 1;
+    obj.material.color.b += 1;
 }
 
 function removeHighlight(){
   if(highlightedObj != undefined) {
-    highlightedObj.material.color.r -= 0.5;
-    highlightedObj.material.color.g -= 0.5;
-    highlightedObj.material.color.b -= 0.5;
+    highlightedObj.material.color.r -= 1;
+    highlightedObj.material.color.g -= 1;
+    highlightedObj.material.color.b -= 1;
     highlightedObj = undefined;
   }
 }
@@ -101,41 +147,15 @@ function getDistrict(obj){
   }
 }
 
-function onDocumentMouseUp() {
-  removeHighlight();
-  UnTip();
-}
-
-function getTooltip (obj) {
-  var str = obj.name;
-  Tip(str);
-}
-
-function light_update() {
-  directionalLight.position.copy(camera.position);
-}
-
-function render() {
-  requestAnimationFrame(render);
-  controls.update();
-  renderer.render(scene, camera);
-}
-
-function updateOrbitControls(positionX, positionZ) {
-  controls.target.x = positionX;
-  controls.target.z = positionZ;
-
-}
-
 function createCity(label, color) {
-  var city = addPlane(1, 1, 0, 0);
+  var city = addPlane(1, 1, {x:0, z:0});
   city.material.color.setHex(color);
   city.name = label;
   return city;
 }
 
-function createDistrict(positionX, positionZ, label, color, containsDistricts) {
-  var district = addPlane(1, 1, positionX, positionZ);
+function createDistrict(position, label, color, containsDistricts) {
+  var district = addPlane(1, 1, position);
   district.material.color.setHex(color);
   if (containsDistricts) {
     district.position.y = 0.02;
@@ -148,8 +168,8 @@ function createDistrict(positionX, positionZ, label, color, containsDistricts) {
   return district;
 }
 
-function createBuilding(width, depth, height, positionX, positionZ, positionY, label, color) {
-  var building = addBox(width, depth, height, positionX, positionZ, positionY);
+function createBuilding(width, depth, height, position, label, color) {
+  var building = addBox(width, depth, height, position);
   building.position.y += 0.06;
   building.material.color.setHex(color);
   if(color == "0xFE2E2E"){
@@ -158,6 +178,35 @@ function createBuilding(width, depth, height, positionX, positionZ, positionY, l
   }
   building.name = label;
   return building;
+}
+
+function createLabel (text, position, color){
+  var loader = new THREE.FontLoader();
+  loader.load("fonts/Open Sans_Regular.js", function(font){
+    var textGeo = new THREE.TextGeometry(text, {
+      font: font,
+      size: 20,
+      height: 2,
+      curveSegments: 12,
+      bevelThickness: 0.5,
+      bevelSize: 0.5,
+      bevelEnabled: true
+    })
+    var textMaterial = new THREE.MeshPhongMaterial();
+
+    if (color == undefined) {
+      color = "0x242424"
+    }
+
+    var textObj = new THREE.Mesh(textGeo, textMaterial);
+    textObj.position.set(position.x, position.y, position.z);
+    textObj.rotateX(-Math.PI / 2);
+    textLabels.push(textObj);
+
+    textObj.material.color.setHex(color);
+
+    scene.add(textObj);
+    });
 }
 
 function changeSizeCity(object, width, depth) {
@@ -176,7 +225,8 @@ function changeSizeCity(object, width, depth) {
     object.geometry.parameters.height = depth;
   }
 
-  changePositionPlane(object, (difWidth / 2), (difDepth / 2));
+  cityPosiion = changePositionPlane(object, (difWidth / 2), (difDepth / 2));
+
 }
 
 function changeSize(object, width, depth) {
@@ -201,6 +251,7 @@ function changeSize(object, width, depth) {
 function changePositionPlane(object, x, z) {
   object.position.x += x;
   object.position.z += z;
+  return object.position;
 }
 
 function changePositionBox(object, x, z) {
@@ -208,7 +259,7 @@ function changePositionBox(object, x, z) {
   object.position.z += z;
 }
 
-function addPlane(width, depth, positionX, positionZ) {
+function addPlane(width, depth, position) {
   //Geometry + Material = plane
 
   var planeGeometry = new THREE.PlaneGeometry(width, depth);
@@ -216,8 +267,8 @@ function addPlane(width, depth, positionX, positionZ) {
   var plane = new THREE.Mesh(planeGeometry, planeMaterial);
 
   //Position
-  plane.position.x = positionX + (0.5 * width);
-  plane.position.z = positionZ + (0.5 * depth);
+  plane.position.x = position.x + (0.5 * width);
+  plane.position.z = position.z + (0.5 * depth);
 
   //Rotation
   plane.rotateX(-Math.PI / 2);
@@ -234,16 +285,16 @@ function addPlane(width, depth, positionX, positionZ) {
   return plane;
 }
 
-function addBox(width, depth, height, positionX, positionZ, positionY) {
+function addBox(width, depth, height, position) {
   //Geometry + Material = Box
   var boxGeometry = new THREE.BoxGeometry(width, height, depth);
   var boxMaterial = new THREE.MeshLambertMaterial();
   var box = new THREE.Mesh(boxGeometry, boxMaterial);
 
   //Position
-  box.position.x = positionX + (width * 0.5);
-  box.position.z = positionZ + (depth * 0.5);
-  box.position.y = positionY + (height * 0.5);
+  box.position.x = position.x + (width * 0.5);
+  box.position.z = position.z + (depth * 0.5);
+  box.position.y = position.y + (height * 0.5);
   //Make changeable
   box.geometry._dirtyPosition = true;
   box.geometry._dirtyVertices = true;

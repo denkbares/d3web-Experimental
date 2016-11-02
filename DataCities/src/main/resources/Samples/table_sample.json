@@ -1,0 +1,2277 @@
+{
+    "Districts": [
+        {
+         "Buildings":  [
+             {
+                 "Label": "S190 - HDD Germany CD 74 - 107%",
+                 "color": "#A9F5A9",
+                 "depth": 10,
+                 "height": 10.7,
+                 "width": 40,
+                 "sortKey": 101
+             },
+             {
+                 "Label": "S190 - HDD Germany CD 102 - 153%",
+                 "color": "#F7FE2E",
+                 "depth": 10,
+                 "height": 15.3,
+                 "width": 40,
+                 "sortKey": 102
+             },
+             {
+                 "Label": "S190 - HDD Germany SM 52 - 124%",
+                 "color": "#A9F5A9",
+                 "depth": 10,
+                 "height": 12.4,
+                 "width": 40,
+                 "sortKey": 103
+             },
+             {
+                 "Label": "S190 - HDD Germany SM 74 - 77%",
+                 "color": "#A9F5A9",
+                 "depth": 10,
+                 "height": 7.7,
+                 "width": 40,
+                 "sortKey": 104
+             },
+             {
+                 "Label": "S190 - HDD Germany SM 102 - 147%",
+                 "color": "#F7FE2E",
+                 "depth": 10,
+                 "height": 14.7,
+                 "width": 40,
+                 "sortKey": 105
+             },
+             {
+                 "Label": "S190 - HDD Germany XL 105 - 103%",
+                 "color": "#A9F5A9",
+                 "depth": 10,
+                 "height": 10.3,
+                 "width": 40,
+                 "sortKey": 106
+             },
+             {
+                 "Label": "S190 - HDD Germany XL 145/162 - 102%",
+                 "color": "#A9F5A9",
+                 "depth": 10,
+                 "height": 10.2,
+                 "width": 40,
+                 "sortKey": 107
+             },
+             {
+                 "Label": "S190 - HDD Germany PM 52 - 0%",
+                 "color": "#0000FF",
+                 "depth": 10,
+                 "height": 0.1,
+                 "width": 40,
+                 "sortKey": 108
+             },
+             {
+                 "Label": "S190 - HDD Germany PM 74 - 184%",
+                 "color": "#FF4000",
+                 "depth": 10,
+                 "height": 18.4,
+                 "width": 40,
+                 "sortKey": 109
+             },
+             {
+                 "Label": "S190 - HDD Germany GTO 52 - 0%",
+                 "color": "#0000FF",
+                 "depth": 10,
+                 "height": 0.1,
+                 "width": 40,
+                 "sortKey": 110
+             },
+             {
+                 "Label": "S190 - HDD Germany QM 46 - 0%",
+                 "color": "#0000FF",
+                 "depth": 10,
+                 "height": 5,
+                 "width": 40,
+                 "sortKey": 111
+             }
+         ],
+            "Label": "S190 - HDD Germany",
+            "color": "#FFFD99",
+            "sortKey": 1
+        },
+        {
+            "Buildings":  [
+                {
+                    "Label": "S080 - HJP Japan CD 74 - 226%",
+                    "color": "#FF4000",
+                    "depth": 10,
+                    "height": 22.6,
+                    "width": 40,
+                    "sortKey": 201
+                },
+                {
+                    "Label": "S080 - HJP Japan D 102 - 140%",
+                    "color": "#F7FE2E",
+                    "depth": 10,
+                    "height": 14,
+                    "width": 40,
+                    "sortKey": 202
+                },
+                {
+                    "Label": "S080 - HJP Japan SM 52 - 102%",
+                    "color": "#A9F5A9",
+                    "depth": 10,
+                    "height": 10.2,
+                    "width": 40,
+                    "sortKey": 203
+                },
+                {
+                    "Label": "S080 - HJP Japan SM 74 - 270%",
+                    "color": "#FF0000",
+                    "depth": 10,
+                    "height": 27,
+                    "width": 40,
+                    "sortKey": 204
+                },
+                {
+                    "Label": "S080 - HJP Japan SM 102 - 130%",
+                    "color": "#F7FE2E",
+                    "depth": 10,
+                    "height": 13,
+                    "width": 40,
+                    "sortKey": 205
+                },
+                {
+                    "Label": "S080 - HJP Japan XL 105 - 70%",
+                    "color": "#04B404",
+                    "depth": 10,
+                    "height": 7,
+                    "width": 40,
+                    "sortKey": 206
+                },
+                {
+                    "Label": "S080 - HJP Japan XL 145/162 - 670%",
+                    "color": "#3B0B17",
+                    "depth": 10,
+                    "height": 67,
+                    "width": 40,
+                    "sortKey": 207
+                },
+                {
+                    "Label": "S080 - HJP Japan PM 52 - 0%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 0.1,
+                    "width": 40,
+                    "sortKey": 208
+                },
+                {
+                    "Label": "S080 - HJP Japan PM 74 - 461%",
+                    "color": "#8A0829",
+                    "depth": 10,
+                    "height": 46.1,
+                    "width": 40,
+                    "sortKey": 209
+                },
+                {
+                    "Label": "S080 - HJP Japan GTO 52 - 307%",
+                    "color": "#DF013A",
+                    "depth": 10,
+                    "height": 30.7,
+                    "width": 40,
+                    "sortKey": 210
+                },
+                {
+                    "Label": "S080 - HJP Japan QM 46 - 147%",
+                    "color": "#F7FE2E",
+                    "depth": 10,
+                    "height": 5,
+                    "width": 40,
+                    "sortKey": 211
+                }
+            ],
+            "Label": "S080 - HJP Japan",
+            "color": "#FFFA6A",
+            "sortKey" : 2
+        },
+        {
+            "Buildings":  [
+                {
+                    "Label": "S450 - U.S.A. CD 74 - 314%",
+                    "color": "#FF0000",
+                    "depth": 10,
+                    "height": 31.4,
+                    "width": 40,
+                    "sortKey": 301
+                },
+                {
+                    "Label": "S450 - U.S.A. CD 102 - 184%",
+                    "color": "#FF4000",
+                    "depth": 10,
+                    "height": 18.4,
+                    "width": 40,
+                    "sortKey": 302
+                },
+                {
+                    "Label": "S450 - U.S.A. SM 52 - 184%",
+                    "color": "#FF4000",
+                    "depth": 10,
+                    "height": 18.4,
+                    "width": 40,
+                    "sortKey": 303
+                },
+                {
+                    "Label": "S450 - U.S.A. SM 74 - 170%",
+                    "color": "#F7FE2E",
+                    "depth": 10,
+                    "height": 17,
+                    "width": 40,
+                    "sortKey": 304
+                },
+                {
+                    "Label": "S450 - U.S.A. SM 102 - 107%",
+                    "color": "#A9F5A9",
+                    "depth": 10,
+                    "height": 10.7,
+                    "width": 40,
+                    "sortKey": 305
+                },
+                {
+                    "Label": "S450 - U.S.A. XL 105 - 139%",
+                    "color": "#F7FE2E",
+                    "depth": 10,
+                    "height": 13.9,
+                    "width": 40,
+                    "sortKey": 306
+                },
+                {
+                    "Label": "S450 - U.S.A. XL 145/162 - 280%",
+                    "color": "#FF0000",
+                    "depth": 10,
+                    "height": 28,
+                    "width": 40,
+                    "sortKey": 307
+                },
+                {
+                    "Label": "S450 - U.S.A. PM 52 - 922%",
+                    "color": "#2A0A22",
+                    "depth": 10,
+                    "height": 92.2,
+                    "width": 40,
+                    "sortKey": 308
+                },
+                {
+                    "Label": "S450 - U.S.A. PM 74 - 0%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 0.1,
+                    "width": 40,
+                    "sortKey": 309
+                },
+                {
+                    "Label": "S450 - U.S.A. GTO 52 - 614%",
+                    "color": "#3B0B17",
+                    "depth": 10,
+                    "height": 61.4,
+                    "width": 40,
+                    "sortKey": 310
+                },
+                {
+                    "Label": "S450 - U.S.A. QM 46 - 168%",
+                    "color": "#F7FE2E",
+                    "depth": 10,
+                    "height": 16.8,
+                    "width": 40,
+                    "sortKey": 311
+                }
+            ],
+            "Label": "S450 - U.S.A.",
+            "color": "#FFF845",
+            "sortKey": 3
+        },
+        {
+            "Buildings":  [
+                {
+                    "Label": "S220 - HUK United Kingdom CD 74 - 88%",
+                    "color": "#A9F5A9",
+                    "depth": 10,
+                    "height": 8.8,
+                    "width": 40,
+                    "sortKey":401
+                },
+                {
+                    "Label": "S220 - HUK United Kingdom CD 102 - 40%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 4,
+                    "width": 40,
+                    "sortKey":402
+                },
+                {
+                    "Label": "S220 - HUK United Kingdom SM 52 - 40%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 4,
+                    "width": 40,
+                    "sortKey":403
+                },
+                {
+                    "Label": "S220 - HUK United Kingdom SM 74 - 95%",
+                    "color": "#A9F5A9",
+                    "depth": 10,
+                    "height": 9.5,
+                    "width": 40,
+                    "sortKey":404
+                },
+                {
+                    "Label": "S220 - HUK United Kingdom SM 102 - 84%",
+                    "color": "#A9F5A9",
+                    "depth": 10,
+                    "height": 8.4,
+                    "width": 40,
+                    "sortKey":405
+                },
+                {
+                    "Label": "S220 - HUK United Kingdom XL 105 - 111%",
+                    "color": "#A9F5A9",
+                    "depth": 10,
+                    "height": 11.1,
+                    "width": 40,
+                    "sortKey":406
+                },
+                {
+                    "Label": "S220 - HUK United Kingdom XL 145/162 - 160%",
+                    "color": "#F7FE2E",
+                    "depth": 10,
+                    "height": 16,
+                    "width": 40,
+                    "sortKey":407
+                },
+                {
+                    "Label": "S220 - HUK United Kingdom PM 52 - 0%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 0.1,
+                    "width": 40,
+                    "sortKey":408
+                },
+                {
+                    "Label": "S220 - HUK United Kingdom PM 74",
+                    "color": "#8A0829",
+                    "depth": 0.1,
+                    "height": 0.1,
+                    "width": 0.1,
+                    "sortKey":409
+                },
+                {
+                    "Label": "S220 - HUK United Kingdom GTO 52",
+                    "color": "#8A0829",
+                    "depth": 0.1,
+                    "height": 0.1,
+                    "width": 0.1,
+                    "sortKey":410
+                },
+                {
+                    "Label": "S220 - HUK United Kingdom QM 46 - 0%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 0.1,
+                    "width": 40,
+                    "sortKey":411
+                }
+            ],
+            "Label": "S220 - HUK United Kingdom",
+            "color": "#FCF41D",
+            "sortKey": 4
+        },
+        {
+            "Buildings":  [
+                {
+                    "Label": "S210 - HCH Switzerland CD 74 - 348%",
+                    "color": "#FF0000",
+                    "depth": 10,
+                    "height": 34.8,
+                    "width": 40,
+                    "sortKey":501
+                },
+                {
+                    "Label": "S210 - HCH Switzerland CD 102 - 1229%",
+                    "color": "#2A0A22",
+                    "depth": 10,
+                    "height": 122.9,
+                    "width": 40,
+                    "sortKey": 502
+                },
+                {
+                    "Label": "S210 - HCH Switzerland SM 52 - 512%",
+                    "color": "#3B0B17",
+                    "depth": 10,
+                    "height": 51.2,
+                    "width": 40,
+                    "sortKey":503
+                },
+                {
+                    "Label": "S210 - HCH Switzerland SM 74 - 184%",
+                    "color": "#FF4000",
+                    "depth": 10,
+                    "height": 18.4,
+                    "width": 40,
+                    "sortKey":504
+                },
+                {
+                    "Label": "S210 - HCH Switzerland SM 102 - 284%",
+                    "color": "#FF0000",
+                    "depth": 10,
+                    "height": 28.4,
+                    "width": 40,
+                    "sortKey":505
+                },
+                {
+                    "Label": "S210 - HCH Switzerland XL 105 - 360%",
+                    "color": "#8A0829",
+                    "depth": 10,
+                    "height": 36,
+                    "width": 40,
+                    "sortKey":506
+                },
+                {
+                    "Label": "S210 - HCH Switzerland XL 145/162",
+                    "color": "#8A0829",
+                    "depth": 0.1,
+                    "height": 0.1,
+                    "width": 0.1,
+                    "sortKey":507
+                },
+                {
+                    "Label": "S210 - HCH Switzerland PM 52 - 461%",
+                    "color": "#8A0829",
+                    "depth": 10,
+                    "height": 46.1,
+                    "width": 40,
+                    "sortKey":508
+                },
+                {
+                    "Label": "S210 - HCH Switzerland PM 74 - 0%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 5,
+                    "width": 40,
+                    "sortKey":509
+                },
+                {
+                    "Label": "S210 - HCH Switzerland GTO - 52 - 461%",
+                    "color": "#8A0829",
+                    "depth": 10,
+                    "height": 46.1,
+                    "width": 40,
+                    "sortKey":510
+                },
+                {
+                    "Label": "S210 - HCH Switzerland QM 46 - 614%",
+                    "color": "#3B0B17",
+                    "depth": 10,
+                    "height": 61.4,
+                    "width": 40,
+                    "sortKey":511
+                }
+            ],
+            "Label": "S210 - HCH Switzerland",
+            "color": "#E4DD00",
+            "sortKey": 5
+        },
+        {
+            "Buildings":  [
+                {
+                    "Label": "S010 - HFR - France CD 74 - 91%",
+                    "color": "#A9F5A9",
+                    "depth": 10,
+                    "height": 9.1,
+                    "width": 40,
+                    "sortKey":601
+                },
+                {
+                    "Label": "S010 - HFR - France CD 102 - 221%",
+                    "color": "#FF4000",
+                    "depth": 10,
+                    "height": 22.1,
+                    "width": 40,
+                    "sortKey":602
+                },
+                {
+                    "Label": "S010 - HFR - France SM 52 - 142%",
+                    "color": "#F7FE2E",
+                    "depth": 10,
+                    "height": 14.2,
+                    "width": 40,
+                    "sortKey":603
+                },
+                {
+                    "Label": "S010 - HFR - France SM 74 - 88%",
+                    "color": "#A9F5A9",
+                    "depth": 10,
+                    "height": 8.8,
+                    "width": 40,
+                    "sortKey":604
+                },
+                {
+                    "Label": "S010 - HFR - France SM 102 - 307%",
+                    "color": "#DF013A",
+                    "depth": 10,
+                    "height": 30.7,
+                    "width": 40,
+                    "sortKey":605
+                },
+                {
+                    "Label": "S010 - HFR - France XL 105 - 130%",
+                    "color": "#F7FE2E",
+                    "depth": 10,
+                    "height": 13,
+                    "width": 40,
+                    "sortKey":606
+                },
+                {
+                    "Label": "S010 - HFR - France Xl 145/162 - 0%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 0.1,
+                    "width": 40,
+                    "sortKey":607
+                },
+                {
+                    "Label": "S010 - HFR - France PM 52 - 0%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 0.1,
+                    "width": 40,
+                    "sortKey":608
+                },
+                {
+                    "Label": "S010 - HFR - France PM 74 - 0%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 0.1,
+                    "width": 40,
+                    "sortKey":609
+                },
+                {
+                    "Label": "S010 - HFR - France GTO 52 - 614%",
+                    "color": "#3B0B17",
+                    "depth": 10,
+                    "height": 61.4,
+                    "width": 40,
+                    "sortKey":610
+                }
+            ],
+            "Label": "S010 - HFR - France",
+            "color": "#D2CB00",
+            "sortKey": 6
+        },
+        {
+            "Buildings":  [
+                {
+                    "Label": "S430 - HCD Canada CD 74 - 230%",
+                    "color": " #FF4000",
+                    "depth": 10,
+                    "height": 23,
+                    "width": 40,
+                    "sortKey":701
+                },
+                {
+                    "Label": "S430 - HCD Canada CD 102 - 178%",
+                    "color": " #FF4000",
+                    "depth": 10,
+                    "height": 17.8,
+                    "width": 40,
+                    "sortKey":702
+                },
+                {
+                    "Label": "S430 - HCD Canada SM 52 - 527%",
+                    "color": "#3B0B17",
+                    "depth": 10,
+                    "height": 52.7,
+                    "width": 40,
+                    "sortKey":703
+                },
+                {
+                    "Label": "S430 - HCD Canada SM 74 - 0%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 0.1,
+                    "width": 40,
+                    "sortKey":704
+                },
+                {
+                    "Label": "S430 - HCD Canada SM 102 - 176%",
+                    "color": "#FF4000",
+                    "depth": 10,
+                    "height": 17.6,
+                    "width": 40,
+                    "sortKey":705
+                },
+                {
+                    "Label": "S430 - HCD Canada XL 105 - 279%",
+                    "color": "#FF0000",
+                    "depth": 10,
+                    "height":27.9,
+                    "width": 40,
+                    "sortKey":706
+                },
+                {
+                    "Label": "S430 - HCD Canada XL 145/162 - 176%",
+                    "color": "#FF4000",
+                    "depth": 10,
+                    "height": 17.6,
+                    "width": 40,
+                    "sortKey":707
+                },
+                {
+                    "Label": "S430 - HCD Canada PM 52 - 0%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 0.1,
+                    "width": 40,
+                    "sortKey":708
+                },
+                {
+                    "Label": "S430 - HCD Canada PM 74 - 307%",
+                    "color": "#DF013A",
+                    "depth": 10,
+                    "height": 30.7,
+                    "width": 40,
+                    "sortKey":709
+                },
+                {
+                    "Label": "S430 - HCD Canada GTO 52 - 0%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 0.1,
+                    "width": 40,
+                    "sortKey":710
+                },
+                {
+                    "Label": "S430 - HCD Canada QM 46 - 70%",
+                    "color": "#04B404",
+                    "depth": 10,
+                    "height": 7,
+                    "width": 40,
+                    "sortKey":711
+                }
+            ],
+            "Label": "S430 - HCD Canada",
+            "color": "#D7D345",
+            "sortKey": 7
+        },
+        {
+            "Buildings":  [
+                {
+                    "Label": "S310 - HPL Poland CD 74 - 270%",
+                    "color": "#FF0000",
+                    "depth": 10,
+                    "height": 27,
+                    "width": 40,
+                    "sortKey":801
+                },
+                {
+                    "Label": "S310 - HPL Poland CD 102 - 217%",
+                    "color": "#FF4000",
+                    "depth": 10,
+                    "height": 21.7,
+                    "width": 40,
+                    "sortKey":802
+                },
+                {
+                    "Label": "S310 - HPL Poland SM 52 - 0%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 0.1,
+                    "width": 40,
+                    "sortKey":803
+                },
+                {
+                    "Label": "S310 - HPL Poland SM 74 - 284%",
+                    "color": "#FF0000",
+                    "depth": 10,
+                    "height": 28.4,
+                    "width": 40,
+                    "sortKey":804
+                },
+                {
+                    "Label": "S310 - HPL Poland SM 102 - 0%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 0.1,
+                    "width": 40,
+                    "sortKey":805
+                },
+                {
+                    "Label": "S310 - HPL Poland XL 105 - 263%",
+                    "color": "#FF0000",
+                    "depth": 10,
+                    "height": 26.3,
+                    "width": 40,
+                    "sortKey":806
+                },
+                {
+                    "Label": "S310 - HPL Poland XL 145/162 - 0%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 0.1,
+                    "width": 40,
+                    "sortKey":807
+                },
+                {
+                    "Label": "S310 - HPL Poland PM 52",
+                    "color": "#8A0829",
+                    "depth": 0.1,
+                    "height": 0.1,
+                    "width": 0.1,
+                    "sortKey":808
+                },
+                {
+                    "Label": "S310 - HPL Poland PM 74 - 0%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 0.1,
+                    "width": 40,
+                    "sortKey":809
+                }
+            ],
+            "Label": "S310 - HPL Poland",
+            "color": "#C4BF31",
+            "sortKey": 8
+        },
+        {
+            "Buildings":  [
+                {
+                    "Label": "S020 - HAN Australia CD 74 - 76%",
+                    "color": "#A9F5A9",
+                    "depth": 10,
+                    "height": 7.6,
+                    "width": 40,
+                    "sortKey":901
+                },
+                {
+                    "Label": "S020 - HAN Australia CD 102 - 115%",
+                    "color": "#A9F5A9",
+                    "depth": 10,
+                    "height": 11.5,
+                    "width": 40,
+                    "sortKey":902
+                },
+                {
+                    "Label": "S020 - HAN Australia SM 52 - 38%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 3.8,
+                    "width": 40,
+                    "sortKey":903
+                },
+                {
+                    "Label": "S020 - HAN Australia SM 74 - 194%",
+                    "color": "#FF4000",
+                    "depth": 10,
+                    "height": 19.4,
+                    "width": 40,
+                    "sortKey":904
+                },
+                {
+                    "Label": "S020 - HAN Australia SM 102 - 79%",
+                    "color": "#A9F5A9",
+                    "depth": 10,
+                    "height": 7.9,
+                    "width": 40,
+                    "sortKey":905
+                },
+                {
+                    "Label": "S020 - HAN Australia XL 105 - 107%",
+                    "color": "#A9F5A9",
+                    "depth": 10,
+                    "height": 10.7,
+                    "width": 40,
+                    "sortKey":906
+                },
+                {
+                    "Label": "S020 - HAN Australia XL 145/162",
+                    "color": "#8A0829",
+                    "depth": 0.1,
+                    "height": 0.1,
+                    "width": 0.1,
+                    "sortKey": 907
+                },
+                {
+                    "Label": "S020 - HAN Australia PM 52 - 0%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 0.1,
+                    "width": 40,
+                    "sortKey":908
+                },
+                {
+                    "Label": "S020 - HAN Australia PM 74 - 0%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 0.1,
+                    "width": 40,
+                    "sortKey":909
+                },
+                {
+                    "Label": "S020 - HAN Australia GTO 52 - 461%",
+                    "color": "#8A0829",
+                    "depth": 10,
+                    "height": 46.1,
+                    "width": 40,
+                    "sortKey":910
+                }
+            ],
+            "Label": "S020 - HAN Australia",
+            "color": "#D1FF26",
+            "sortKey": 9
+        },
+        {
+            "Buildings":  [
+                {
+                    "Label": "S150 - HBR Brazil CD 74 - 0%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 0.1,
+                    "width": 40,
+                    "sortKey":1001
+                },
+                {
+                    "Label": "S150 - HBR Brazil CD 102 - 0%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 0.1,
+                    "width": 40,
+                    "sortKey":1002
+                },
+                {
+                    "Label": "S150 - HBR Brazil SM 52 - 284%",
+                    "color": "#DF013A",
+                    "depth": 10,
+                    "height": 28.4,
+                    "width": 40,
+                    "sortKey":1003
+                },
+                {
+                    "Label": "S150 - HBR Brazil SM 74 - 47%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 4.7,
+                    "width": 40,
+                    "sortKey":1004
+                },
+                {
+                    "Label": "S150 - HBR Brazil SM 102 - 0%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 0.1,
+                    "width": 40,
+                    "sortKey":1005
+                },
+                {
+                    "Label": "S150 - HBR Brazil XL 105 - 80%",
+                    "color": "#A9F5A9",
+                    "depth": 10,
+                    "height": 8,
+                    "width": 40,
+                    "sortKey":1006
+                },
+                {
+                    "Label": "S150 - HBR Brazil XL 145/162",
+                    "color": "#8A0829",
+                    "depth": 0.1,
+                    "height": 0.1,
+                    "width": 0.1,
+                    "sortKey":1007
+                },
+                {
+                    "Label": "S150 - HBR Brazil PM 52 - 0%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 0.1,
+                    "width": 40,
+                    "sortKey":1008
+                },
+                {
+                    "Label": "S150 - HBR Brazil Pm 74 - 0%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 0.1,
+                    "width": 40,
+                    "sortKey":1009
+                },
+                {
+                    "Label": "S150 - HBR Brazil GTO 52 - 0%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 0.1,
+                    "width": 40,
+                    "sortKey":1010
+                },
+                {
+                    "Label": "S150 - HBR Brazil QM 46",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 0.1,
+                    "width": 40,
+                    "sortKey":1011
+                }
+            ],
+            "Label": "S150 - HBR Brazil",
+            "color": "#D3F74E",
+            "sortKey": 10
+        },
+        {
+            "Buildings":  [
+                {
+                    "Label": "S170 - HDK Denmark CD 74 - 263%",
+                    "color": "#FF0000",
+                    "depth": 10,
+                    "height": 26.3,
+                    "width": 40,
+                    "sortKey":1101
+                },
+                {
+                    "Label": "S170 - HDK Denmark CD 102 - 0%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 0.1,
+                    "width": 40,
+                    "sortKey":1102
+                },
+                {
+                    "Label": "S170 - HDK Denmark SM 52 - 0%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 0.1,
+                    "width": 40,
+                    "sortKey":1103
+                },
+                {
+                    "Label": "S170 - HDK Denmark SM 74 - 0%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 0.1,
+                    "width": 40,
+                    "sortKey":1104
+                },
+                {
+                    "Label": "S170 - HDK Denmark SM 102 - 0%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 0.1,
+                    "width": 40,
+                    "sortKey":1105
+                },
+                {
+                    "Label": "S170 - HDK Denmark XL 105 - 64%",
+                    "color": "#04B404",
+                    "depth": 10,
+                    "height": 6.4,
+                    "width": 40,
+                    "sortKey":1106
+                }
+            ],
+            "Label": "S170 - HDK Denmark",
+            "color": "#B3CE53",
+            "sortKey": 11
+        },
+        {
+            "Buildings":  [
+                {
+                    "Label": "S200 - HSE Sweden CD 74 - 0%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 0.1,
+                    "width": 40,
+                    "sortKey":1201
+                },
+                {
+                    "Label": "S200 - HSE Sweden CD 102 - 0%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 0.1,
+                    "width": 40,
+                    "sortKey":1202
+                },
+                {
+                    "Label": "S200 - HSE Sweden SM 52 - 0%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 0.1,
+                    "width": 40,
+                    "sortKey":1203
+                },
+                {
+                    "Label": "S200 - HSE Sweden SM 74 - 0%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 0.1,
+                    "width": 40,
+                    "sortKey":1204
+                },
+                {
+                    "Label": "S200 - HSE Sweden SM 102 - 0%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 0.1,
+                    "width": 40,
+                    "sortKey":1205
+                },
+                {
+                    "Label": "S200 - HSE Sweden XL 105 - 0%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 0.1,
+                    "width": 40,
+                    "sortKey":1206
+                },
+                {
+                    "Label": "S200 - HSE Sweden Xl 145/162 - 0%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 0.1,
+                    "width": 40,
+                    "sortKey":1207
+                },
+                {
+                    "Label": "S200 - HSE Sweden PM 52",
+                    "color": "#8A0829",
+                    "depth": 0.1,
+                    "height": 0.1,
+                    "width": 0.1,
+                    "sortKey":1208
+                },
+                {
+                    "Label": "S200 - HSE Sweden PM 74",
+                    "color": "#8A0829",
+                    "depth": 0.1,
+                    "height": 0.1,
+                    "width": 0.1,
+                    "sortKey":1209
+                },
+                {
+                    "Label": "S200 - HSE Sweden GTO 52 - 0%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 0.1,
+                    "width": 40,
+                    "sortKey":1210
+                }
+            ],
+            "Label": "S200 - HSE Sweden",
+            "color": "#ACDC00",
+            "sortKey": 12
+        },
+        {
+            "Buildings":  [
+                {
+                    "Label": "S090 - HKR Korea CD 74 - 0%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 0.1,
+                    "width": 40,
+                    "sortKey":1301
+                },
+                {
+                    "Label": "S090 - HKR Korea CD 102 - 8%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 1.8,
+                    "width": 40,
+                    "sortKey":1302
+                },
+                {
+                    "Label": "S090 - HKR Korea SM 52 - 0%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 0.1,
+                    "width": 40,
+                    "sortKey":1303
+                },
+                {
+                    "Label": "S090 - HKR Korea SM 74 - 0%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 0.1,
+                    "width": 40,
+                    "sortKey":1304
+                },
+                {
+                    "Label": "S090 - HKR Korea SM 102 - 0%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 0.1,
+                    "width": 40,
+                    "sortKey":1305
+                },
+                {
+                    "Label": "S090 - HKR Korea XL 105 - 51%",
+                    "color": "#04B404",
+                    "depth": 10,
+                    "height": 5.1,
+                    "width": 40,
+                    "sortKey":1306
+                },
+                {
+                    "Label": "S090 - HKR Korea XL 145/162",
+                    "color": "#8A0829",
+                    "depth": 0.1,
+                    "height": 0.1,
+                    "width": 0.1,
+                    "sortKey":1307
+                },
+                {
+                    "Label": "S090 - HKR Korea PM 52",
+                    "color": "#8A0829",
+                    "depth": 0.1,
+                    "height": 0.1,
+                    "width": 0.1,
+                    "sortKey":1308
+                },
+                {
+                    "Label": "S090 - HKR Korea PM 74 - 0%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 0.1,
+                    "width": 40,
+                    "sortKey":1309
+                },
+                {
+                    "Label": "S090 - HKR Korea GTO 52 - 0%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 0.1,
+                    "width": 40,
+                    "sortKey":1310
+                }
+            ],
+            "Label": "S090 - HKR Korea",
+            "color": "#769701",
+            "sortKey": 13
+        },
+        {
+            "Buildings":  [
+                {
+                    "Label": "S030 - HNZ New Zealand CD 74 - 42%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 4.2,
+                    "width": 40,
+                    "sortKey":1401
+                },
+                {
+                    "Label": "S030 - HNZ New Zealand CD 102 - 0%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 0.1,
+                    "width": 40,
+                    "sortKey":1402
+                },
+                {
+                    "Label": "S030 - HNZ New Zealand SM 52 - 0%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 0.1,
+                    "width": 40,
+                    "sortKey":1403
+                },
+                {
+                    "Label": "S030 - HNZ New Zealand SM 74 - 0%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 0.1,
+                    "width": 40,
+                    "sortKey":1404
+                },
+                {
+                    "Label": "S030 - HNZ New Zealand SM 102 - 0%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 0.1,
+                    "width": 40,
+                    "sortKey":1405
+                },
+                {
+                    "Label": "S030 - HNZ New Zealand XL 105 - 0%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 0.1,
+                    "width": 40,
+                    "sortKey":1406
+                },
+                {
+                    "Label": "S030 - HNZ New Zealand XL 145/162",
+                    "color": "#8A0829",
+                    "depth": 0.1,
+                    "height": 0.1,
+                    "width": 0.1,
+                    "sortKey":1407
+                },
+                {
+                    "Label": "S030 - HNZ New Zealand PM 52",
+                    "color": "#8A0829",
+                    "depth": 0.1,
+                    "height": 0.1,
+                    "width": 0.1,
+                    "sortKey":1408
+                },
+                {
+                    "Label": "S030 - HNZ New Zealand PM 74 - 0%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 0.1,
+                    "width": 40,
+                    "sortKey":1409
+                },
+                {
+                    "Label": "S030 - HNZ New Zealand GTO 52 - 0%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 0.1,
+                    "width": 40,
+                    "sortKey":1410
+                },
+                {
+                    "Label": "S030 - HNZ New Zealand QM 46",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 0.1,
+                    "width": 40,
+                    "sortKey":1411
+                }
+            ],
+            "Label": "S030 - HNZ New Zealand",
+            "color": "#5C720A",
+            "sortKey": 14
+        },
+        {
+            "Buildings":  [
+                {
+                    "Label": "S060 - HIN India CD 74 - 0%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 0.1,
+                    "width": 40,
+                    "sortKey":1501
+                },
+                {
+                    "Label": "S060 - HIN India CD 102 - 30%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 3,
+                    "width": 40,
+                    "sortKey":1502
+                },
+                {
+                    "Label": "S060 - HIN India SM 52 . 0%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 0.1,
+                    "width": 40,
+                    "sortKey":1503
+                },
+                {
+                    "Label": "S060 - HIN India SM 74 - 0%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 0.1,
+                    "width": 40,
+                    "sortKey":1504
+                },
+                {
+                    "Label": "S060 - HIN India SM 102 - 0%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 0.1,
+                    "width": 40,
+                    "sortKey":1505
+                },
+                {
+                    "Label": "S060 - HIN India XL 105 - 0%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 0.1,
+                    "width": 40,
+                    "sortKey":1506
+                },
+                {
+                    "Label": "S060 - HIN India XL 145/162",
+                    "color": "#8A0829",
+                    "depth": 0.1,
+                    "height": 0.1,
+                    "width": 0.1,
+                    "sortKey":1507
+                },
+                {
+                    "Label": "S060 - HIN India PM 52 - 0%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 0.1,
+                    "width": 40,
+                    "sortKey":1508
+                },
+                {
+                    "Label": "S060 - HIN India PM 74 - 0%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 0.1,
+                    "width": 40,
+                    "sortKey":1509
+                },
+                {
+                    "Label": "S060 - HIN India GTO 52 - 0%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 0.1,
+                    "width": 40,
+                    "sortKey":1510
+                }
+            ],
+            "Label": "S060 - HIN India",
+            "color": "#A0FE2D",
+            "sortKey": 15
+        },
+        {
+            "Buildings":  [
+                {
+                    "Label": "S070 - HID Indonesia CD74 - 0%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 0.1,
+                    "width": 40,
+                    "sortKey":1601
+                },
+                {
+                    "Label": "S070 - HID Indonesia CD 102 - 0%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 0.1,
+                    "width": 40,
+                    "sortKey":1602
+                },
+                {
+                    "Label": "S070 - HID Indonesia SM 52 - 0%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 0.1,
+                    "width": 40,
+                    "sortKey":1603
+                },
+                {
+                    "Label": "S070 - HID Indonesia SM 74 - 0%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 0.1,
+                    "width": 40,
+                    "sortKey":1604
+                },
+                {
+                    "Label": "S070 - HID Indonesia SM 102 - 0%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 0.1,
+                    "width": 40,
+                    "sortKey":1605
+                },
+                {
+                    "Label": "S070 - HID Indonesia XL 105 - 0%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 0.1,
+                    "width": 40,
+                    "sortKey":1606
+                },
+                {
+                    "Label": "S070 - HID Indonesia XL 145/162 - 0%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 0.1,
+                    "width": 40,
+                    "sortKey":1607
+                },
+                {
+                    "Label": "S070 - HID Indonesia PM 52 - 0%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 0.1,
+                    "width": 40,
+                    "sortKey":1608
+                },
+                {
+                    "Label": "S070 - HID Indonesia PM 74",
+                    "color": "#8A0829",
+                    "depth": 0.1,
+                    "height": 0.1,
+                    "width": 0.1,
+                    "sortKey":1609
+                },
+                {
+                    "Label": "S070 - HID Indonesia GTO 52 - 0%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 0.1,
+                    "width": 40,
+                    "sortKey":1610
+                }
+            ],
+            "Label": "S070 - HID Indonesia",
+            "color": "#9DE93F",
+            "sortKey": 16
+        },
+        {
+            "Buildings":  [
+                {
+                    "Label": "S100 - HMY Malaysia CD 74 - 0%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 0.1,
+                    "width": 40,
+                    "sortKey":1701
+                },
+                {
+                    "Label": "S100 - HMY Malaysia CD 102 - 0%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 0.1,
+                    "width": 40,
+                    "sortKey":1702
+                },
+                {
+                    "Label": "S100 - HMY Malaysia SM 52 - 0%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 0.1,
+                    "width": 40,
+                    "sortKey":1703
+                },
+                {
+                    "Label": "S100 - HMY Malaysia SM 74 - 0%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 0.1,
+                    "width": 40,
+                    "sortKey":1704
+                },
+                {
+                    "Label": "S100 - HMY Malaysia SM 102 - 0%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 0.1,
+                    "width": 40,
+                    "sortKey":1705
+                },
+                {
+                    "Label": "S100 - HMY Malaysia Xl 105 - 0%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 0.1,
+                    "width": 40,
+                    "sortKey":1706
+                },
+                {
+                    "Label": "S100 - HMY Malaysia XL 145/162 - 0%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 0.1,
+                    "width": 40,
+                    "sortKey":1707
+                },
+                {
+                    "Label": "S100 - HMY Malaysia PM 52 - 0%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 0.1,
+                    "width": 40,
+                    "sortKey":1708
+                },
+                {
+                    "Label": "S100 - HMY Malaysia PM 74 - 0%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 0.1,
+                    "width": 40,
+                    "sortKey":1709
+                },
+                {
+                    "Label": "S100 - HMY Malaysia GTO 52 - 0%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 0.1,
+                    "width": 40,
+                    "sortKey":1710
+                }
+            ],
+            "Label": "S100 - HMY Malaysia",
+            "color": "#80D518",
+            "sortKey": 17
+        },
+        {
+            "Buildings":  [
+                {
+                    "Label": "S110 - HPH Philippines CD74 - 0%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 0.1,
+                    "width": 40,
+                    "sortKey":1801
+                },
+                {
+                    "Label": "S110 - HPH Philippines CD 102 - 0%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 0.1,
+                    "width": 40,
+                    "sortKey":1802
+                },
+                {
+                    "Label": "S110 - HPH Philippines SM 52 - 0%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 0.1,
+                    "width": 40,
+                    "sortKey":1803
+                },
+                {
+                    "Label": "S110 - HPH Philippines SM 74 - 0%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 0.1,
+                    "width": 40,
+                    "sortKey":1804
+                },
+                {
+                    "Label": "S110 - HPH Philippines SM 102 - 0%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 0.1,
+                    "width": 40,
+                    "sortKey":1805
+                },
+                {
+                    "Label": "S110 - HPH Philippines XL 105 - 0%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 0.1,
+                    "width": 40,
+                    "sortKey":1806
+                },
+                {
+                    "Label": "S110 - HPH Philippines XL 145/162",
+                    "color": "#8A0829",
+                    "depth": 0.1,
+                    "height": 0.1,
+                    "width": 0.1,
+                    "sortKey":1807
+                },
+                {
+                    "Label": "S110 - HPH Philippines PM 52 - 0%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 0.1,
+                    "width": 40,
+                    "sortKey":1808
+                }
+            ],
+            "Label": "S110 - HPH Philippines",
+            "color": "#5D9B11",
+            "sortKey": 18
+        },
+        {
+            "Buildings":  [
+                {
+                    "Label": "S120 - Singapore CD 74 - 0%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 0.1,
+                    "width": 40,
+                    "sortKey":1901
+                },
+                {
+                    "Label": "S120 - Singapore CD 102 - 47%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 4.7,
+                    "width": 40,
+                    "sortKey":1902
+                },
+                {
+                    "Label": "S120 - Singapore SM 52 - 0 %",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 0.1,
+                    "width": 40,
+                    "sortKey":1903
+                },
+                {
+                    "Label": "S120 - Singapore SM 74 - 0%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 0.1,
+                    "width": 40,
+                    "sortKey":1904
+                },
+                {
+                    "Label": "S120 - Singapore SM 102 - 92%",
+                    "color": "#A9F5A9",
+                    "depth": 10,
+                    "height": 9.2,
+                    "width": 40,
+                    "sortKey":1905
+                },
+                {
+                    "Label": "S120 - Singapore XL 105 - 0%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 0.1,
+                    "width": 40,
+                    "sortKey":1906
+                },
+                {
+                    "Label": "S120 - Singapore XL 145/162",
+                    "color": "#8A0829",
+                    "depth": 0.1,
+                    "height": 0.1,
+                    "width": 0.1,
+                    "sortKey":1907
+                },
+                {
+                    "Label": "S120 - Singapore PM 52 - 0%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 0.1,
+                    "width": 40,
+                    "sortKey":1908
+                },
+                {
+                    "Label": "S120 - Singapore PM 74 - 0%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 0.1,
+                    "width": 40,
+                    "sortKey":1909
+                },
+                {
+                    "Label": "S120 - Singapore GTO 52 - 0%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 0.1,
+                    "width": 40,
+                    "sortKey":1910
+                }
+            ],
+            "Label": "S120 - Singapore",
+            "color": "#457C02",
+            "sortKey": 19
+        },
+        {
+            "Buildings":  [
+                {
+                    "Label": "S130 - HTW Taiwan CD 74 - 263%",
+                    "color": "#FF0000",
+                    "depth": 10,
+                    "height": 26.3,
+                    "width": 40,
+                    "sortKey":2001
+                },
+                {
+                    "Label": "S130 - HTW Taiwan CD 102 - 0%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 0.1,
+                    "width": 40,
+                    "sortKey":2002
+                },
+                {
+                    "Label": "S130 - HTW Taiwan SM 52 - 0%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 0.1,
+                    "width": 40,
+                    "sortKey":2003
+                },
+                {
+                    "Label": "S130 - HTW Taiwan SM 74 - 0%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 0.1,
+                    "width": 40,
+                    "sortKey":2004
+                },
+                {
+                    "Label": "S130 - HTW Taiwan Sm 102 - 50%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 5,
+                    "width": 40,
+                    "sortKey":2005
+                },
+                {
+                    "Label": "S130 - HTW Taiwan XL 105 - 0%",
+                    "color": "",
+                    "depth": 10,
+                    "height": 0.1,
+                    "width": 40,
+                    "sortKey":2006
+                }
+            ],
+            "Label": "S130 - HTW Taiwan",
+            "color": "#3A620A",
+            "sortKey": 20
+        },
+        {
+            "Buildings":  [
+                {
+                    "Label": "S140 - Thailand CD 74 - 0%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 0.1,
+                    "width": 40,
+                    "sortKey":2101
+                },
+                {
+                    "Label": "S140 - Thailand CD 102 - 0%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 0.1,
+                    "width": 40,
+                    "sortKey":2102
+                },
+                {
+                    "Label": "S140 - Thailand SM 52 - 0%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 0.1,
+                    "width": 40,
+                    "sortKey":2103
+                },
+                {
+                    "Label": "S140 - Thailand SM 74 - 0%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 0.1,
+                    "width": 40,
+                    "sortKey":2104
+                },
+                {
+                    "Label": "S140 - Thailand SM 102 - 0%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 0.1,
+                    "width": 40,
+                    "sortKey":2105
+                },
+                {
+                    "Label": "S140 - Thailand XL 105 - 0%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 0.1,
+                    "width": 40,
+                    "sortKey":2106
+                }
+            ],
+            "Label": "S140 - Thailand",
+            "color": "#2B4B03",
+            "sortKey": 21
+        },
+        {
+            "Buildings":  [
+                {
+                    "Label": "S410 - HZA South Africa CD 74 - 0%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 0.1,
+                    "width": 40,
+                    "sortKey":2201
+                },
+                {
+                    "Label": "S410 - HZA South Africa CD 102 - 178%",
+                    "color": "#FF4000",
+                    "depth": 10,
+                    "height": 17.8,
+                    "width": 40,
+                    "sortKey":2202
+                },
+                {
+                    "Label": "S410 - HZA South Africa SM 52 - 0%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 0.1,
+                    "width": 40,
+                    "sortKey":2203
+                },
+                {
+                    "Label": "S410 - HZA South Africa SM 74 - 0%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 0.1,
+                    "width": 40,
+                    "sortKey":2204
+                },
+                {
+                    "Label": "S410 - HZA South Africa SM 102 - 0%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 0.1,
+                    "width": 40,
+                    "sortKey":2205
+                },
+                {
+                    "Label": "S410 - HZA South Africa XL 105 - 0%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 0.1,
+                    "width": 40,
+                    "sortKey":2206
+                },
+                {
+                    "Label": "S410 - HZA South Africa XL 145/162",
+                    "color": "#8A0829",
+                    "depth": 0.1,
+                    "height": 0.1,
+                    "width": 0.1,
+                    "sortKey":2207
+                },
+                {
+                    "Label": "S410 - HZA South Africa PM 52 - 0%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 0.1,
+                    "width": 40,
+                    "sortKey":2208
+                }
+            ],
+            "Label": "S410 - HZA South Africa",
+            "color": "#31E400",
+            "sortKey": 22
+        },
+        {
+            "Buildings":  [
+                {
+                    "Label": "S440 - HMX Mexico CD 74 - 0%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 0.1,
+                    "width": 40,
+                    "sortKey":2301
+                },
+                {
+                    "Label": "S440 - HMX Mexico CD 102 - 0%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 0.1,
+                    "width": 40,
+                    "sortKey":2302
+                },
+                {
+                    "Label": "S440 - HMX Mexico SM 52 - 0%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 0.1,
+                    "width": 40,
+                    "sortKey":2303
+                },
+                {
+                    "Label": "S440 - HMX Mexico SM 74 - 0%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 0.1,
+                    "width": 40,
+                    "sortKey":2304
+                },
+                {
+                    "Label": "S440 - HMX Mexico SM 102 - 0%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 0.1,
+                    "width": 40,
+                    "sortKey":2305
+                },
+                {
+                    "Label": "S440 - HMX Mexico XL 105 - 0%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 0.1,
+                    "width": 40,
+                    "sortKey":2306
+                },
+                {
+                    "Label": "S440 - HMX Mexico XL 145/162",
+                    "color": "#8A0829",
+                    "depth": 0.1,
+                    "height": 0.1,
+                    "width": 0.1,
+                    "sortKey":2307
+                },
+                {
+                    "Label": "S440 - HMX Mexico PM 52 - 0%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 0.1,
+                    "width": 40,
+                    "sortKey":2308
+                },
+                {
+                    "Label": "S440 - HMX Mexico PM 74",
+                    "color": "#8A0829",
+                    "depth": 0.1,
+                    "height": 0.1,
+                    "width": 0.1,
+                    "sortKey":2309
+                },
+                {
+                    "Label": "S440 - HMX Mexico GTO 52 - 0%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 0.1,
+                    "width": 40,
+                    "sortKey":2310
+                }
+            ],
+            "Label": "S440 - HMX Mexico",
+            "color": "#28BA00",
+            "sortKey": 23
+        },
+        {
+            "Buildings":  [
+                {
+                    "Label": "SB20 - HHK CD 74 - 0%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 0.1,
+                    "width": 40,
+                    "sortKey":2401
+                },
+                {
+                    "Label": "SB20 - HHK CD 102 - 0%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 0.1,
+                    "width": 40,
+                    "sortKey":2402
+                },
+                {
+                    "Label": "SB20 - HHK SM 52 - 0%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 0.1,
+                    "width": 40,
+                    "sortKey":2403
+                },
+                {
+                    "Label": "SB20 - HHK SM 74 - 230%",
+                    "color": "#FF4000",
+                    "depth": 10,
+                    "height": 23,
+                    "width": 40,
+                    "sortKey":2404
+                },
+                {
+                    "Label": "SB20 - HHK SM 102 - 58%",
+                    "color": "#04B404",
+                    "depth": 10,
+                    "height": 5.8,
+                    "width": 40,
+                    "sortKey":2405
+                },
+                {
+                    "Label": "SB20 - HHK XL 105",
+                    "color": "#8A0829",
+                    "depth": 0.1,
+                    "height": 0.1,
+                    "width": 0.1,
+                    "sortKey":2406
+                },
+                {
+                    "Label": "SB20 - HHK XL 145/162",
+                    "color": "#8A0829",
+                    "depth": 0.1,
+                    "height": 0.1,
+                    "width": 0.1,
+                    "sortKey":2407
+                },
+                {
+                    "Label": "SB20 - HHK PM 52 - 0%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 0.1,
+                    "width": 40,
+                    "sortKey":2408
+                },
+                {
+                    "Label": "SB20 - HHK PM 74 - 0%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 0.1,
+                    "width": 40,
+                    "sortKey":2409
+                },
+                {
+                    "Label": "SB20 - HHK GTO 52 - 0%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 0.1,
+                    "width": 40,
+                    "sortKey":2410
+                }
+            ],
+            "Label": "SB20 - HHK",
+            "color": "#219600",
+            "sortKey": 24
+        },
+        {
+            "Buildings":  [
+                {
+                    "Label": "SB30 - HGBL CD 74 - 0%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 0.1,
+                    "width": 40,
+                    "sortKey":2501
+                },
+                {
+                    "Label": "SB30 - HGBL CD 102 - 44%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 4.4,
+                    "width": 40,
+                    "sortKey":2502
+                },
+                {
+                    "Label": "SB30 - HGBL SM 52",
+                    "color": "#8A0829",
+                    "depth": 0.1,
+                    "height": 0.1,
+                    "width": 0.1,
+                    "sortKey":2503
+                },
+                {
+                    "Label": "SB30 - HGBL SM 74 - 0%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 0.1,
+                    "width": 40,
+                    "sortKey":2504
+                },
+                {
+                    "Label": "SB30 - HGBL SM 102 - 0%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 0.1,
+                    "width": 40,
+                    "sortKey":2505
+                },
+                {
+                    "Label": "SB30 - HGBL XL 105 - 0%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 0.1,
+                    "width": 40,
+                    "sortKey":2506
+                }
+            ],
+            "Label": "SB30 - HGBL",
+            "color": "#197000",
+            "sortKey": 25
+        },
+        {
+            "Buildings":  [
+                {
+                    "Label": "SB40 - HTL CD 74 - 0%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 0.1,
+                    "width": 40,
+                    "sortKey":2601
+                },
+                {
+                    "Label": "SB40 - HTL CD 102 - 0%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 0.1,
+                    "width": 40,
+                    "sortKey":2602
+                },
+                {
+                    "Label": "SB40 - HTL SM 52 - 0%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 0.1,
+                    "width": 40,
+                    "sortKey":2603
+                },
+                {
+                    "Label": "SB40 - HTL SM 74 - 0%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 0.1,
+                    "width": 40,
+                    "sortKey":2604
+                },
+                {
+                    "Label": "SB40 - HTL SM 102 - 0%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 0.1,
+                    "width": 40,
+                    "sortKey":2605
+                }
+            ],
+            "Label": "SB40 - HTL",
+            "color": "#276A14",
+            "sortKey": 26
+        },
+        {
+            "Buildings":  [
+                {
+                    "Label": "SB50 - HITSL CD 74 - 0%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 0.1,
+                    "width": 40,
+                    "sortKey":2701
+                },
+                {
+                    "Label": "SB50 - HITSL CD 102 - 68%",
+                    "color": "#04B404",
+                    "depth": 10,
+                    "height": 6.8,
+                    "width": 40,
+                    "sortKey":2702
+                },
+                {
+                    "Label": "SB50 - HITSL SM 52 - 0%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 0.1,
+                    "width": 40,
+                    "sortKey":2703
+                },
+                {
+                    "Label": "SB50 - HITSL SM 74 - 0%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 0.1,
+                    "width": 40,
+                    "sortKey":2704
+                },
+                {
+                    "Label": "SB50 - HITSL SM 102 - 0%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 0.1,
+                    "width": 40,
+                    "sortKey":2705
+                },
+                {
+                    "Label": "SB50 - HITSL XL 105 - 0%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 0.1,
+                    "width": 40,
+                    "sortKey":2706
+                },
+                {
+                    "Label": "SB50 - HITSL XL 145/162 - 0%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 0.1,
+                    "width": 40,
+                    "sortKey":2707
+                },
+                {
+                    "Label": "SB50 - HITSL PM 52",
+                    "color": "#8A0829",
+                    "depth": 0.1,
+                    "height": 0.1,
+                    "width": 0.1,
+                    "sortKey":2708
+                },
+                {
+                    "Label": "SB50 - HITSL PM 74 - 0%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 0.1,
+                    "width": 40,
+                    "sortKey":2709
+                },
+                {
+                    "Label": "SB50 - HITSL GTO 52 - 0%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 0.1,
+                    "width": 40,
+                    "sortKey":2710
+                }
+            ],
+            "Label": "SB50 - HITSL",
+            "color": "#2E5A22",
+            "sortKey": 27
+        },
+        {
+            "Buildings": [
+                {
+                    "Label": "SB60 - HSL CD 74 - 80%",
+                    "color": "#A9F5A9",
+                    "depth": 10,
+                    "height": 8,
+                    "width": 40,
+                    "sortKey": 2801
+                },
+                {
+                    "Label": "SB60 - HSL CD 102 - 24%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 2.4,
+                    "width": 40,
+                    "sortKey": 2802
+                },
+                {
+                    "Label": "SB60 - HSL SM 52 - 0%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 0.1,
+                    "width": 40,
+                    "sortKey": 2803
+                },
+                {
+                    "Label": "SB60 - HSL SM 74 - 0%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 0.1,
+                    "width": 40,
+                    "sortKey": 2804
+                },
+                {
+                    "Label": "SB60 - HSL SM 102 - 0%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 0.1,
+                    "width": 40,
+                    "sortKey": 2805
+                },
+                {
+                    "Label": "SB60 - HSL XL 105 - 614%",
+                    "color": "#3B0B17",
+                    "depth": 10,
+                    "height": 61.4,
+                    "width": 40,
+                    "sortKey": 2806
+                },
+                {
+                    "Label": "SB60 - HSL XL 145/162 - 0%",
+                    "color": "#0000FF",
+                    "depth": 10,
+                    "height": 0.1,
+                    "width": 40,
+                    "sortKey": 2807
+                }
+            ],
+            "Label": "SB60 - HSL",
+            "color": "#0B2C02",
+            "sortKey": 28
+        }
+        ],
+    "Label": "SSU & EquFamily",
+    "color": "#BDBDBD",
+    "sorted": false,
+    "isTable": true,
+    "columns": ["CD 74", "CD 102", "SM 52", "SM 74", "SM 102", "XL 105", "XL 145/162", "PM 52", "PM 74", "GTO 52", "QM 46"]
+}

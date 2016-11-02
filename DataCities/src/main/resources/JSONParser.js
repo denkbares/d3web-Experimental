@@ -2,12 +2,24 @@
  * Created by Lea on 30.05.2016.
  */
 //bgz_city/bgz_city_sample
-function start (){
-  readTextFile("Samples/bgz_city/bgz_city_full_colorsample3.json", function(text){
+function start(){
+  if(json == undefined) {
+    startParser();
+  }
+  else startExistingJson();
+}
+
+function startParser (){
+  readTextFile("Samples/table_sample.json", function(text){
     var json = JSON.parse(text);
     createCityFromJSON(json);
   });
 }
+
+function startExistingJson (){
+  createCityFromJSON(json);
+}
+
 function createCityFromJSON (json){
   init();
   var color;
@@ -15,10 +27,10 @@ function createCityFromJSON (json){
     color = json.color;
   }
   else color = "#002D29";
-  var city = new City(1, 2, json.Label, color);
+  var city = new City(40, 40, json.Label, color);
   //Go through the City's districts
   getDistricts(json, city);
-  city.render(json.sorted);
+  city.render(json.sorted, json.isTabel, json.columns);
 
 
   render();
