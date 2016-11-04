@@ -1,104 +1,104 @@
 {
     "Districts": [
         {
-         "Buildings":  [
-             {
-                 "Label": {"text": "HDD-Germany-CD-74.html", "isURL": true},
-                 "color": "#2EFE2E",
-                 "depth": 20,
-                 "height": 10.7,
-                 "width": 40,
-                 "sortKey": 101
-             },
-             {
-                 "Label": {"text": "HDD-Germany-CD-102.html", "isURL": true},
-                 "color": "#FF8000",
-                 "depth": 20,
-                 "height": 15.3,
-                 "width": 40,
-                 "sortKey": 102
-             },
-             {
-                 "Label": {"text": "HDD-Germany-SM-52.html", "isURL": true},
+            "Buildings":  [
+                {
+                    "Label": {"text": "HDD-Germany-CD-74", "url": "HDD-Germany-CD-74.html"},
+                    "color": "#2EFE2E",
+                    "depth": 20,
+                    "height": 10.7,
+                    "width": 40,
+                    "sortKey": 101
+                },
+                {
+                    "Label": {"text": "HDD-Germany-CD-102", "url": "HDD-Germany-CD-102.html"},
+                    "color": "#FF8000",
+                    "depth": 20,
+                    "height": 15.3,
+                    "width": 40,
+                    "sortKey": 102
+                },
+                {
+                    "Label": {"text": "HDD-Germany-SM-52", "url": "HDD-Germany-SM-52.html"},
 
-                 "color": "#F7FE2E",
-                 "depth": 20,
-                 "height": 12.4,
-                 "width": 40,
-                 "sortKey": 103
-             },
-             {
-                 "Label": {"text": "HDD-Germany-SM-74.html", "isURL": true},
+                    "color": "#F7FE2E",
+                    "depth": 20,
+                    "height": 12.4,
+                    "width": 40,
+                    "sortKey": 103
+                },
+                {
+                    "Label": {"text": "HDD-Germany-SM-74", "url": "HDD-Germany-SM-74.html"},
 
-                 "color": "#088A08",
-                 "depth": 20,
-                 "height": 7.7,
-                 "width": 40,
-                 "sortKey": 104
-             },
-             {
-                 "Label": {"text": "HDD-Germany-SM-102.html", "isURL": true},
+                    "color": "#088A08",
+                    "depth": 20,
+                    "height": 7.7,
+                    "width": 40,
+                    "sortKey": 104
+                },
+                {
+                    "Label": {"text": "HDD-Germany-SM-102", "url": "HDD-Germany-SM-102.html"},
 
-                 "color": "#FF8000",
-                 "depth": 20,
-                 "height": 14.7,
-                 "width": 40,
-                 "sortKey": 105
-             },
-             {
-                 "Label": {"text": "HDD-Germany-XL-105.html", "isURL": true},
+                    "color": "#FF8000",
+                    "depth": 20,
+                    "height": 14.7,
+                    "width": 40,
+                    "sortKey": 105
+                },
+                {
+                    "Label": {"text": "HDD-Germany-XL-105", "url": "HDD-Germany-XL-105.html"},
 
-                 "color": "#2EFE2E",
-                 "depth": 20,
-                 "height": 10.3,
-                 "width": 40,
-                 "sortKey": 106
-             },
-             {
-                 "Label": {"text": "HDD-Germany-XL-145/162.html", "isURL": true},
+                    "color": "#2EFE2E",
+                    "depth": 20,
+                    "height": 10.3,
+                    "width": 40,
+                    "sortKey": 106
+                },
+                {
+                    "Label": {"text": "HDD-Germany-XL-145/162", "url": "HDD-Germany-XL-145/162.html"},
 
-                 "color": "#2EFE2E",
-                 "depth": 20,
-                 "height": 10.2,
-                 "width": 40,
-                 "sortKey": 107
-             },
-             {
-                 "Label": {"text": "HDD-Germany-PM-52", "isURL": true},
+                    "color": "#2EFE2E",
+                    "depth": 20,
+                    "height": 10.2,
+                    "width": 40,
+                    "sortKey": 107
+                },
+                {
+                    "Label": {"text": "HDD-Germany-PM-52"},
 
-                 "color": "#E6F8E0",
-                 "depth": 20,
-                 "height": 0.1,
-                 "width": 40,
-                 "sortKey": 108
-             },
-             {
-                 "Label": {"text": "HDD-Germany-PM-74.html", "isURL": true},
+                    "color": "#E6F8E0",
+                    "depth": 20,
+                    "height": 0.1,
+                    "width": 40,
+                    "sortKey": 108
+                },
+                {
+                    "Label": {"text": "HDD-Germany-PM-74.", "url": "HDD-Germany-PM-74.html"},
 
-                 "color": "#FF0000",
-                 "depth": 20,
-                 "height": 18.4,
-                 "width": 40,
-                 "sortKey": 109
-             },
-             {
-                 "Label": {"text": "HDD-Germany-GTO-52.html", "isURL": true},
-                 "color": "#E6F8E0",
-                 "depth": 20,
-                 "height": 0.1,
-                 "width": 40,
-                 "sortKey": 110
-             },
-             {
-                 "Label": {"text": "HDD-Germany-QM-46.html", "isURL": true},
-                 "color": "#E6F8E0",
-                 "depth": 20,
-                 "height": 5,
-                 "width": 40,
-                 "sortKey": 111
-             }
-         ],
-            "Label": {"text": "S190 - HDD Germany", "isURL": false},
+                    "color": "#FF0000",
+                    "depth": 20,
+                    "height": 18.4,
+                    "width": 40,
+                    "sortKey": 109
+                },
+                {
+                    "Label": {"text": "HDD-Germany-GTO-52", "url": "HDD-Germany-GTO-52.html"},
+                    "color": "#E6F8E0",
+                    "depth": 20,
+                    "height": 0.1,
+                    "width": 40,
+                    "sortKey": 110
+                },
+                {
+                    "Label": {"text": "HDD-Germany-QM-46", "url": "HDD-Germany-QM-46.html"},
+                    "color": "#E6F8E0",
+                    "depth": 20,
+                    "height": 5,
+                    "width": 40,
+                    "sortKey": 111
+                }
+            ],
+            "Label": {"text": "S190 - HDD Germany"},
 
             "color": "#585858",
             "sortKey": 1
@@ -106,7 +106,7 @@
         {
             "Buildings":  [
                 {
-                    "Label": {"text": "HJP-Japan-CD-74.html", "isURL": true},
+                    "Label": {"text": "HJP-Japan-CD-74", "url": "HJP-Japan-CD-74.html"},
                     "color": "#FF0000",
                     "depth": 20,
                     "height": 22.6,
@@ -114,7 +114,7 @@
                     "sortKey": 201
                 },
                 {
-                    "Label": {"text": "HJP-Japan-CD-102.html", "isURL": true},
+                    "Label": {"text": "HJP-Japan-CD-102", "url": "HJP-Japan-CD-102.html"},
                     "color": "#F7FE2E",
                     "depth": 20,
                     "height": 14,
@@ -122,7 +122,7 @@
                     "sortKey": 202
                 },
                 {
-                    "Label": {"text": "HJP-Japan-SM-52.html", "isURL": true},
+                    "Label": {"text": "HJP-Japan-SM-52", "url": "HJP-Japan-SM-52.html"},
                     "color": "#2EFE2E",
                     "depth": 20,
                     "height": 10.2,
@@ -130,7 +130,7 @@
                     "sortKey": 203
                 },
                 {
-                    "Label": {"text": "HJP-Japan-SM-74.html", "isURL": true},
+                    "Label": {"text": "HJP-Japan-SM-74", "url": "HJP-Japan-SM-74.html"},
                     "color": "#8904B1",
                     "depth": 20,
                     "height": 27,
@@ -138,7 +138,7 @@
                     "sortKey": 204
                 },
                 {
-                    "Label": {"text": "HJP-Japan-SM-102.html", "isURL": true},
+                    "Label": {"text": "HJP-Japan-SM-102", "url": "HJP-Japan-SM-102.html"},
                     "color": "#F7FE2E",
                     "depth": 20,
                     "height": 13,
@@ -146,7 +146,7 @@
                     "sortKey": 205
                 },
                 {
-                    "Label": {"text": "HJP-Japan-XL-105.html", "isURL": true},
+                    "Label": {"text": "HJP-Japan-XL-105", "url": "HJP-Japan-XL-105.html"},
                     "color": "#04B404",
                     "depth": 20,
                     "height": 7,
@@ -154,7 +154,7 @@
                     "sortKey": 206
                 },
                 {
-                    "Label": {"text": "HJP-Japan-XL-145/162.html", "isURL": true},
+                    "Label": {"text": "HJP-Japan-XL-145/162", "url": "HJP-Japan-XL-145/162.html"},
                     "color": "#8904B1",
                     "depth": 20,
                     "height": 67,
@@ -162,7 +162,7 @@
                     "sortKey": 207
                 },
                 {
-                    "Label": {"text": "HJP-Japan-PM-52.html", "isURL": true},
+                    "Label": {"text": "HJP-Japan-PM-52", "url": "HJP-Japan-PM-52.html"},
                     "color": "#E6F8E0",
                     "depth": 20,
                     "height": 0.1,
@@ -170,7 +170,7 @@
                     "sortKey": 208
                 },
                 {
-                    "Label": {"text": "HJP-Japan-PM-74.html", "isURL": true},
+                    "Label": {"text": "HJP-Japan-PM-74", "url": "HJP-Japan-PM-74.html"},
                     "color": "#8904B1",
                     "depth": 20,
                     "height": 46.1,
@@ -178,7 +178,7 @@
                     "sortKey": 209
                 },
                 {
-                    "Label": {"text": "HJP-Japan-GTO-52.html", "isURL": true},
+                    "Label": {"text": "HJP-Japan-GTO-52", "url": "HJP-Japan-GTO-52.html"},
                     "color": "#DF013A",
                     "depth": 20,
                     "height": 30.7,
@@ -186,7 +186,7 @@
                     "sortKey": 210
                 },
                 {
-                    "Label": {"text": "HJP-Japan-QM-46.html", "isURL": true},
+                    "Label": {"text": "HJP-Japan-QM-46", "url": "HJP-Japan-QM-46.html"},
                     "color": "#FF8000",
                     "depth": 20,
                     "height": 5,
@@ -194,7 +194,7 @@
                     "sortKey": 211
                 }
             ],
-            "Label": {"text": "S080 - HJP Japan", "isURL": false},
+            "Label": {"text": "S080 - HJP Japan"},
 
             "color": "#2E2E2E",
             "sortKey" : 2
@@ -202,7 +202,7 @@
         {
             "Buildings":  [
                 {
-                    "Label": {"text": "HUS-U.S.A.-CD-74.html", "isURL": true},
+                    "Label": {"text": "HUS-U.S.A.-CD-74", "url": "HUS-U.S.A.-CD-74.html"},
                     "color": "#FF0000",
                     "depth": 20,
                     "height": 31.4,
@@ -210,7 +210,7 @@
                     "sortKey": 301
                 },
                 {
-                    "Label": {"text": "HUS-U.S.A.-CD-102.html", "isURL": true},
+                    "Label": {"text": "HUS-U.S.A.-CD-102", "url": "HUS-U.S.A.-CD-102.html"},
                     "color": "#FF0000",
                     "depth": 20,
                     "height": 18.4,
@@ -218,7 +218,7 @@
                     "sortKey": 302
                 },
                 {
-                    "Label": {"text": "HUS-U.S.A.-SM-52.html", "isURL": true},
+                    "Label": {"text": "HUS-U.S.A.-SM-52", "url": "HUS-U.S.A.-SM-52.htm"},
                     "color": "#FF0000",
                     "depth": 20,
                     "height": 18.4,
@@ -226,7 +226,7 @@
                     "sortKey": 303
                 },
                 {
-                    "Label": {"text": "HUS-U.S.A.-SM-74.html", "isURL": true},
+                    "Label": {"text": "HUS-U.S.A.-SM-74", "url": "HUS-U.S.A.-SM-74.html"},
                     "color": "#FF8000",
                     "depth": 20,
                     "height": 17,
@@ -234,7 +234,7 @@
                     "sortKey": 304
                 },
                 {
-                    "Label": {"text": "HUS-U.S.A.-SM-102.html", "isURL": true},
+                    "Label": {"text": "HUS-U.S.A.-SM-102", "url": "HUS-U.S.A.-SM-102.html"},
                     "color": "#2EFE2E",
                     "depth": 20,
                     "height": 10.7,
@@ -242,7 +242,7 @@
                     "sortKey": 305
                 },
                 {
-                    "Label": {"text": "HUS-U.S.A.-XL-105.html", "isURL": true},
+                    "Label": {"text": "HUS-U.S.A.-XL-105", "url": "HUS-U.S.A.-XL-105.html"},
                     "color": "#F7FE2E",
                     "depth": 20,
                     "height": 13.9,
@@ -250,7 +250,7 @@
                     "sortKey": 306
                 },
                 {
-                    "Label": {"text": "HUS-U.S.A.-XL-145/162.html", "isURL": true},
+                    "Label": {"text": "HUS-U.S.A.-XL-145/162", "url": "HUS-U.S.A.-XL-145/162.html"},
                     "color": "#FF0000",
                     "depth": 20,
                     "height": 28,
@@ -258,7 +258,7 @@
                     "sortKey": 307
                 },
                 {
-                    "Label": {"text": "HUS-U.S.A.-PM-52.html", "isURL": true},
+                    "Label": {"text": "HUS-U.S.A.-PM-52", "url": "HUS-U.S.A.-PM-52.html"},
                     "color": "#8904B1",
                     "depth": 20,
                     "height": 92.2,
@@ -266,7 +266,7 @@
                     "sortKey": 308
                 },
                 {
-                    "Label": {"text": "HUS-U.S.A.-PM-74.html", "isURL": true},
+                    "Label": {"text": "HUS-U.S.A.-PM-74", "url": "HUS-U.S.A.-PM-74.html"},
                     "color": "#E6F8E0",
                     "depth": 20,
                     "height": 0.1,
@@ -274,7 +274,7 @@
                     "sortKey": 309
                 },
                 {
-                    "Label": {"text": "HUS-U.S.A.-GTO-52.html", "isURL": true},
+                    "Label": {"text": "HUS-U.S.A.-GTO-52", "url": "HUS-U.S.A.-GTO-52.html"},
                     "color": "#8904B1",
                     "depth": 20,
                     "height": 61.4,
@@ -282,7 +282,7 @@
                     "sortKey": 310
                 },
                 {
-                    "Label": {"text": "HUS-U.S.A.-QM-46.html", "isURL": true},
+                    "Label": {"text": "HUS-U.S.A.-QM-46", "url": "HUS-U.S.A.-QM-46.html"},
                     "color": "#FF8000",
                     "depth": 20,
                     "height": 16.8,
@@ -290,7 +290,7 @@
                     "sortKey": 311
                 }
             ],
-            "Label": {"text": "S450 - HUS - U.S.A.", "isURL": false},
+            "Label": {"text": "S450 - HUS - U.S.A."},
 
             "color": "#585858",
             "sortKey": 3
@@ -298,7 +298,7 @@
         {
             "Buildings":  [
                 {
-                    "Label": {"text": "HUK-United-Kingdom-CD-74.html", "isURL": true},
+                    "Label": {"text": "HUK-United-Kingdom-CD-74", "url": "HUK-United-Kingdom-CD-74.html"},
                     "color": "#2EFE2E",
                     "depth": 20,
                     "height": 8.8,
@@ -306,7 +306,7 @@
                     "sortKey":401
                 },
                 {
-                    "Label": {"text": "HUK-United-Kingdom-CD-102.html", "isURL": true},
+                    "Label": {"text": "HUK-United-Kingdom-CD-102", "url": "HUK-United-Kingdom-CD-102.html"},
                     "color": "#088A08",
                     "depth": 20,
                     "height": 4,
@@ -314,7 +314,7 @@
                     "sortKey":402
                 },
                 {
-                    "Label": {"text": "HUK-United-Kingdom-SM-52.html", "isURL": true},
+                    "Label": {"text": "HUK-United-Kingdom-SM-52", "url": "HUK-United-Kingdom-SM-52.html"},
                     "color": "#088A08",
                     "depth": 20,
                     "height": 4,
@@ -322,7 +322,7 @@
                     "sortKey":403
                 },
                 {
-                    "Label": {"text": "HUK-United-Kingdom-SM-74.html", "isURL": true},
+                    "Label": {"text": "HUK-United-Kingdom-SM-74", "url": "HUK-United-Kingdom-SM-74.html"},
                     "color": "#2EFE2E",
                     "depth": 20,
                     "height": 9.5,
@@ -330,7 +330,7 @@
                     "sortKey":404
                 },
                 {
-                    "Label": {"text": "HUK-United-Kingdom-SM-102.html", "isURL": true},
+                    "Label": {"text": "HUK-United-Kingdom-SM-102", "url": "HUK-United-Kingdom-SM-102.html"},
                     "color": "#2EFE2E",
                     "depth": 20,
                     "height": 8.4,
@@ -338,7 +338,7 @@
                     "sortKey":405
                 },
                 {
-                    "Label": {"text": "HUK-United-Kingdom-XL-105.html", "isURL": true},
+                    "Label": {"text": "HUK-United-Kingdom-XL-105", "url": "HUK-United-Kingdom-XL-105.html"},
                     "color": "#F7FE2E",
                     "depth": 20,
                     "height": 11.1,
@@ -346,7 +346,7 @@
                     "sortKey":406
                 },
                 {
-                    "Label": {"text": "HUK-United-Kingdom-XL-145/162.html", "isURL": true},
+                    "Label": {"text": "HUK-United-Kingdom-XL-145/162", "url": "HUK-United-Kingdom-XL-145/162.html"},
                     "color": "#FF8000",
                     "depth": 20,
                     "height": 16,
@@ -354,7 +354,7 @@
                     "sortKey":407
                 },
                 {
-                    "Label": {"text": "HUK-United-Kingdom-PM-52.html", "isURL": true},
+                    "Label": {"text": "HUK-United-Kingdom-PM-52", "url": "HUK-United-Kingdom-PM-52.html"},
                     "color": "#E6F8E0",
                     "depth": 20,
                     "height": 0.1,
@@ -362,7 +362,7 @@
                     "sortKey":408
                 },
                 {
-                    "Label": {"text": "HUK-United-Kingdom-PM-74.html", "isURL": true},
+                    "Label": {"text": "HUK-United-Kingdom-PM-74", "url": "HUK-United-Kingdom-PM-74.html"},
 
                     "color": "#8904B1",
                     "depth": 0,
@@ -371,7 +371,7 @@
                     "sortKey":409
                 },
                 {
-                    "Label": {"text": "HUK-United-Kingdom-GTO-52.html", "isURL": true},
+                    "Label": {"text": "HUK-United-Kingdom-GTO-52", "url": "HUK-United-Kingdom-GTO-52.html"},
 
                     "color": "#8904B1",
                     "depth": 0,
@@ -380,7 +380,7 @@
                     "sortKey":410
                 },
                 {
-                    "Label": {"text": "HUK-United-Kingdom-QM-46.html", "isURL": true},
+                    "Label": {"text": "HUK-United-Kingdom-QM-46", "url": "HUK-United-Kingdom-QM-46.html"},
                     "color": "#E6F8E0",
                     "depth": 20,
                     "height": 0.1,
@@ -388,7 +388,7 @@
                     "sortKey":411
                 }
             ],
-            "Label": {"text": "S220 - HUK United Kingdom", "isURL": false},
+            "Label": {"text": "S220 - HUK United Kingdom"},
 
             "color": "#2E2E2E",
             "sortKey": 4
@@ -396,7 +396,7 @@
         {
             "Buildings":  [
                 {
-                    "Label": {"text": "HCH-Switzerland-CD-74.html", "isURL": true},
+                    "Label": {"text": "HCH-Switzerland-CD-74", "url": "HCH-Switzerland-CD-74.html"},
                     "color": "#FF0000",
                     "depth": 20,
                     "height": 34.8,
@@ -404,7 +404,7 @@
                     "sortKey":501
                 },
                 {
-                    "Label": {"text": "HCH Switzerland CD 102.html", "isURL": true},
+                    "Label": {"text": "HCH Switzerland CD-102", "url": "HCH-Switzerland-CD-102.html"},
                     "color": "#8904B1",
                     "depth": 20,
                     "height": 122.9,
@@ -412,7 +412,7 @@
                     "sortKey": 502
                 },
                 {
-                    "Label": {"text": "HCH-Switzerland-SM 5.html", "isURL": true},
+                    "Label": {"text": "HCH-Switzerland-SM-5", "url": "HCH-Switzerland-SM-5.html"},
                     "color": "#8904B1",
                     "depth": 20,
                     "height": 51.2,
@@ -420,7 +420,7 @@
                     "sortKey":503
                 },
                 {
-                    "Label": {"text": "HCH-Switzerland-SM 74.html", "isURL": true},
+                    "Label": {"text": "HCH-Switzerland-SM-74", "url": "HCH-Switzerland-SM-74.html"},
                     "color": "#FF0000",
                     "depth": 20,
                     "height": 18.4,
@@ -428,7 +428,7 @@
                     "sortKey":504
                 },
                 {
-                    "Label": {"text": "HCH-Switzerland-SM 102.html", "isURL": true},
+                    "Label": {"text": "HCH-Switzerland-SM-102", "url": "HCH-Switzerland-SM 102.html"},
                     "color": "#FF0000",
                     "depth": 20,
                     "height": 28.4,
@@ -436,7 +436,7 @@
                     "sortKey":505
                 },
                 {
-                    "Label": {"text": "HCH-Switzerland-XL 105.html", "isURL": true},
+                    "Label": {"text": "HCH-Switzerland-XL-105", "url": "HCH-Switzerland-XL 105.html"},
                     "color": "#8904B1",
                     "depth": 20,
                     "height": 36,
@@ -444,7 +444,7 @@
                     "sortKey":506
                 },
                 {
-                    "Label": {"text": "HCH-Switzerland-XL 145/162.html", "isURL": true},
+                    "Label": {"text": "HCH-Switzerland-XL-145/162", "url": "HCH-Switzerland-XL 145/162.html"},
 
                     "color": "#8904B1",
                     "depth": 0,
@@ -453,7 +453,7 @@
                     "sortKey":507
                 },
                 {
-                    "Label": {"text": "HCH-Switzerland-PM 52.html", "isURL": true},
+                    "Label": {"text": "HCH-Switzerland-PM-52", "url": "HCH-Switzerland-PM 52.html"},
                     "color": "#8904B1",
                     "depth": 20,
                     "height": 46.1,
@@ -461,7 +461,7 @@
                     "sortKey":508
                 },
                 {
-                    "Label": {"text": "HCH-Switzerland-PM-74.html", "isURL": true},
+                    "Label": {"text": "HCH-Switzerland-PM-74", "url": "HCH-Switzerland-PM-74.html"},
                     "color": "#E6F8E0",
                     "depth": 20,
                     "height": 5,
@@ -469,7 +469,7 @@
                     "sortKey":509
                 },
                 {
-                    "Label": {"text": "HCH-Switzerland-GTO-52.html", "isURL": true},
+                    "Label": {"text": "HCH-Switzerland-GTO-52", "url": "HCH-Switzerland-GTO-52.html"},
                     "color": "#8904B1",
                     "depth": 20,
                     "height": 46.1,
@@ -477,7 +477,7 @@
                     "sortKey":510
                 },
                 {
-                    "Label": {"text": "HCH-Switzerland-QM-46.html", "isURL": true},
+                    "Label": {"text": "HCH-Switzerland-QM-46", "url": "HCH-Switzerland-QM-46.html"},
                     "color": "#8904B1",
                     "depth": 20,
                     "height": 61.4,
@@ -485,7 +485,7 @@
                     "sortKey":511
                 }
             ],
-            "Label": {"text": "S210 HCH Switzerland", "isURL": false},
+            "Label": {"text": "S210 HCH Switzerland"},
 
             "color": "#585858",
             "sortKey": 5
@@ -493,7 +493,7 @@
         {
             "Buildings":  [
                 {
-                    "Label": {"text": "HFR-France-CD-74.html", "isURL": true},
+                    "Label": {"text": "HFR-France-CD-74", "url": "HFR-France-CD-74.html"},
                     "color": "#2EFE2E",
                     "depth": 20,
                     "height": 9.1,
@@ -501,7 +501,7 @@
                     "sortKey":601
                 },
                 {
-                    "Label": {"text": "HFR-France-CD-102.html", "isURL": true},
+                    "Label": {"text": "HFR-France-CD-102", "url": "HFR-France-CD-102.html"},
                     "color": "#FF0000",
                     "depth": 20,
                     "height": 22.1,
@@ -509,7 +509,7 @@
                     "sortKey":602
                 },
                 {
-                    "Label": {"text": "HFR-France-SM-52.html", "isURL": true},
+                    "Label": {"text": "HFR-France-SM-52", "url": "HFR-France-SM-52.html"},
                     "color": "#FF8000",
                     "depth": 20,
                     "height": 14.2,
@@ -517,7 +517,7 @@
                     "sortKey":603
                 },
                 {
-                    "Label": {"text": "HFR-France-SM-74.html", "isURL": true},
+                    "Label": {"text": "HFR-France-SM-74", "url": "HFR-France-SM-74.html"},
                     "color": "#2EFE2E",
                     "depth": 20,
                     "height": 8.8,
@@ -525,7 +525,7 @@
                     "sortKey":604
                 },
                 {
-                    "Label": {"text": "HFR-France-SM-102.html", "isURL": true},
+                    "Label": {"text": "HFR-France-SM-102", "url": "HFR-France-SM-102.html"},
                     "color": "#DF013A",
                     "depth": 20,
                     "height": 30.7,
@@ -533,7 +533,7 @@
                     "sortKey":605
                 },
                 {
-                    "Label": {"text": "HFR-France-XL-105.html", "isURL": true},
+                    "Label": {"text": "HFR-France-XL-105", "url": "HFR-France-XL-105.html"},
                     "color": "#F7FE2E",
                     "depth": 20,
                     "height": 13,
@@ -541,7 +541,7 @@
                     "sortKey":606
                 },
                 {
-                    "Label": {"text": "HFR-France-Xl-145/162.html", "isURL": true},
+                    "Label": {"text": "HFR-France-Xl-145/162", "url": "HFR-France-Xl-145/162.html"},
                     "color": "#E6F8E0",
                     "depth": 20,
                     "height": 0.1,
@@ -549,7 +549,7 @@
                     "sortKey":607
                 },
                 {
-                    "Label": {"text": "HFR-France-PM-52.html", "isURL": true},
+                    "Label": {"text": "HFR-France-PM-52", "url": "HFR-France-PM-52.html"},
                     "color": "#E6F8E0",
                     "depth": 20,
                     "height": 0.1,
@@ -557,7 +557,7 @@
                     "sortKey":608
                 },
                 {
-                    "Label": {"text": "HFR-France-PM-74.html", "isURL": true},
+                    "Label": {"text": "HFR-France-PM-74", "url": "HFR-France-PM-74.html"},
                     "color": "#E6F8E0",
                     "depth": 20,
                     "height": 0.1,
@@ -565,7 +565,7 @@
                     "sortKey":609
                 },
                 {
-                    "Label": {"text": "HFR-France-GTO-52.html", "isURL": true},
+                    "Label": {"text": "HFR-France-GTO-52", "url": "HFR-France-GTO-52.html"},
                     "color": "#8904B1",
                     "depth": 20,
                     "height": 61.4,
@@ -573,7 +573,7 @@
                     "sortKey":610
                 }
             ],
-            "Label": {"text": "S010 HFR France", "isURL": false},
+            "Label": {"text": "S010 HFR France"},
 
             "color": "#2E2E2E",
             "sortKey": 6
@@ -581,7 +581,7 @@
         {
             "Buildings":  [
                 {
-                    "Label": {"text": "HCD-Canada-CD-74.html", "isURL": true},
+                    "Label": {"text": "HCD-Canada-CD-74", "url": "HCD-Canada-CD-74.html"},
                     "color": " #FF0000",
                     "depth": 20,
                     "height": 23,
@@ -589,7 +589,7 @@
                     "sortKey":701
                 },
                 {
-                    "Label": {"text": "HCD-Canada-CD-102.html", "isURL": true},
+                    "Label": {"text": "HCD-Canada-CD-102", "url": "HCD-Canada-CD-102.html"},
                     "color": " #FF0000",
                     "depth": 20,
                     "height": 17.8,
@@ -597,7 +597,7 @@
                     "sortKey":702
                 },
                 {
-                    "Label": {"text": "HCD-Canada-SM-52.html", "isURL": true},
+                    "Label": {"text": "HCD-Canada-SM-52", "url": "HCD-Canada-SM-52.html"},
                     "color": "#8904B1",
                     "depth": 20,
                     "height": 52.7,
@@ -605,7 +605,7 @@
                     "sortKey":703
                 },
                 {
-                    "Label": {"text": "HCD-Canada-SM-74.html%", "isURL": true},
+                    "Label": {"text": "HCD-Canada-SM-74", "url": "HCD-Canada-SM-74.html"},
                     "color": "#E6F8E0",
                     "depth": 20,
                     "height": 0.1,
@@ -613,7 +613,7 @@
                     "sortKey":704
                 },
                 {
-                    "Label": {"text": "HCD-Canada-SM-102.html", "isURL": true},
+                    "Label": {"text": "HCD-Canada-SM-102", "url": "HCD-Canada-SM-102.html"},
                     "color": "#FF0000",
                     "depth": 20,
                     "height": 17.6,
@@ -621,7 +621,7 @@
                     "sortKey":705
                 },
                 {
-                    "Label": {"text": "HCD-Canada-XL-105.html", "isURL": true},
+                    "Label": {"text": "HCD-Canada-XL-105", "url": "HCD-Canada-XL-105.html"},
                     "color": "#FF0000",
                     "depth": 20,
                     "height":27.9,
@@ -629,7 +629,7 @@
                     "sortKey":706
                 },
                 {
-                    "Label": {"text": "HCD-Canada-XL-145/162.html", "isURL": true},
+                    "Label": {"text": "HCD-Canada-XL-145/162", "url": "HCD-Canada-XL-145/162.html"},
                     "color": "#FF0000",
                     "depth": 20,
                     "height": 17.6,
@@ -637,7 +637,7 @@
                     "sortKey":707
                 },
                 {
-                    "Label": {"text": "HCD-Canada-PM-52.html", "isURL": true},
+                    "Label": {"text": "HCD-Canada-PM-52", "url": "HCD-Canada-PM-52.html"},
                     "color": "#E6F8E0",
                     "depth": 20,
                     "height": 0.1,
@@ -645,7 +645,7 @@
                     "sortKey":708
                 },
                 {
-                    "Label": {"text": "HCD-Canada-PM-74.html", "isURL": true},
+                    "Label": {"text": "HCD-Canada-PM-74", "url": "HCD-Canada-PM-74.html"},
                     "color": "#DF013A",
                     "depth": 20,
                     "height": 30.7,
@@ -653,7 +653,7 @@
                     "sortKey":709
                 },
                 {
-                    "Label": {"text": "HCD-Canada-GTO-52.html", "isURL": true},
+                    "Label": {"text": "HCD-Canada-GTO-52", "url": "HCD-Canada-GTO-52.html"},
                     "color": "#E6F8E0",
                     "depth": 20,
                     "height": 0.1,
@@ -661,7 +661,7 @@
                     "sortKey":710
                 },
                 {
-                    "Label": {"text": "HCD-Canada-QM-46.html", "isURL": true},
+                    "Label": {"text": "HCD-Canada-QM-46", "url": "HCD-Canada-QM-46.html"},
                     "color": "#04B404",
                     "depth": 20,
                     "height": 7,
@@ -669,7 +669,7 @@
                     "sortKey":711
                 }
             ],
-            "Label": {"text": "S430 HCD Canada", "isURL": false},
+            "Label": {"text": "S430 HCD Canada"},
 
             "color": "#585858",
             "sortKey": 7
@@ -677,7 +677,7 @@
         {
             "Buildings":  [
                 {
-                    "Label": {"text": "HPL-Poland-CD-74.html", "isURL": true},
+                    "Label": {"text": "HPL-Poland-CD-74", "url": "HPL-Poland-CD-74.html"},
                     "color": "#FF0000",
                     "depth": 20,
                     "height": 27,
@@ -685,7 +685,7 @@
                     "sortKey":801
                 },
                 {
-                    "Label": {"text": "HPL-Poland-CD-102.html", "isURL": true},
+                    "Label": {"text": "HPL-Poland-CD-102", "url": "HPL-Poland-CD-102.html"},
                     "color": "#FF0000",
                     "depth": 20,
                     "height": 21.7,
@@ -693,7 +693,7 @@
                     "sortKey":802
                 },
                 {
-                    "Label": {"text": "HPL-Poland-SM-52.html", "isURL": true},
+                    "Label": {"text": "HPL-Poland-SM-52", "url": "HPL-Poland-SM-52.html"},
                     "color": "#E6F8E0",
                     "depth": 20,
                     "height": 0.1,
@@ -701,7 +701,7 @@
                     "sortKey":803
                 },
                 {
-                    "Label": {"text": "HPL-Poland-SM-74.html", "isURL": true},
+                    "Label": {"text": "HPL-Poland-SM-74", "url": "HPL-Poland-SM-74.html"},
                     "color": "#FF0000",
                     "depth": 20,
                     "height": 28.4,
@@ -709,7 +709,7 @@
                     "sortKey":804
                 },
                 {
-                    "Label": {"text": "HPL-Poland-SM-102.html", "isURL": true},
+                    "Label": {"text": "HPL-Poland-SM-102", "url": "HPL-Poland-SM-102.html"},
                     "color": "#E6F8E0",
                     "depth": 20,
                     "height": 0.1,
@@ -717,7 +717,7 @@
                     "sortKey":805
                 },
                 {
-                    "Label": {"text": "HPL-Poland-XL-105.html", "isURL": true},
+                    "Label": {"text": "HPL-Poland-XL-105", "url": "HPL-Poland-XL-105.html"},
                     "color": "#FF0000",
                     "depth": 20,
                     "height": 26.3,
@@ -725,7 +725,7 @@
                     "sortKey":806
                 },
                 {
-                    "Label": {"text": "HPL-Poland-XL-145/162.html", "isURL": true},
+                    "Label": {"text": "HPL-Poland-XL-145/162", "url": "HPL-Poland-XL-145/162.html"},
                     "color": "#E6F8E0",
                     "depth": 20,
                     "height": 0.1,
@@ -733,7 +733,7 @@
                     "sortKey":807
                 },
                 {
-                    "Label": {"text": "HPL-Poland-PM-52.html", "isURL": true},
+                    "Label": {"text": "HPL-Poland-PM-52", "url": "HPL-Poland-PM-52.html"},
 
                     "color": "#8904B1",
                     "depth": 0,
@@ -742,7 +742,7 @@
                     "sortKey":808
                 },
                 {
-                    "Label": {"text": "HPL-Poland-PM-74 - 0%", "isURL": true},
+                    "Label": {"text": "HPL-Poland-PM-74", "url": "HPL-Poland-PM-74.html"},
                     "color": "#E6F8E0",
                     "depth": 20,
                     "height": 0.1,
@@ -750,7 +750,7 @@
                     "sortKey":809
                 }
             ],
-            "Label": {"text": "S310 HPL Poland", "isURL": false},
+            "Label": {"text": "S310 HPL Poland"},
 
             "color": "#2E2E2E",
             "sortKey": 8
@@ -758,7 +758,7 @@
         {
             "Buildings":  [
                 {
-                    "Label": {"text": "HAN-Australia-CD-74.html", "isURL": true},
+                    "Label": {"text": "HAN-Australia-CD-74", "url": "HAN-Australia-CD-74.html"},
                     "color": "#088A08",
                     "depth": 20,
                     "height": 7.6,
@@ -766,7 +766,7 @@
                     "sortKey":901
                 },
                 {
-                    "Label": {"text": "HAN-Australia-CD-102.html", "isURL": true},
+                    "Label": {"text": "HAN-Australia-CD-102", "url": "HAN-Australia-CD-102.html"},
                     "color": "#F7FE2E",
                     "depth": 20,
                     "height": 11.5,
@@ -774,7 +774,7 @@
                     "sortKey":902
                 },
                 {
-                    "Label": {"text": "HAN-Australia-SM-52.html", "isURL": true},
+                    "Label": {"text": "HAN-Australia-SM-52", "url": "HAN-Australia-SM-52.html"},
                     "color": "#088A08",
                     "depth": 20,
                     "height": 3.8,
@@ -782,7 +782,7 @@
                     "sortKey":903
                 },
                 {
-                    "Label": {"text": "HAN-Australia-SM-74.html", "isURL": true},
+                    "Label": {"text": "HAN-Australia-SM-74", "url": "HAN-Australia-SM-74.html"},
                     "color": "#FF4000",
                     "depth": 20,
                     "height": 19.4,
@@ -790,7 +790,7 @@
                     "sortKey":904
                 },
                 {
-                    "Label": {"text": "HAN-Australia-SM-102.html", "isURL": true},
+                    "Label": {"text": "HAN-Australia-SM-102", "url": "HAN-Australia-SM-102.html"},
                     "color": "#088A08",
                     "depth": 20,
                     "height": 7.9,
@@ -798,7 +798,7 @@
                     "sortKey":905
                 },
                 {
-                    "Label": {"text": "HAN-Australia-XL-105.html", "isURL": true},
+                    "Label": {"text": "HAN-Australia-XL-105", "url": "HAN-Australia-XL-105.html"},
                     "color": "#2EFE2E",
                     "depth": 20,
                     "height": 10.7,
@@ -806,7 +806,7 @@
                     "sortKey":906
                 },
                 {
-                    "Label": {"text": "HAN-Australia-XL-145/162.html", "isURL": true},
+                    "Label": {"text": "HAN-Australia-XL-145/162", "url": "HAN-Australia-XL-145/162.html"},
 
                     "color": "#8904B1",
                     "depth": 0,
@@ -815,7 +815,7 @@
                     "sortKey": 907
                 },
                 {
-                    "Label": {"text": "HAN-Australia-PM-52.html", "isURL": true},
+                    "Label": {"text": "HAN-Australia-PM-52", "url": "HAN-Australia-PM-52.html"},
                     "color": "#E6F8E0",
                     "depth": 20,
                     "height": 0.1,
@@ -823,7 +823,7 @@
                     "sortKey":908
                 },
                 {
-                    "Label": {"text": "HAN-Australia-PM-74.html", "isURL": true},
+                    "Label": {"text": "HAN-Australia-PM-74", "url": "HAN-Australia-PM-74.html"},
                     "color": "#E6F8E0",
                     "depth": 20,
                     "height": 0.1,
@@ -831,7 +831,7 @@
                     "sortKey":909
                 },
                 {
-                    "Label": {"text": "HAN-Australia-GTO-52.html", "isURL": true},
+                    "Label": {"text": "HAN-Australia-GTO-52", "url": "HAN-Australia-GTO-52.html"},
                     "color": "#8904B1",
                     "depth": 20,
                     "height": 46.1,
@@ -839,7 +839,7 @@
                     "sortKey":910
                 }
             ],
-            "Label": {"text": "S020 HAN Australia", "isURL": false},
+            "Label": {"text": "S020 HAN Australia"},
 
             "color": "#585858",
             "sortKey": 9
@@ -847,7 +847,7 @@
         {
             "Buildings":  [
                 {
-                    "Label": {"text": "HDK-Denmark-CD-74.html", "isURL": true},
+                    "Label": {"text": "HDK-Denmark-CD-74", "url": "HDK-Denmark-CD-74.html"},
                     "color": "#FF0000",
                     "depth": 20,
                     "height": 26.3,
@@ -855,7 +855,7 @@
                     "sortKey":1101
                 },
                 {
-                    "Label": {"text": "HDK-Denmark-CD-102.html", "isURL": true},
+                    "Label": {"text": "HDK-Denmark-CD-102", "url": "HDK-Denmark-CD-102.html"},
                     "color": "#E6F8E0",
                     "depth": 20,
                     "height": 0.1,
@@ -863,7 +863,7 @@
                     "sortKey":1102
                 },
                 {
-                    "Label": {"text": "HDK-Denmark-SM-52.html", "isURL": true},
+                    "Label": {"text": "HDK-Denmark-SM-52", "url": "HDK-Denmark-SM-52.html"},
                     "color": "#E6F8E0",
                     "depth": 20,
                     "height": 0.1,
@@ -871,7 +871,7 @@
                     "sortKey":1103
                 },
                 {
-                    "Label": {"text": "HDK-Denmark-SM-74.html", "isURL": true},
+                    "Label": {"text": "HDK-Denmark-SM-74", "url": "HDK-Denmark-SM-74.html"},
                     "color": "#E6F8E0",
                     "depth": 20,
                     "height": 0.1,
@@ -879,7 +879,7 @@
                     "sortKey":1104
                 },
                 {
-                    "Label": {"text": "HDK-Denmark-SM-102.html", "isURL": true},
+                    "Label": {"text": "HDK-Denmark-SM-102", "url": "HDK-Denmark-SM-102.html"},
                     "color": "#E6F8E0",
                     "depth": 20,
                     "height": 0.1,
@@ -887,7 +887,7 @@
                     "sortKey":1105
                 },
                 {
-                    "Label": {"text": "HDK-Denmark-XL-105.html%", "isURL": true},
+                    "Label": {"text": "HDK-Denmark-XL-105", "url": "HDK-Denmark-XL-105.html"},
                     "color": "#088A08",
                     "depth": 20,
                     "height": 6.4,
@@ -895,7 +895,7 @@
                     "sortKey":1106
                 }
             ],
-            "Label": {"text": "S170 HDK Denmark", "isURL": false},
+            "Label": {"text": "S170 HDK Denmark"},
 
             "color": "#2E2E2E",
             "sortKey": 11
@@ -903,7 +903,7 @@
         {
             "Buildings":  [
                 {
-                    "Label": {"text": "HSE-Sweden-CD-74.html", "isURL": true},
+                    "Label": {"text": "HSE-Sweden-CD-74", "url": "HSE-Sweden-CD-74.html"},
                     "color": "#E6F8E0",
                     "depth": 20,
                     "height": 0.1,
@@ -911,7 +911,7 @@
                     "sortKey":1201
                 },
                 {
-                    "Label": {"text": "HSE-Sweden-CD-102.html", "isURL": true},
+                    "Label": {"text": "HSE-Sweden-CD-102", "url": "HSE-Sweden-CD-102.html"},
                     "color": "#E6F8E0",
                     "depth": 20,
                     "height": 0.1,
@@ -919,7 +919,7 @@
                     "sortKey":1202
                 },
                 {
-                    "Label": {"text": "HSE-Sweden-SM-52.html", "isURL": true},
+                    "Label": {"text": "HSE-Sweden-SM-52", "url": "HSE-Sweden-SM-52.html"},
                     "color": "#E6F8E0",
                     "depth": 20,
                     "height": 0.1,
@@ -927,7 +927,7 @@
                     "sortKey":1203
                 },
                 {
-                    "Label": {"text": "HSE-Sweden-SM-74.html", "isURL": true},
+                    "Label": {"text": "HSE-Sweden-SM-74", "url": "HSE-Sweden-SM-74.html"},
                     "color": "#E6F8E0",
                     "depth": 20,
                     "height": 0.1,
@@ -935,7 +935,7 @@
                     "sortKey":1204
                 },
                 {
-                    "Label": {"text": "HSE-Sweden-SM-102.html", "isURL": true},
+                    "Label": {"text": "HSE-Sweden-SM-102", "url": "HSE-Sweden-SM-102.html"},
                     "color": "#E6F8E0",
                     "depth": 20,
                     "height": 0.1,
@@ -943,7 +943,7 @@
                     "sortKey":1205
                 },
                 {
-                    "Label": {"text": "HSE-Sweden-XL-105.html", "isURL": true},
+                    "Label": {"text": "HSE-Sweden-XL-105", "url": "HSE-Sweden-XL-105.html"},
                     "color": "#E6F8E0",
                     "depth": 20,
                     "height": 0.1,
@@ -951,7 +951,7 @@
                     "sortKey":1206
                 },
                 {
-                    "Label": {"text": "HSE-Sweden-Xl-145/162.html", "isURL": true},
+                    "Label": {"text": "HSE-Sweden-Xl-145/162", "url": "HSE-Sweden-Xl-145/162.html"},
                     "color": "#E6F8E0",
                     "depth": 20,
                     "height": 0.1,
@@ -959,7 +959,7 @@
                     "sortKey":1207
                 },
                 {
-                    "Label": {"text": "HSE-Sweden-PM-52.html", "isURL": true},
+                    "Label": {"text": "HSE-Sweden-PM-52", "url": "HSE-Sweden-PM-52.html"},
 
                     "color": "#8904B1",
                     "depth": 0,
@@ -968,7 +968,7 @@
                     "sortKey":1208
                 },
                 {
-                    "Label": {"text": "HSE-Sweden-PM-74.html", "isURL": true},
+                    "Label": {"text": "HSE-Sweden-PM-74", "url": "HSE-Sweden-PM-74.html"},
 
                     "color": "#8904B1",
                     "depth": 0,
@@ -977,7 +977,7 @@
                     "sortKey":1209
                 },
                 {
-                    "Label": {"text": "HSE-Sweden-GTO-52.html", "isURL": true},
+                    "Label": {"text": "HSE-Sweden-GTO-52", "url": "HSE-Sweden-GTO-52.html"},
                     "color": "#E6F8E0",
                     "depth": 20,
                     "height": 0.1,
@@ -985,7 +985,7 @@
                     "sortKey":1210
                 }
             ],
-            "Label": {"text": "S200 HSE Sweden", "isURL": false},
+            "Label": {"text": "S200 HSE Sweden"},
 
             "color": "#585858",
             "sortKey": 12
@@ -993,7 +993,7 @@
         {
             "Buildings":  [
                 {
-                    "Label": {"text": "HNZ-New-Zealand-CD-74.html", "isURL": true},
+                    "Label": {"text": "HNZ-New-Zealand-CD-74", "url": "HNZ-New-Zealand-CD-74.html"},
                     "color": "#088A08",
                     "depth": 20,
                     "height": 4.2,
@@ -1001,7 +1001,7 @@
                     "sortKey":1401
                 },
                 {
-                    "Label": {"text": "HNZ-New-Zealand-CD-102.html", "isURL": true},
+                    "Label": {"text": "HNZ-New-Zealand-CD-102", "url": "HNZ-New-Zealand-CD-102.html"},
                     "color": "#E6F8E0",
                     "depth": 20,
                     "height": 0.1,
@@ -1009,7 +1009,7 @@
                     "sortKey":1402
                 },
                 {
-                    "Label": {"text": "HNZ-New-Zealand-SM-52.html", "isURL": true},
+                    "Label": {"text": "HNZ-New-Zealand-SM-52", "url": "HNZ-New-Zealand-SM-52.html"},
                     "color": "#E6F8E0",
                     "depth": 20,
                     "height": 0.1,
@@ -1017,7 +1017,7 @@
                     "sortKey":1403
                 },
                 {
-                    "Label": {"text": "HNZ-New-Zealand-SM-74.htm%", "isURL": true},
+                    "Label": {"text": "HNZ-New-Zealand-SM-74", "url": "HNZ-New-Zealand-SM-74.html"},
                     "color": "#E6F8E0",
                     "depth": 20,
                     "height": 0.1,
@@ -1025,7 +1025,7 @@
                     "sortKey":1404
                 },
                 {
-                    "Label": {"text": "HNZ-New-Zealand-SM-102.html", "isURL": true},
+                    "Label": {"text": "HNZ-New-Zealand-SM-102", "url": "HNZ-New-Zealand-SM-102.html"},
                     "color": "#E6F8E0",
                     "depth": 20,
                     "height": 0.1,
@@ -1033,7 +1033,7 @@
                     "sortKey":1405
                 },
                 {
-                    "Label": {"text": "HNZ-New-Zealand-XL-105.html", "isURL": true},
+                    "Label": {"text": "HNZ-New-Zealand-XL-105", "url": "HNZ-New-Zealand-XL-105.html"},
                     "color": "#E6F8E0",
                     "depth": 20,
                     "height": 0.1,
@@ -1041,7 +1041,7 @@
                     "sortKey":1406
                 },
                 {
-                    "Label": {"text": "HNZ-New-Zealand-XL-145/162.html", "isURL": true},
+                    "Label": {"text": "HNZ-New-Zealand-XL-145/162", "url": "HNZ-New-Zealand-XL-145/162.html"},
 
                     "color": "#8904B1",
                     "depth": 0,
@@ -1050,7 +1050,7 @@
                     "sortKey":1407
                 },
                 {
-                    "Label": {"text": "HNZ-New-Zealand-PM-52.html", "isURL": true},
+                    "Label": {"text": "HNZ-New-Zealand-PM-52", "url": "HNZ-New-Zealand-PM-52.html"},
 
                     "color": "#8904B1",
                     "depth": 0,
@@ -1059,7 +1059,7 @@
                     "sortKey":1408
                 },
                 {
-                    "Label": {"text": "HNZ-New-Zealand-PM-74.html", "isURL": true},
+                    "Label": {"text": "HNZ-New-Zealand-PM-74", "url": "HNZ-New-Zealand-PM-74.html"},
                     "color": "#E6F8E0",
                     "depth": 20,
                     "height": 0.1,
@@ -1067,7 +1067,7 @@
                     "sortKey":1409
                 },
                 {
-                    "Label": {"text": "HNZ-New-Zealand-GTO-52.html", "isURL": true},
+                    "Label": {"text": "HNZ-New-Zealand-GTO-52", "url": "HNZ-New-Zealand-GTO-52.html"},
                     "color": "#E6F8E0",
                     "depth": 20,
                     "height": 0.1,
@@ -1075,7 +1075,7 @@
                     "sortKey":1410
                 },
                 {
-                    "Label": {"text": "HNZ-New-Zealand-QM-46.html", "isURL": true},
+                    "Label": {"text": "HNZ-New-Zealand-QM-46", "url": "HNZ-New-Zealand-QM-46.html"},
 
                     "color": "#E6F8E0",
                     "depth": 20,
@@ -1084,14 +1084,14 @@
                     "sortKey":1411
                 }
             ],
-            "Label": {"text": "S030 HNZ New Zealand", "isURL": false},
+            "Label": {"text": "S030 HNZ New Zealand"},
             "color": "#2E2E2E",
             "sortKey": 14
         },
         {
             "Buildings":  [
                 {
-                    "Label": {"text": "HMX-Mexico-CD-74.html%", "isURL": true},
+                    "Label": {"text": "HMX-Mexico-CD-74", "url": "HMX-Mexico-CD-74.html"},
                     "color": "#E6F8E0",
                     "depth": 20,
                     "height": 0.1,
@@ -1099,7 +1099,7 @@
                     "sortKey":2301
                 },
                 {
-                    "Label": {"text": "HMX-Mexico-CD-102.html", "isURL": true},
+                    "Label": {"text": "HMX-Mexico-CD-102", "url": "HMX-Mexico-CD-102.html"},
                     "color": "#E6F8E0",
                     "depth": 20,
                     "height": 0.1,
@@ -1107,7 +1107,7 @@
                     "sortKey":2302
                 },
                 {
-                    "Label": {"text": "HMX-Mexico-SM-52.html", "isURL": true},
+                    "Label": {"text": "HMX-Mexico-SM-52", "url": "HMX-Mexico-SM-52.html"},
                     "color": "#E6F8E0",
                     "depth": 20,
                     "height": 0.1,
@@ -1115,7 +1115,7 @@
                     "sortKey":2303
                 },
                 {
-                    "Label": {"text": "HMX-Mexico-SM-74.html", "isURL": true},
+                    "Label": {"text": "HMX-Mexico-SM-74", "url": "HMX-Mexico-SM-74.html"},
                     "color": "#E6F8E0",
                     "depth": 20,
                     "height": 0.1,
@@ -1123,7 +1123,7 @@
                     "sortKey":2304
                 },
                 {
-                    "Label": {"text": "HMX-Mexico-SM-102.html", "isURL": true},
+                    "Label": {"text": "HMX-Mexico-SM-102", "url": "HMX-Mexico-SM-102.html"},
                     "color": "#E6F8E0",
                     "depth": 20,
                     "height": 0.1,
@@ -1131,7 +1131,7 @@
                     "sortKey":2305
                 },
                 {
-                    "Label": {"text": "HMX-Mexico-XL-105.html", "isURL": true},
+                    "Label": {"text": "HMX-Mexico-XL-105", "url": "HMX-Mexico-XL-105.html"},
                     "color": "#E6F8E0",
                     "depth": 20,
                     "height": 0.1,
@@ -1139,7 +1139,7 @@
                     "sortKey":2306
                 },
                 {
-                    "Label": {"text": "HMX-Mexico-XL-145/162.html", "isURL": true},
+                    "Label": {"text": "HMX-Mexico-XL-145/162", "url": "HMX-Mexico-XL-145/162.htm"},
                     "color": "#8904B1",
                     "depth": 0,
                     "height": 0,
@@ -1148,7 +1148,7 @@
 
                 },
                 {
-                    "Label": {"text": "HMX-Mexico-PM-52.html", "isURL": true},
+                    "Label": {"text": "HMX-Mexico-PM-52", "url": "HMX-Mexico-PM-52.htm"},
 
                     "color": "#E6F8E0",
                     "depth": 20,
@@ -1157,7 +1157,7 @@
                     "sortKey":2308
                 },
                 {
-                    "Label": {"text": "HMX-Mexico-PM-74.html", "isURL": true},
+                    "Label": {"text": "HMX-Mexico-PM-74", "url": "HMX-Mexico-PM-74.html"},
 
                     "color": "#8904B1",
                     "depth": 0,
@@ -1166,7 +1166,7 @@
                     "sortKey":2309
                 },
                 {
-                    "Label": {"text": "HMX-Mexico-GTO-52.html", "isURL": true},
+                    "Label": {"text": "HMX-Mexico-GTO-52", "url": "HMX-Mexico-GTO-52.html"},
                     "color": "#E6F8E0",
                     "depth": 20,
                     "height": 0.1,
@@ -1174,13 +1174,13 @@
                     "sortKey":2310
                 }
             ],
-            "Label": {"text": "S440 HMX Mexico", "isURL": true},
+            "Label": {"text": "S440 HMX Mexico"},
 
             "color": "#585858",
             "sortKey": 23
         }
-        ],
-    "Label": {"text": "SSU & EquFamily", "isURL": false},
+    ],
+    "Label": {"text": "SSU & EquFamily"},
 
     "color": "#BDBDBD",
     "sorted": false,

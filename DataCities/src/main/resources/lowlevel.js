@@ -75,7 +75,6 @@ function onDocumentMouseDown(event) {
   var mouseX = event.clientX + window.scrollX - 3;
   var mouseY = event.clientY + window.scrollY - 5;
   var mouse3D = new THREE.Vector3(( (mouseX / window.innerWidth ) * 2 - 1), ( -( mouseY / window.innerHeight) * 2 + 1 ), 0.5);
-
   raycaster.setFromCamera(mouse3D, camera);
   var intersects = raycaster.intersectObjects(scene.children);
 
@@ -84,18 +83,14 @@ function onDocumentMouseDown(event) {
     if (event.ctrlKey) {
       getDistrict(obj);
     }
-    else {
-      if (obj.name.isURL) {
-        openURL(obj.name.text);
+    else if(event.button == 2) {
+      if(obj.name.url) {
+        openURL(obj.name.url);
       }
-      else if (obj.name) {
-        getTooltip(obj);
+    }
+    else{
+        getTooltip(obj.name.text);
         highlight(obj);
-      }
-      else {
-        removeHighlight();
-        UnTip();
-      }
     }
   }
 }
@@ -109,10 +104,9 @@ function openURL(url){
   window.open(url);
 }
 
-function getTooltip (obj) {
+function getTooltip (text) {
   UnTip();
-  var str = obj.name.text;
-  var tip = Tip(str);
+  var tip = Tip(text);
 }
 
 function highlight(obj){
