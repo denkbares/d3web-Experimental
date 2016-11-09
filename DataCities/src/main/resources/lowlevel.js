@@ -2,7 +2,7 @@
  * Created by Lea on 12.05.2016.
  */
 
-var scene, renderer, camera, directionalLight, controls, highlightedObj, textLabels, fontLoader, cityPosiion;
+var scene, renderer, camera, directionalLight, controls, highlightedObj, textLabels, cityPosition;
 function init() {
     scene = new THREE.Scene();
  
@@ -44,7 +44,7 @@ function render() {
 }
 
 function light_update() {
-  directionalLight.position = cityPosiion;
+  directionalLight.position = cityPosition;
   directionalLight.position.y = 100;
 }
 
@@ -57,7 +57,6 @@ function labelUpdate () {
 function updateOrbitControls(positionX, positionZ) {
   controls.target.x = positionX;
   controls.target.z = positionZ;
-
 }
 
 function onWindowResize(){
@@ -85,7 +84,7 @@ function onDocumentMouseDown(event) {
     }
     else if(event.button == 2) {
       if(obj.name.url) {
-        openURL(obj.name.url);
+        window.open(obj.name.url);
       }
     }
     else{
@@ -93,15 +92,15 @@ function onDocumentMouseDown(event) {
         highlight(obj);
     }
   }
+  else{
+    UnTip();
+    removeHighlight();
+  }
 }
 
 function onDocumentMouseUp() {
   UnTip();
   removeHighlight();
-}
-
-function openURL(url){
-  window.open(url);
 }
 
 function getTooltip (text) {
@@ -162,11 +161,11 @@ function createDistrict(position, label, color, containsDistricts) {
   return district;
 }
 
-function createBuilding(width, depth, height, position, label, color) {
+function createBuilding(width, depth, height, position, label, color, smoothed) {
   var building = addBox(width, depth, height, position);
   building.position.y += 0.06;
   building.material.color.setHex(color);
-  if(color == "0xFE2E2E"){
+  if(smoothed){
     building.material.opacity = 0.5;
     building.material.transparent = true;
   }
@@ -219,7 +218,7 @@ function changeSizeCity(object, width, depth) {
     object.geometry.parameters.height = depth;
   }
 
-  cityPosiion = changePositionPlane(object, (difWidth / 2), (difDepth / 2));
+  cityPosition = changePositionPlane(object, (difWidth / 2), (difDepth / 2));
 
 }
 

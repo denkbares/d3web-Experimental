@@ -1183,7 +1183,9 @@
     "Label": {"text": "SSU & EquFamily"},
 
     "color": "#BDBDBD",
+    "distanceBuildings": 40,
+    "distanceDistricts": 40,
     "sorted": false,
-    "isTabel": true,
+    "isTable": true,
     "columns": ["CD 74", "CD 102", "SM 52", "SM 74", "SM 102", "XL 105", "XL 145/162", "PM 52", "PM 74", "GTO 52", "QM 46"]
 }

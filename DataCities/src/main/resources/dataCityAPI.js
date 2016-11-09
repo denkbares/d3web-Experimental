@@ -153,7 +153,7 @@ City.prototype = {
         this.markMap(position, current.width, current.depth);
         insertedObjs.push(current);
       }
-      this.adjustSize(0.5 * this.distanceDistricts, 0.5 * this.distanceDistricts);
+      this.adjustSize(Math.round(0.5 * this.distanceDistricts), Math.round(0.5 * this.distanceDistricts));
     }
   },
 
@@ -213,11 +213,11 @@ City.prototype = {
     //Go through the buildings already inserted & check whether there is a possible Position at their edges
     for(var i = 0; i < insertedObjs.length; i++){
       current = insertedObjs[i];
-      x = current.positionX + current.width;
-      z = current.positionZ + current.depth;
+      x = current.position.x + current.width;
+      z = current.position.z + current.depth;
       //For each possible Position at the edge of the current inserted building try putting the new building in
       for(var j = 0; j <= current.width; j++){
-        position = {x: current.positionX + j, z: z  + this.distanceDistricts};
+        position = {x: current.position.x + j, z: z  + this.distanceDistricts};
         if(this.checkPosition(obj, position.x, position.z)){
           //If the position fits put it into the candidates array and go on (As all the other possible positions would be worse)
           if(!containsPosition(candidates,position)) {
@@ -227,7 +227,7 @@ City.prototype = {
         }
       }
       for(j = 0; j < current.depth; j++){
-        position = {x: x + this.distanceDistricts, z: current.positionZ + j};
+        position = {x: x + this.distanceDistricts, z: current.position.z + j};
         if(this.checkPosition(obj, position.x, position.z)){
           if(!containsPosition(candidates,position)) {
             candidates.push(position);
@@ -283,7 +283,7 @@ City.prototype = {
       //If the end of the map is reached one can be sure the building fits in (in the current column / row)
       if(x+i >= this.map.length) break;
       for(var j = 0; j < obj.depth + this.distanceDistricts; j++){
-        if(z+j >= this.map[i].length) break;
+        if(this.map[x+i] == undefined || z+j >= this.map[i].length) break;
         if(this.map[x+i][z+j] == true){
           return false;
         }
@@ -460,7 +460,7 @@ District.prototype = {
       candidates = this.getPositionCandidates(this.containedObjs[i], insertedObjs);
       //Pick out the best one (with the smallest distance to (0|0)
       position = this.getBestCandidate(candidates, current);
-      current.move(position.x + this.position.x, position.z + this.positionZ);
+      current.move(position.x + this.position.x, position.z + this.position.z);
       this.markMap(position, current.width, current.depth);
       insertedObjs.push(current);
     }
@@ -681,24 +681,19 @@ Building.prototype = {
     if(!(this.height == 0 || this.width == 0 || this.depth == 0)) {
       if (this.height instanceof Array) {
         var heights = this.smoothBigHeights();
-        // var heights = this.height;
-        //  var heights = this.smoothHeightsRatio();
         var y = 0;
         for (var i = 0; i < heights.length; i++) {
           if (i != 0) {
             y += heights[i - 1];
           }
           if (heights[i] > 0) {
-            this.geometry.push(createBuilding(this.width, this.depth, heights[i], {
-              x: 0,
-              y: y,
-              z: 0
-            }, this.label[i], this.color[i]));
+            if(this.label.text[i] == "Smoothed") this.geometry.push(createBuilding(this.width, this.depth, heights[i], {x: 0, y: y, z: 0}, this.label[i], this.color[i], true));
+            else this.geometry.push(createBuilding(this.width, this.depth, heights[i], {x: 0, y: y, z: 0}, this.label[i], this.color[i], false));
           }
         }
       }
       else {
-        this.geometry = createBuilding(this.width, this.depth, this.height, this.position, this.label, this.color);
+        this.geometry = createBuilding(this.width, this.depth, this.height, this.position, this.label, this.color, false);
       }
     }
   },
@@ -713,7 +708,7 @@ Building.prototype = {
           smoothedHeights.push(ratio);
           smoothedHeights.push(0.4);
           this.color.splice(i + smoothed + 1, 0, "0xF3F3F3");
-          this.label.splice(i+1 + smoothed, 0, {text: "Smoothed"});
+          this.label.text.splice(i+1 + smoothed, 0, "Smoothed");
           smoothed++;
         }
         else{

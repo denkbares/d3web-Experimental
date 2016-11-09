@@ -6,19 +6,17 @@ function start(){
   if(json == undefined) {
     startParser();
   }
-  else startExistingJson();
+  else  createCityFromJSON(json);
 }
 
 function startParser (){
-  readTextFile("Samples/table_sample.json", function(text){
+  readTextFile("Samples/bgz_city_full_sample.json", function(text){
     var json = JSON.parse(text);
     createCityFromJSON(json);
   });
 }
 
-function startExistingJson (){
-  createCityFromJSON(json);
-}
+
 
 function createCityFromJSON (json){
   init();
@@ -27,10 +25,10 @@ function createCityFromJSON (json){
     color = json.color;
   }
   else color = "#002D29";
-  var city = new City(40, 40, json.Label, color);
+  var city = new City(json.distanceBuildings, json.distanceDistricts, json.Label, color);
   //Go through the City's districts
   getDistricts(json, city);
-  city.render(json.sorted, json.isTabel, json.columns);
+  city.render(json.sorted, json.isTable, json.columns);
 
 
   render();
