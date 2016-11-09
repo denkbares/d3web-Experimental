@@ -27,6 +27,7 @@ import org.apache.wiki.auth.WikiSecurityException;
 import org.openrdf.http.server.repository.RepositoryController;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.denkbares.utils.Log;
 import de.knowwe.core.Environment;
 import de.knowwe.core.action.AbstractAction;
 import de.knowwe.core.action.UserActionContext;
@@ -91,7 +92,7 @@ public class SparqlEndpointAction extends AbstractAction {
 			modelAndView.getView().render(modelAndView.getModel(), request, context.getResponse());
 		}
 		catch (Exception e) {
-			e.printStackTrace();
+			Log.severe("Exception while executing query on SPARQL endpoint.", e);
 		}
 
 	}
