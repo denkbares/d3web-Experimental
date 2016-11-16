@@ -22,15 +22,16 @@ package de.d3web.persistence.tests.utils;
 
 import java.util.Enumeration;
 import java.util.Hashtable;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map.Entry;
+import java.util.Map;
 import java.util.Set;
 
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+
+import com.denkbares.strings.Strings;
 
 /**
  * @author bates This Class represents an XMLTag generated from a DOM-Node. You
@@ -45,19 +46,19 @@ public class XMLTag {
 
 	/**
 	 * Creates a new XMLTag-representation with the given name
-	 * 
+	 *
 	 * @param name the Name of the new Tag
 	 */
 	public XMLTag(String name) {
 		this.name = name;
 		attributes = new Hashtable<>();
 		children = new LinkedList<>();
-		content = "\n";
+		content = "";
 	}
 
 	/**
 	 * Creates a new XMLTag-representation from the given DOM-Node
-	 * 
+	 *
 	 * @param node DOM-Node to create the XMLTag-Object from
 	 */
 	public XMLTag(Node node) {
@@ -65,7 +66,7 @@ public class XMLTag {
 
 		attributes = new Hashtable<>();
 		children = new LinkedList<>();
-		content = "\n";
+		content = "";
 
 		// name
 		name = node.getNodeName();
@@ -91,11 +92,8 @@ public class XMLTag {
 			if (child.getNodeType() == Node.ELEMENT_NODE) {
 				addChild(new XMLTag(child));
 			}
-			else if ((child.getNodeType() == Node.TEXT_NODE) && (child.getNodeValue() != null)) {
-				content = child.getNodeValue();
-			}
-			else if ((child.getNodeType() == Node.CDATA_SECTION_NODE)
-					&& (child.getNodeValue() != null)) {
+			else if ((child.getNodeType() == Node.TEXT_NODE || child.getNodeType() == Node.CDATA_SECTION_NODE)
+					&& !Strings.isBlank(child.getNodeValue())) {
 				content = child.getNodeValue();
 			}
 		}
@@ -103,16 +101,9 @@ public class XMLTag {
 	}
 
 	/**
-	 * @return the value of the requested attribute
-	 */
-	public String getAttribute(String attr) {
-		return attributes.get(attr);
-	}
-
-	/**
 	 * Adds a new attribute to this XMLTag
-	 * 
-	 * @param name the name of the new attribute
+	 *
+	 * @param name  the name of the new attribute
 	 * @param value the attribute´s value
 	 */
 	public void addAttribute(String name, String value) {
@@ -121,7 +112,7 @@ public class XMLTag {
 
 	/**
 	 * Returns the children of this Tag
-	 * 
+	 *
 	 * @return List of all children of this XMLTag
 	 */
 	public List<XMLTag> getChildren() {
@@ -130,7 +121,7 @@ public class XMLTag {
 
 	/**
 	 * Adds a new child to this Tag
-	 * 
+	 *
 	 * @param child to add
 	 */
 	public void addChild(XMLTag child) {
@@ -139,7 +130,7 @@ public class XMLTag {
 
 	/**
 	 * Returns the tag-content.
-	 * 
+	 *
 	 * @return the tag´s content
 	 */
 	public String getContent() {
@@ -148,7 +139,7 @@ public class XMLTag {
 
 	/**
 	 * Returns the name.
-	 * 
+	 *
 	 * @return the tag´s name
 	 */
 	public String getName() {
@@ -156,17 +147,8 @@ public class XMLTag {
 	}
 
 	/**
-	 * Sets the tag´s children.
-	 * 
-	 * @param children the children to set
-	 */
-	public void setChildren(List<XMLTag> children) {
-		this.children = children;
-	}
-
-	/**
 	 * Sets the content of this tag.
-	 * 
+	 *
 	 * @param content the content to set
 	 */
 	public void setContent(String content) {
@@ -176,7 +158,7 @@ public class XMLTag {
 	/**
 	 * Returns a Hashtable containing attribute-names as key and their value as
 	 * value.
-	 * 
+	 *
 	 * @return the attributes of this tag in a Hashtable
 	 */
 	public Hashtable<String, String> getAttributes() {
@@ -203,10 +185,12 @@ public class XMLTag {
 		ret.append(">\n");
 
 		for (XMLTag aChildren : children) {
-			ret.append(aChildren.toString());
+			ret.append(aChildren);
 		}
 
-		ret.append(content).append("\n");
+		if (!content.isEmpty()) {
+			ret.append(content).append("\n");
+		}
 
 		ret.append("</").append(name).append(">\n");
 
@@ -215,7 +199,7 @@ public class XMLTag {
 
 	/**
 	 * Checks for equality by comparing name, attributes, content and children
-	 * 
+	 *
 	 * @return true, if equal as described above
 	 */
 	@Override
@@ -224,32 +208,31 @@ public class XMLTag {
 		if (o instanceof XMLTag) {
 			XMLTag other = (XMLTag) o;
 
-			boolean nameok = name.equals(other.getName());
+			boolean nameOk = name.equals(other.getName());
 			// System.out.println(name + " = " + other.getName());
 
-			Set<Entry<String, String>> attrSet = attributes.entrySet();
-			Set<Entry<String, String>> otherAttrSet = other.getAttributes().entrySet();
+			Set<Map.Entry<String, String>> attrSet = attributes.entrySet();
+			Set<Map.Entry<String, String>> otherAttrSet = other.getAttributes().entrySet();
 
-			boolean attrok = attrSet.containsAll(otherAttrSet) && otherAttrSet.containsAll(attrSet);
+			boolean attrOk = attrSet.containsAll(otherAttrSet) && otherAttrSet.containsAll(attrSet);
 			// System.out.println("Attributes ok? " + attrok);
 
 			List<XMLTag> otherChildren = other.getChildren();
 
-			boolean childrenok = children.containsAll(otherChildren)
+			boolean childrenOk = children.containsAll(otherChildren)
 					&& otherChildren.containsAll(children);
 			// System.out.println("children: " + children);
 			// System.out.println("other children: " + other.getChildren());
 			// System.out.println("childrenok? " + childrenok);
 
-			boolean contentok = content.equals(other.getContent());
+			boolean contentOk = content.equals(other.getContent());
 			// System.out.println(content + " = " + other.getContent());
 
-			return nameok && attrok && childrenok && contentok;
+			return nameOk && attrOk && childrenOk && contentOk;
 
 		}
 
 		return false;
 
 	}
-
 }

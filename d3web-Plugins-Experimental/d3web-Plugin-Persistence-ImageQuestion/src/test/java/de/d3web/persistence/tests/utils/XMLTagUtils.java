@@ -40,15 +40,12 @@ public class XMLTagUtils {
 
 	/**
 	 * @throws SAXException Method that generates a DOM-Node from XMLCode
-	 * 
+	 *
 	 * @param code the XML-code to generate the DOM-Node from
 	 * @param nodeName the node-name the DOM-Node shall be created for
 	 * @param index tells the converter which appearence of the tag in the
 	 *        XML-code shall be taken for conversion
 	 * @return generated Node
-	 * @throws ParserConfigurationException
-	 * @throws IOException
-	 * @throws SAXException
 	 */
 	public static Node generateNodeFromXMLCode(
 			String code,
@@ -56,9 +53,9 @@ public class XMLTagUtils {
 			int index) throws ParserConfigurationException, IOException, SAXException {
 		DocumentBuilder dBuilder =
 				DocumentBuilderFactory.newInstance().newDocumentBuilder();
-		StringReader strr = new StringReader(code);
+		StringReader stringReader = new StringReader(code);
 
-		InputSource is = new InputSource(strr);
+		InputSource is = new InputSource(stringReader);
 		Document doc = dBuilder.parse(is);
 		return doc.getElementsByTagName(nodeName).item(index);
 	}
