@@ -20,12 +20,21 @@ function startParser (){
 
 function createCityFromJSON (json){
   init();
-  var color;
-  if(json.color){
-    color = json.color;
-  }
+  var color, distanceBuildings, distanceDistricts, label;
+
+  if(json.label) label = json.label;
+  else label = {text: "city"};
+
+  if(json.color) color = json.color;
   else color = "#002D29";
-  var city = new City(json.distanceBuildings, json.distanceDistricts, json.Label, color);
+
+  if(json.distanceBuildings) distanceBuildings = json.distanceBuildings;
+  else distanceBuildings = 5;
+
+  if(json.distanceDistricts) distanceDistricts = json.distanceDistricts;
+  else distanceDistricts = 10;
+
+  var city = new City(distanceBuildings, distanceDistricts, label, color);
   //Go through the City's districts
   getDistricts(json, city);
   city.render(json.sorted, json.isTable, json.columns);
@@ -37,13 +46,23 @@ function createCityFromJSON (json){
 function getBuildings(dataDistrict, district){
   var dataBuilding;
   var building;
-  var color;
+  var color, width, height, depth;
   dataDistrict.Buildings.sort(function(a, b){ return a.sortKey - b.sortKey});
   for (var j = 0; j < dataDistrict.Buildings.length; j++) {
     dataBuilding = dataDistrict.Buildings[j];
     if(dataBuilding.color) color = dataBuilding.color;
     else color = "#EFEFEF";
-    building = new Building(dataBuilding.width, dataBuilding.depth, dataBuilding.height, district, dataBuilding.Label, dataBuilding.color);
+    
+    if(dataBuilding.width) width = dataBuilding.width;
+    else width = 1;
+    
+    if(dataBuilding.depth) depth = dataBuilding.depth;
+    else depth = 1;
+    
+    if(dataBuilding.height) height = dataBuilding.height;
+    else height = 1;
+    
+    building = new Building(width, depth, height, district, dataBuilding.label, color);
   }
 }
 
@@ -62,7 +81,7 @@ function getDistricts (data, containingObj){
       else{
         color = "#808080";
       }
-      dis = new District(containingObj, dataDistrict.Label, color, true);
+      dis = new District(containingObj, dataDistrict.label, color, true);
       getDistricts(dataDistrict, dis);
     }
     else{
@@ -73,7 +92,7 @@ function getDistricts (data, containingObj){
       else{
         color = "#808080";
       }
-      dis = new District(containingObj, dataDistrict.Label, color, false);
+      dis = new District(containingObj, dataDistrict.label, color, false);
       getBuildings(dataDistrict, dis);
     }
   }

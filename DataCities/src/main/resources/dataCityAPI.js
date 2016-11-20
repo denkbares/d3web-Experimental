@@ -2,6 +2,7 @@
  * Created by Lea on 12.05.2016.
  */
 
+//Checks whether an array of positions contains a given position
 function containsPosition(arr, pos){
   for(var i = 0; i < arr.length; i++){
     if(arr[i].x == pos.x && arr[i].z == pos.z){
@@ -60,15 +61,16 @@ City.prototype = {
     updateOrbitControls(this.width/2, this.depth/2);
   },
 
+  // Creates parameters columnWidth, rowDepth, sumColumns and sumRows which are needed to render a table-city.
   prepareTableRender: function(columns){
     var current;
-    var columnWidth = [];
+    var columnWidth = []; //Contains a number for each column that states the columns minimum width
     for(var i = 0; i < columns.length; i++){
       columnWidth.push(0);
     }
-    var rowDepth = [];
-    var sumColumns = 0;
-    var sumRows = 0;
+    var rowDepth = [];   //Contains a number for each row that states the rows minimum depth
+    var sumColumns = 0;  // minimum total width of the table
+    var sumRows = 0;     // minimum total depth of the table
     for(i = 0; i < this.containedObjs.length; i++){
       current = this.containedObjs[i];
       rowDepth.push(0);
@@ -92,34 +94,46 @@ City.prototype = {
     return {columnWidth: columnWidth, rowDepth: rowDepth, sumRows: sumRows, sumColumns: sumColumns};
   },
 
+  //Rendering of a table-city
   renderTable: function(columns){
     var current;
     var columnWidth, rowDepth, sumColumns, sumRows;
     current = this.prepareTableRender(columns);
-    columnWidth = current.columnWidth; rowDepth = current.rowDepth; sumColumns = current.sumColumns; sumRows = current.sumRows;
+    columnWidth = current.columnWidth;  //Contains a number for each column that states the columns minimum width
+    rowDepth = current.rowDepth;        //Contains a number for each row that states the rows minimum depth
+    sumColumns = current.sumColumns;    // minimum total width of the table
+    sumRows = current.sumRows;          // minimum total depth of the table
     var position = {x: 0, y: 0};
+    //Successively rendering the rows / districts
     for(i = 0; i < this.containedObjs.length; i++){
       current = this.containedObjs[i];
       current.renderTable(columnWidth);
+      //Sets each districts size to its minimum depth and the minimum width of the whole table
       current.adjustSize(sumColumns, rowDepth[i]*2);
+      //Adjust the position to get a gap between the districts border and the buildings
       changePositionPlane(current.geometry, -this.distanceBuildings*0.5, -rowDepth[i]*0.5);
       current.move(position.x, position.y);
       position.y += rowDepth[i]*2 + this.distanceDistricts;
     }
+    //Sets the city size
     this.adjustSize(sumColumns, sumRows);
+    //Adjust the position to get a gap between the city border and the districts
     this.adjustSize(this.distanceDistricts, 0.5 * this.distanceDistricts);
     changePositionPlane(this.geometry, -this.distanceBuildings, -this.distanceBuildings);
+
     this.createTableLabels(columns, columnWidth);
 
   },
-
+  //Creates the labels of the rows & columns
   createTableLabels: function (columns, columnWidth){
+    //First column-label-position is set one distanceBuilding from the city border
     var position = {x: -this.distanceDistricts+this.distanceBuildings*0.5, y: 0, z: -(this.distanceDistricts+10)};
     for(var i = 0; i < columns.length; i++){
       createLabel(columns[i],{x: position.x, y: position.y, z: position.z - ((i % 2)*40)});
       position.x += columnWidth[i] + this.distanceBuildings;
     }
     var current;
+    //Row-Labels; set to the left edge of the city and the middle of the related district
     for(i = 0; i < this.containedObjs.length; i++){
       current = this.containedObjs[i];
       createLabel(current.label.text, {x: current.position.x -400, y: 0, z: current.position.z + 15}, current.color);
@@ -153,10 +167,12 @@ City.prototype = {
         this.markMap(position, current.width, current.depth);
         insertedObjs.push(current);
       }
+      //Adjust the position to get a gap between the districts border and the buildings
       this.adjustSize(Math.round(0.5 * this.distanceDistricts), Math.round(0.5 * this.distanceDistricts));
     }
   },
 
+  //Marks the distance between districts around a given district / position. (Parameters: districts position, districts width, districts depth)
   markDistanceInMap: function(position, width, depth){
     var dis = this.distanceDistricts;
     var difX = (position.x + dis + width) - this.width;
@@ -190,6 +206,7 @@ City.prototype = {
     }
   },
 
+  //Marks a district in the map
   markMap: function(position, width, depth){
     //Set the district & the map to the minimal needed width & depth
     this.adjustSize((position.x +width - this.width), (position.z + depth  - this.depth));
@@ -260,6 +277,7 @@ City.prototype = {
     return candidates;
   },
 
+  //Returns the next free position at the shortest edge of the city
   getNextPosition: function(){
     var position;
     if(this.map[0].length == 0){
@@ -292,36 +310,46 @@ City.prototype = {
     return true;
   },
 
+  /**Returns the candidate with the smallest distance.
+   * If there is more than one opportunity the position that won't extend the city is choosen.
+   * candidates is an array of positions
+   * obj is the district that needs to be placed
+   **/
   getBestCandidate: function(candidates, obj){
     var best = candidates[0];
-    var currDistance = Math.sqrt(Math.pow(best.x, 2) + Math.pow(best.z, 2));
-    var bestExtends = this.extendsThis(best, obj);
+    var bestDistance = Math.sqrt(Math.pow(best.x, 2) + Math.pow(best.z, 2));
+    var bestExtends = this.extendsThis(best, obj); //True if for the best position the city needs to be extended
     var dis = 0;
     var current;
-    var currentExtends;
+    var currentExtends; //True if for the current position the city needs to be extended
     for(var i = 1; i < candidates.length; i++){
       current = candidates[i];
       currentExtends = this.extendsThis(current, obj);
-      dis = Math.sqrt(Math.pow(candidates[i].x, 2) + Math.pow(candidates[i].z, 2));
-      if(bestExtends && currentExtends && currDistance > dis ){
+      dis = Math.sqrt(Math.pow(candidates[i].x, 2) + Math.pow(candidates[i].z, 2)); //Pythagoras' theorem
+
+      //If both will extend the city the one with the smaller distance is choosen
+      if(bestExtends && currentExtends && bestDistance > dis ){
         best = current;
-        currDistance = dis;
+        bestDistance = dis;
         bestExtends = currentExtends;
       }
+      //The candidate that doesn't extend the city is chosen
       else if(bestExtends && !currentExtends ){
         best = current;
-        currDistance = dis;
+        bestDistance = dis;
         bestExtends = currentExtends;
       }
-      else if(!bestExtends && !currentExtends && currDistance > dis){
+      //If both won't extend the city the one with the smaller distance is choosen
+      else if(!bestExtends && !currentExtends && bestDistance > dis){
         best = current;
-        currDistance = dis;
+        bestDistance = dis;
         bestExtends = currentExtends;
       }
     }
     return best;
   },
 
+  //Checks wether an object will extend the city if set to the given position
   extendsThis: function(position, obj){
     var width = position.x + this.distanceDistricts + obj.width;
     var depth = position.z + this.distanceDistricts + obj.depth;
@@ -468,6 +496,7 @@ District.prototype = {
     this.adjustSize(distance*0.5, distance*0.5);
   },
 
+  //Marks a building in the map (parameters: buildings position, buildings width, buildings depth)
   markMap: function(position, width, depth){
     //Set the district & the map to the minimal needed width & depth
     this.adjustSize((position.x + width - this.width), (position.z + depth  - this.depth));
@@ -478,6 +507,8 @@ District.prototype = {
     }
     this.markDistanceInMap(position, width, depth);
   },
+
+  //Marks the related distance of a building or a district in the map
   markDistanceInMap: function(position, width, depth){
     var dis = this.getDistance();
     var difX = (position.x + dis + width) - this.width;
@@ -571,6 +602,7 @@ District.prototype = {
     return candidates;
   },
 
+  //Returns the next free position at the shortest edge of the district
   getNextPosition: function(){
     var position;
     var dis = this.getDistance();
@@ -604,7 +636,12 @@ District.prototype = {
     return true;
   },
 
-  getBestCandidate: function(candidates, obj){
+  /**Returns the position-candidate with the smallest distance.
+   * If there is more than one opportunity the position that won't extend the district is choosen.
+   * candidates is an array of positions
+   * obj is the district or building that needs to be placed
+  **/
+   getBestCandidate: function(candidates, obj){
     var best = candidates[0];
     var currDistance = Math.sqrt(Math.pow(best.x, 2) + Math.pow(best.z, 2));
     var bestExtends = this.extendsThis(best, obj);
@@ -634,12 +671,14 @@ District.prototype = {
     return best;
   },
 
+  //Checks whether the object (building or district) will extend the district if set to this position
   extendsThis: function(position, obj){
     var width = position.x + this.getDistance() + obj.width;
     var depth = position.z + this.getDistance() + obj.depth;
     return ( width > this.map.length || depth > this.map[0].length);
   },
 
+  //MOves the district for the guven values
   move: function(x, z){
     //adjust attributes
     this.position.x += x;
@@ -679,15 +718,16 @@ Building.prototype = {
   //Renders the building
   render: function() {
     if(!(this.height == 0 || this.width == 0 || this.depth == 0)) {
+      //If there is more than one floor, the floor are rendered successively
       if (this.height instanceof Array) {
-        var heights = this.smoothBigHeights();
+        var heights = this.smoothBigHeights(); //Heights are smoothed as needed
         var y = 0;
         for (var i = 0; i < heights.length; i++) {
           if (i != 0) {
             y += heights[i - 1];
           }
           if (heights[i] > 0) {
-            if(this.label.text[i] == "Smoothed") this.geometry.push(createBuilding(this.width, this.depth, heights[i], {x: 0, y: y, z: 0}, this.label[i], this.color[i], true));
+            if(this.label[i].text == "Smoothed") this.geometry.push(createBuilding(this.width, this.depth, heights[i], {x: 0, y: y, z: 0}, this.label[i], this.color[i], true));
             else this.geometry.push(createBuilding(this.width, this.depth, heights[i], {x: 0, y: y, z: 0}, this.label[i], this.color[i], false));
           }
         }
@@ -698,6 +738,7 @@ Building.prototype = {
     }
   },
 
+  //Heights that are bigger than the ratio of hieghts are smoothed to the ratio & a marking is added
   smoothBigHeights: function(){
     if(this.getHeight() > 50){
       var ratio = this.getHeight() / this.height.length;
@@ -707,8 +748,8 @@ Building.prototype = {
         if(this.height[i] > ratio){
           smoothedHeights.push(ratio);
           smoothedHeights.push(0.4);
-          this.color.splice(i + smoothed + 1, 0, "0xF3F3F3");
-          this.label.text.splice(i+1 + smoothed, 0, "Smoothed");
+          this.color.splice((i+smoothed+1), 0, "0xF3F3F3");
+          this.label.splice((i+smoothed+1), 0, {"text": "Smoothed"});
           smoothed++;
         }
         else{
