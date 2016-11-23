@@ -55,7 +55,7 @@ public class TypeGraphDataBuilder extends GraphDataBuilder {
     }
 
     @Override
-    public void selectGraphData() {
+    public void selectGraphData(long timeOutMillis) {
         getConceptName();
 
         findClassOfConcept();
