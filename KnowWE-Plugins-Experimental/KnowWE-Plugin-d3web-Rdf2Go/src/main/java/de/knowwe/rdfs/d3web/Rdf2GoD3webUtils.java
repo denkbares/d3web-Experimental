@@ -2,7 +2,7 @@ package de.knowwe.rdfs.d3web;
 
 import java.util.Collection;
 
-import org.openrdf.model.URI;
+import org.eclipse.rdf4j.model.URI;
 
 import de.d3web.core.knowledge.terminology.NamedObject;
 import com.denkbares.strings.Identifier;

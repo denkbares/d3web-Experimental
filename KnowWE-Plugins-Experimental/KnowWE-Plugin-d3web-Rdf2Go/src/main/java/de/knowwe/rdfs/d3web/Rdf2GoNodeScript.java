@@ -22,9 +22,9 @@ package de.knowwe.rdfs.d3web;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.openrdf.model.Statement;
-import org.openrdf.model.URI;
-import org.openrdf.model.vocabulary.RDF;
+import org.eclipse.rdf4j.model.Statement;
+import org.eclipse.rdf4j.model.URI;
+import org.eclipse.rdf4j.model.vocabulary.RDF;
 
 import de.d3web.diaFlux.flow.Node;
 import com.denkbares.strings.Identifier;

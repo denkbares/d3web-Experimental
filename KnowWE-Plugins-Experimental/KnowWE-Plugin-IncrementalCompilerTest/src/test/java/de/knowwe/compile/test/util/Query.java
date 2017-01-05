@@ -18,7 +18,7 @@
  */
 package de.knowwe.compile.test.util;
 
-import org.openrdf.model.URI;
+import org.eclipse.rdf4j.model.URI;
 
 /**
  * 

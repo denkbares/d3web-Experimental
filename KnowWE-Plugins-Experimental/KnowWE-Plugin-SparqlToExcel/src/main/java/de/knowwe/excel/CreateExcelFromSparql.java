@@ -32,8 +32,8 @@ import jxl.write.WritableFont;
 import jxl.write.WritableSheet;
 import jxl.write.WritableWorkbook;
 import jxl.write.WriteException;
-import org.openrdf.model.Value;
-import org.openrdf.query.BindingSet;
+import org.eclipse.rdf4j.model.Value;
+import org.eclipse.rdf4j.query.BindingSet;
 
 import com.denkbares.semanticcore.CachedTupleQueryResult;
 import com.denkbares.strings.Strings;

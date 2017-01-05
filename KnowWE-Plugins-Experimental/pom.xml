@@ -38,7 +38,7 @@
 		<module>KnowWE-Plugin-TypeVis</module>
 		<module>KnowWE-Plugin-KnowledgeSummary</module>
 		<module>KnowWE-Plugin-SELESUP</module>
-		<module>KnowWE-Plugin-SparqlEndpoint</module>
+		<!--<module>KnowWE-Plugin-SparqlEndpoint</module>-->
 		<module>KnowWE-Plugin-CityVis</module>
 		<!--module>KnowWE-Plugin-RDFS-Basic</module-->
 		<!--module>KnowWE-Plugin-RDFS-TurtleN3</module-->

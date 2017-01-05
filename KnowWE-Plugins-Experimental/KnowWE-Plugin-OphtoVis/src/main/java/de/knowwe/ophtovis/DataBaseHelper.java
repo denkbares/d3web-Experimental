@@ -24,8 +24,8 @@
  import java.util.Collection;
  import java.util.List;
 
- import org.openrdf.model.Value;
- import org.openrdf.query.BindingSet;
+ import org.eclipse.rdf4j.model.Value;
+ import org.eclipse.rdf4j.query.BindingSet;
 
  import de.d3web.strings.Identifier;
  import de.knowwe.compile.IncrementalCompiler;

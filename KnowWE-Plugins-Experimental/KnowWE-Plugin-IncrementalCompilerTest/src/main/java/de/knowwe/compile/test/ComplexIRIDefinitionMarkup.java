@@ -25,7 +25,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import org.openrdf.model.URI;
+import org.eclipse.rdf4j.model.URI;
 
 import de.knowwe.compile.object.AbstractKnowledgeUnitType;
 import de.knowwe.compile.object.ComplexDefinition;

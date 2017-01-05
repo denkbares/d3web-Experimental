@@ -25,9 +25,9 @@ import java.util.List;
 import java.util.Locale;
 
 import org.apache.commons.lang.WordUtils;
-import org.openrdf.model.Literal;
-import org.openrdf.model.Statement;
-import org.openrdf.model.URI;
+import org.eclipse.rdf4j.model.Literal;
+import org.eclipse.rdf4j.model.Statement;
+import org.eclipse.rdf4j.model.URI;
 
 import de.d3web.core.knowledge.InfoStore;
 import de.d3web.core.knowledge.terminology.Choice;

@@ -19,7 +19,7 @@
 
 package de.knowwe.rdfs.d3web;
 
-import org.openrdf.model.URI;
+import org.eclipse.rdf4j.model.URI;
 
 import de.knowwe.rdf2go.Rdf2GoCore;
 
