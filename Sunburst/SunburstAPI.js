@@ -51,7 +51,7 @@ sunburstElement.prototype = {
             next += parts;
         }
 
-        if(this.parent != undefined) addCircle(2, 0, (2*Math.PI), narrator.color, this.scene, narrator.scene, narrator.label, narrator);
+        if(this.parent != undefined) addCircle(2, 0, (2*Math.PI), this.parent.color, this.scene, this.parent.scene, this.parent.label, this.parent);
     },
 
     render: function(length, start, radius, scene){
