@@ -1,8 +1,8 @@
 jq$(document).ready(function() {
 	
 	initOverviewGraphCollapse();
-	
-	addListenerFunctionForDropEditUpdate(rerenderOverviewGraph);
+
+	KNOWWE.plugin.termbrowserautocompletion.addListenerFunctionForDropEditUpdate(rerenderOverviewGraph);
 
 });
 
