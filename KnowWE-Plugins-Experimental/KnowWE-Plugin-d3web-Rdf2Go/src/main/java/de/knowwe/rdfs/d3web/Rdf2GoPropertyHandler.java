@@ -23,16 +23,17 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 import org.apache.commons.lang.WordUtils;
 import org.openrdf.model.Literal;
 import org.openrdf.model.Statement;
 import org.openrdf.model.URI;
 
+import com.denkbares.strings.Identifier;
 import de.d3web.core.knowledge.InfoStore;
 import de.d3web.core.knowledge.terminology.Choice;
 import de.d3web.core.knowledge.terminology.info.Property;
-import com.denkbares.strings.Identifier;
 import de.d3web.we.object.NamedObjectReference;
 import de.d3web.we.object.QuestionReference;
 import de.knowwe.core.kdom.parsing.Section;
@@ -104,7 +105,7 @@ public class Rdf2GoPropertyHandler extends OntologyHandler<PropertyDeclarationTy
 			URI propertyNameURI = core.createlocalURI(
 					getD3webPropertyAsOntologyProperty(property));
 			Literal contentLiteral;
-			if (locale == InfoStore.NO_LANGUAGE) {
+			if (Objects.equals(locale, InfoStore.NO_LANGUAGE)) {
 				contentLiteral = core.createLiteral(content);
 			}
 			else {
