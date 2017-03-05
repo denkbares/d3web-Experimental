@@ -23,7 +23,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
-import java.util.Objects;
 
 import org.apache.commons.lang.WordUtils;
 import org.openrdf.model.Literal;
@@ -31,7 +30,7 @@ import org.openrdf.model.Statement;
 import org.openrdf.model.URI;
 
 import com.denkbares.strings.Identifier;
-import de.d3web.core.knowledge.InfoStore;
+import com.denkbares.strings.Locales;
 import de.d3web.core.knowledge.terminology.Choice;
 import de.d3web.core.knowledge.terminology.info.Property;
 import de.d3web.we.object.NamedObjectReference;
@@ -104,17 +103,11 @@ public class Rdf2GoPropertyHandler extends OntologyHandler<PropertyDeclarationTy
 			URI identifierURI = core.createlocalURI(externalForm);
 			URI propertyNameURI = core.createlocalURI(
 					getD3webPropertyAsOntologyProperty(property));
-			Literal contentLiteral;
-			if (Objects.equals(locale, InfoStore.NO_LANGUAGE)) {
-				contentLiteral = core.createLiteral(content);
-			}
-			else {
-				contentLiteral = core.createLanguageTaggedLiteral(content,
-						locale.getLanguage());
-			}
-			Rdf2GoUtils.addStatement(core, identifierURI, propertyNameURI, contentLiteral,
-					statements);
 
+			Literal contentLiteral = Locales.isEmpty(locale)
+					? core.createLiteral(content)
+					: core.createLanguageTaggedLiteral(content, locale.getLanguage());
+			Rdf2GoUtils.addStatement(core, identifierURI, propertyNameURI, contentLiteral, statements);
 			core.addStatements(section, Rdf2GoUtils.toArray(statements));
 		}
 
@@ -137,18 +130,21 @@ public class Rdf2GoPropertyHandler extends OntologyHandler<PropertyDeclarationTy
 		if (answerReferenceSection != null) {
 			Section<QuestionReference> questionReferenceSection = Sections.child(
 					namendObjectSection, QuestionReference.class);
-			Identifier answerIdentifier = answerReferenceSection.get().getTermIdentifier(answerReferenceSection);
+			Identifier answerIdentifier = answerReferenceSection.get()
+					.getTermIdentifier(answerReferenceSection);
 			if (questionReferenceSection != null && questionReferenceSection.getText().isEmpty()) {
 				// question is a wild card, get all questions with the given
 				// answer.
 				Collection<Identifier> choiceIdentifiers = compiler.getTerminologyManager()
 						.getAllDefinedTermsOfType(Choice.class);
 				for (Identifier choiceIdentifier : choiceIdentifiers) {
-					if (choiceIdentifier.getLastPathElement().equals(answerIdentifier.getLastPathElement())) {
+					if (choiceIdentifier.getLastPathElement()
+							.equals(answerIdentifier.getLastPathElement())) {
 						objects.add(choiceIdentifier);
 					}
 				}
-			} else {
+			}
+			else {
 				objects.add(answerIdentifier);
 			}
 		}
@@ -161,6 +157,4 @@ public class Rdf2GoPropertyHandler extends OntologyHandler<PropertyDeclarationTy
 		}
 		return objects;
 	}
-
-
 }

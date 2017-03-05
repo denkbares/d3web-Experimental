@@ -68,15 +68,12 @@ public class MissingPropertyTest extends KBObjectsTest {
 
 	@Override
 	protected List<TerminologyObject> doTest(KnowledgeBase kb, List<TerminologyObject> objects, String[] args) {
-
 		Property<Object> property = Property.getUntypedProperty(args[1]);
-
 		for (TerminologyObject object : new ArrayList<>(objects)) {
 			if (object.getInfoStore().contains(property)) {
 				objects.remove(object);
 			}
 		}
-
 		return objects;
 	}
 
