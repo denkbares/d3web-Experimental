@@ -22,7 +22,7 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.wcohen.ss.Levenstein;
+import org.apache.commons.lang3.StringUtils;
 
 import com.denkbares.strings.Identifier;
 import de.knowwe.compile.IncrementalCompiler;
@@ -55,7 +55,6 @@ public class IncrementalTermReferenceCorrectionProvider implements CorrectionPro
 		Collection<Section<? extends SimpleDefinition>> defs = terminology.getAllTermDefinitions();
 
 		String originalText = section.getText();
-		Levenstein l = new Levenstein();
 
 		for (Section<? extends SimpleDefinition> def : defs) {
 			Identifier termIdentifier = KnowWEUtils.getTermIdentifier(def);
@@ -63,8 +62,8 @@ public class IncrementalTermReferenceCorrectionProvider implements CorrectionPro
 			String originalTextRegex = originalText.replace(" ", ".*");
 
 			/* levenstein test */
-			double score = l.score(originalText, termIdentifierElement);
-			if (score >= -threshold) {
+			double score = StringUtils.getLevenshteinDistance(originalText, termIdentifierElement, threshold);
+			if (score >= 0) {
 				suggestions.add(new DefaultSuggestion(termIdentifierElement, (int) score));
 			}
 			/* infix test */
