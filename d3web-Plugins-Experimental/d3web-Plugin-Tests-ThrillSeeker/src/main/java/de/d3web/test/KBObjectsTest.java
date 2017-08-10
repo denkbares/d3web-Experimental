@@ -20,7 +20,7 @@ package de.d3web.test;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Collection;
 import java.util.List;
 
 import de.d3web.core.knowledge.KnowledgeBase;
@@ -29,10 +29,11 @@ import de.d3web.core.utilities.NamedObjectComparator;
 import de.d3web.testing.Message;
 import de.d3web.testing.Message.Type;
 import de.d3web.testing.TestParameter.Mode;
+import de.d3web.testing.TestingUtils;
 
 /**
  * Base class for tests of TerminologyObjects.
- * 
+ *
  * @author Reinhard Hatko
  * @created 23.01.2013
  */
@@ -61,21 +62,23 @@ public abstract class KBObjectsTest extends KBTest {
 		List<TerminologyObject> objects = new ArrayList<>(
 				D3webTestUtils.filter(getBaseObjects(kb, args), ignores, getAdditionalIgnores(args)));
 
-		List<TerminologyObject> errorObjects = doTest(kb, objects, args);
+		Collection<TerminologyObject> errorObjects = doTest(kb, objects, args);
 
-		if (!errorObjects.isEmpty()) {
-			Collections.sort(errorObjects, new NamedObjectComparator());
-			String error = formatErrorMessage(errorObjects, args);
-			return D3webTestUtils.createFailure(errorObjects,
-					error);
-		}
-		else {
+		errorObjects.removeIf(errorQuestion -> TestingUtils.isIgnored(errorQuestion.getName(), TestingUtils.compileIgnores(ignores)));
+
+		if (errorObjects.isEmpty()) {
 			return new Message(Type.SUCCESS);
 		}
-
+		else {
+			List<TerminologyObject> result = new ArrayList<>(errorObjects);
+			result.sort(new NamedObjectComparator());
+			String error = formatErrorMessage(result, args);
+			return D3webTestUtils.createFailure(result,
+					error);
+		}
 	}
 
-	protected String formatErrorMessage(List<TerminologyObject> errorObjects, String[] args) {
+	private String formatErrorMessage(List<TerminologyObject> errorObjects, String[] args) {
 		return MessageFormat.format(message, getFormatParameters(errorObjects, args));
 	}
 
@@ -83,11 +86,11 @@ public abstract class KBObjectsTest extends KBTest {
 	 * Returns the parameters for insertion into the error message. This method
 	 * allows to define additional information. Default is only the number of
 	 * errors.
-	 * 
+	 *
+	 * @param errorObjects objects that have an error
+	 * @param args parameters of the test execution
+	 * @return parameters for insertion into the error message
 	 * @created 26.03.2013
-	 * @param errorObjects
-	 * @param args
-	 * @return
 	 */
 	protected Object[] getFormatParameters(List<TerminologyObject> errorObjects, String[] args) {
 		return new Object[] { errorObjects.size() };
@@ -95,29 +98,26 @@ public abstract class KBObjectsTest extends KBTest {
 
 	/**
 	 * Names of objects to ignore by default
-	 * 
+	 *
 	 * @param args the arguments of the test
-	 * 
+	 * @return the names of the objects to be ignored by default
 	 * @created 26.03.2013
-	 * @return
 	 */
 	protected String[] getAdditionalIgnores(String[] args) {
 		return new String[] {
 				"now", "start", "P000" };
 	}
 
-	protected abstract List<TerminologyObject> doTest(KnowledgeBase kb, List<TerminologyObject> objects, String[] args);
+	protected abstract Collection<TerminologyObject> doTest(KnowledgeBase kb, List<TerminologyObject> objects, String[] args);
 
 	/**
 	 * Returns the base list of objects to test. Filtering of ignores is done
 	 * based on this list.
-	 * 
-	 * @created 26.03.2013
-	 * @param kb
+	 *
+	 * @param kb the knowledgebase under test
 	 * @param args the arguments of the test
-	 * @return
+	 * @return the list of objects to be tested
+	 * @created 26.03.2013
 	 */
 	protected abstract List<TerminologyObject> getBaseObjects(KnowledgeBase kb, String[] args);
-	
-
 }
