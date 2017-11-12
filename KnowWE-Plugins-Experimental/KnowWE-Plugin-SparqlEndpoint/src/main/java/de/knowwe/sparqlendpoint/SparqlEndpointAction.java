@@ -24,7 +24,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.wiki.auth.WikiSecurityException;
-import org.openrdf.http.server.repository.RepositoryController;
+import org.openrdfdes.http.server.repository.RepositoryController;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.denkbares.utils.Log;
