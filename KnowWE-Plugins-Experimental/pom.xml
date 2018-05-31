@@ -40,6 +40,7 @@
 		<module>KnowWE-Plugin-SELESUP</module>
 		<module>KnowWE-Plugin-SparqlEndpoint</module>
 		<module>KnowWE-Plugin-CityVis</module>
+		<module>KnowWE-Plugin-Hello-Kotlin</module>
 		<!--module>KnowWE-Plugin-RDFS-Basic</module-->
 		<!--module>KnowWE-Plugin-RDFS-TurtleN3</module-->
 		<!--module>KnowWE-Plugin-RDFS-WikiObjectModel</module-->
