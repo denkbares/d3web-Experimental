@@ -40,7 +40,7 @@ public class TimeTableContentType extends AbstractType {
 	class TimeTableLine extends AbstractType {
 
 		TimeTableLine() {
-			this.setSectionFinder(new LineSectionFinder());
+			this.setSectionFinder(LineSectionFinder.getInstance());
 			this.addChildType(new DateT());
 		}
 	}
