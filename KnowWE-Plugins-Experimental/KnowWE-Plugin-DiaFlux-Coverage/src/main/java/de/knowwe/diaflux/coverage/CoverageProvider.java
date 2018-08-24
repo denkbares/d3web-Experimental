@@ -54,14 +54,14 @@ public class CoverageProvider implements ToolProvider {
 		String description = "Highlights covered nodes and edges in the flowchart.";
 		if (dohighlighting) {
 			return new DefaultTool(Icon.DEBUG, "Hide Coverage", description,
-					DiaFluxTraceHighlight.getDeactivationJSAction(), Tool.CATEGORY_INFO);
+					DiaFluxTraceHighlight.getDeactivationJSAction(), Tool.CATEGORY_UTIL);
 		}
 		else {
 			return new DefaultTool(
 					Icon.DEBUG,
 					"Show Coverage",
 					description,
-					DiaFluxTraceHighlight.getActivationJSAction(DiaFluxCoverageHighlight.COVERAGE_HIGHLIGHT), Tool.CATEGORY_INFO);
+					DiaFluxTraceHighlight.getActivationJSAction(DiaFluxCoverageHighlight.COVERAGE_HIGHLIGHT), Tool.CATEGORY_UTIL);
 		}
 	}
 }

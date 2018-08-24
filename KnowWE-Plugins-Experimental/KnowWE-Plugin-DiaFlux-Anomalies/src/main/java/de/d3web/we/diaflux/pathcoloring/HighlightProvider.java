@@ -53,7 +53,7 @@ public class HighlightProvider implements ToolProvider {
 			return new DefaultTool(Icon.DEBUG, "Hide Anomalies",
 					"Highlights Anomalies in the flowchart.",
 					DiaFluxTraceHighlight.getDeactivationJSAction(),
-					Tool.CATEGORY_INFO);
+					Tool.CATEGORY_UTIL);
 		}
 		else {
 			return new DefaultTool(
@@ -61,7 +61,7 @@ public class HighlightProvider implements ToolProvider {
 					"Show Anomalies",
 					"Highlights Anomalies in the flowchart.",
 					DiaFluxTraceHighlight.getActivationJSAction(AnomaliesHighlight.ANOMALIES_HIGHLIGHT),
-					Tool.CATEGORY_INFO);
+					Tool.CATEGORY_UTIL);
 		}
 	}
 }
