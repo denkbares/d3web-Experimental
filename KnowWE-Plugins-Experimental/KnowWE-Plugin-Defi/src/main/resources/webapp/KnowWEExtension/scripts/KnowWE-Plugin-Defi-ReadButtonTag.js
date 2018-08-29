@@ -1,3 +1,24 @@
+function sendSolutionReadButton(solution, sectionId) {
+
+	var params = {
+		action : 'SendSolutionReadButtionAction',
+		section : sectionId
+	};
+
+	var options = {
+		url : KNOWWE.core.util.getURL(params),
+		response : {
+			action : '',
+			ids : [ '' ],
+			fn : function() { document.location.href = "Wiki.jsp?page=" + solution }
+		}
+	};
+
+	new _KA(options).send();
+
+}
+
+
 function sendReadbutton(id, threshold) {
 	container = document.getElementById('rb_' + id);
 	radiobuttons = $ES('input[type=radio]' , 'rb_' + id);
@@ -10,7 +31,7 @@ function sendReadbutton(id, threshold) {
 	}
 	
 	if (checked == -1) {
-		defiAlert('Bitte wählen Sie eine Bewertung aus')
+		defiAlert('Bitte wählen Sie eine Bewertung aus');
 		return;
 	}
 	
@@ -35,7 +56,7 @@ function sendReadbutton(id, threshold) {
 			discussed : discussed,
 			closed : close,
 			id : id
-	}
+	};
 	
 	var options = {
 			url : KNOWWE.core.util.getURL(params),
@@ -44,7 +65,7 @@ function sendReadbutton(id, threshold) {
 				ids : [ '' ],
 				fn : function(){ setTimeout ( 'document.location.reload()', 100 ); }
 			}
-	}
+	};
 	
 	new _KA(options).send();
 }
@@ -55,7 +76,7 @@ function readbuttonDiscuss(id) {
 			action : 'ReadbuttonLinkClickedAction',
 			discussed : 'Ja',
 			id : id
-	}
+	};
 	
 	var options = {
 			url : KNOWWE.core.util.getURL(params),
@@ -64,7 +85,7 @@ function readbuttonDiscuss(id) {
 				ids : [ '' ],
 				fn : function(){ }
 			}
-	}
+	};
 	
 	new _KA(options).send();
 }
@@ -75,7 +96,7 @@ function readbuttonCloseLink(id) {
 			action : 'ReadbuttonLinkClickedAction',
 			discussed : 'Nein',
 			id : id
-	}
+	};
 	
 	var options = {
 			url : KNOWWE.core.util.getURL(params),
@@ -84,7 +105,7 @@ function readbuttonCloseLink(id) {
 				ids : [ '' ],
 				fn : function(){ setTimeout ( 'document.location.reload()', 100 ); }
 			}
-	}
+	};
 	
 	new _KA(options).send();
 }

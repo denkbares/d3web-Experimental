@@ -295,7 +295,7 @@ td.diff {
 	border:none;
 }
 a.action.more, a.action.sectiontoc {
-	background:#3f464a url(images/arrdown.gif) 95% center no-repeat;*/
+	background:#3f464a url(images/arrdown.gif) 95% center no-repeat;
 }
 
 a.tool {
@@ -312,7 +312,7 @@ a.tool:hover {
 	border:4px solid #fc3;
 }
 #tools h4 {
-	color:#black;
+	color: black;
 	font-weight:bold;
 	border-color:#ffff99;
 }
@@ -519,11 +519,11 @@ table.calendar * {
 	border:4px solid #fc3;
 }
 * html .tip-title {
-	background:url(images/tip_bg.png) top left;
+	background:url("images/tip_bg.png") top left;
 }
 /*ie7 hack */
 *:first-child+html .tip-title {
-	background:url(images/tip_bg.png) top left;
+	background:url("images/tip_bg.png") top left;
 }
 .tip-text {
 	padding:4px 8px 8px;
@@ -532,11 +532,11 @@ table.calendar * {
 	background:grey !important;
 }
 * html .tip-text {
-	background:url(images/tip.png) bottom right;
+	background:url("images/tip.png") bottom right;
 }
 /*ie7 hack */
 *:first-child+html .tip-text {
-	background:url(images/tip.png) bottom right;
+	background:url("images/tip.png") bottom right;
 }
 .tip-text a {
 	color:#c30 !important;

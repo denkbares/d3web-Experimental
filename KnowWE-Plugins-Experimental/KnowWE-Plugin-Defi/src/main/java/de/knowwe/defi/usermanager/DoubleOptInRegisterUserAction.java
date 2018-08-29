@@ -52,7 +52,7 @@ public class DoubleOptInRegisterUserAction extends AbstractRegisterUserAction {
 			Date current = new Date();
 			long firstDiff = TimeUnit.MILLISECONDS.toMinutes(current.getTime() - first.getTime());
 			long secondDiff = TimeUnit.MILLISECONDS.toMinutes(current.getTime() - second.getTime());
-			if (firstDiff < 60 || secondDiff < 60) return true;
+			return firstDiff < 60 || secondDiff < 60;
 		}
 		return false;
 	}
@@ -114,7 +114,7 @@ public class DoubleOptInRegisterUserAction extends AbstractRegisterUserAction {
 			MailUtils.sendDefiMail(message.toString(), "Bitte bestätigen Sie Ihre Registrierung im ICD-Forum.", newUser.getEmail());
 		}
 		catch (MessagingException e) {
-			Log.severe("Activation message could not be transported to: " + newUser.getEmail());
+			Log.severe("Activation message could not be transported to: " + newUser.getEmail(), e);
 			context.getResponse().setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 			context.getWriter().write("Es konnte keine Bestätigungs-E-Mail an " + newUser.getEmail() + " gesendet werden, bitte wenden Sie sich an den Administrator.");
 		}

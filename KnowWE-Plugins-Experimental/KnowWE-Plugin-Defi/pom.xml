@@ -57,6 +57,11 @@
 			<version>${knowwe.version}</version>
 		</dependency>
 		<dependency>
+			<groupId>de.uniwue.d3web</groupId>
+			<artifactId>KnowWE-Plugin-d3web-basic</artifactId>
+			<version>${knowwe.version}</version>
+		</dependency>
+		<dependency>
 			<groupId>com.palbrattberg</groupId>
 			<artifactId>jspwiki2pdf</artifactId>
 			<version>2.10</version>
